@@ -30,5 +30,9 @@
 	<classpathentry kind="lib" path="/extArqueoPonte/lib/es.udc.cartolab.gvsig.navtableforms.jar" sourcepath="/extNavTableForms/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extLoadData"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extNavTable"/>
+	<classpathentry kind="lib" path="/home/jlopez/extPMF/extPMF/lib/es.udc.cartolab.gvsig.arqueoponte.jar"/>
+	<classpathentry kind="lib" path="/home/jlopez/extPMF/extPMF/lib/es.udc.cartolab.gvsig.fonsagua.jar"/>
+	<classpathentry kind="lib" path="/home/jlopez/extPMF/extPMF/lib/es.udc.cartolab.gvsig.navtable.jar"/>
+	<classpathentry kind="lib" path="/home/jlopez/extPMF/extPMF/lib/es.udc.cartolab.gvsig.navtableforms.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
