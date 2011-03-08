@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.navtableformsexample;
+package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.Container;
 import java.io.IOException;
@@ -12,36 +12,36 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.jeta.forms.components.panel.FormPanel;
 
-import es.udc.cartolab.gvsig.arqueoponte.preferences.Preferences;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
-import es.udc.cartolab.gvsig.navtableformsexample.validation.ComunidadBinding;
-import es.udc.cartolab.gvsig.navtableformsexample.validation.ComunidadModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.CentroComunalBinding;
+import es.udc.cartolab.gvsig.pmf.forms.validation.CentroComunalModel;
+import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-public class ComunidadForm extends AbstractForm
+public class CentroComunalForm extends AbstractForm
 {
 
-	public ComunidadForm(FLyrVect layer) {
+	public CentroComunalForm(FLyrVect layer) {
 		super(layer);
 		viewInfo.setHeight(500);
 		viewInfo.setWidth(450);
-		viewInfo.setTitle(PluginServices.getText(this, "Comunidades"));
+		viewInfo.setTitle(PluginServices.getText(this, "Centros comunales"));
 	}
 
 	@Override
 	public FormPanel getFormBody() {
-		return new FormPanel("comunidad.xml");
+		return new FormPanel("centro_comunal.xml");
 	}
 
 	@Override
 	public FormModel getFormModel(Container c) {
-		return new ComunidadModel(c);
+		return new CentroComunalModel(c);
 	}
 
 	@Override
 	public FormBinding getFormBinding(FormModel model) {
-		return new ComunidadBinding(model);
+		return new CentroComunalBinding(model);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class ComunidadForm extends AbstractForm
 
 
 	protected String getAliasInXML() {
-		return "comunidades";
+		return "centros_comunales";
 	}
 
 
@@ -74,8 +74,8 @@ public class ComunidadForm extends AbstractForm
 			if (recordset.getRowCount() == 0) {
 				return false;
 			} else {
-				String nameOfKeyInModel = "cod_com";
-				String nameOfKeyInRecordSet = "cod_com";
+				String nameOfKeyInModel = "cod_creu";
+				String nameOfKeyInRecordSet = "cod_creu";
 				String valueFromModel = formModel.getWidgetValues().get(
 						nameOfKeyInModel);
 				for (int index = 0; index < recordset.getRowCount(); index++) {

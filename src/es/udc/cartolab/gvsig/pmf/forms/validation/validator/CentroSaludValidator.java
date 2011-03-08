@@ -1,11 +1,13 @@
-package es.udc.cartolab.gvsig.navtableformsexample.validation;
+package es.udc.cartolab.gvsig.pmf.forms.validation.validator;
 
+import com.iver.andami.PluginServices;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.Validator;
 import com.jgoodies.validation.util.PropertyValidationSupport;
 import com.jgoodies.validation.util.ValidationUtils;
 
 import es.udc.cartolab.gvsig.navtableforms.validation.ValidationCheckingUtils;
+import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroSaludModel;
 
 public final class CentroSaludValidator implements Validator<CentroSaludModel> {
 
@@ -23,6 +25,10 @@ public final class CentroSaludValidator implements Validator<CentroSaludModel> {
 		PropertyValidationSupport support =
 			new PropertyValidationSupport(centroSaludModel, "CentroSaludModel");
 
+		// numUniEst (Check PrimaryKey + numeric)
+		if (ValidationUtils.isBlank(centroSaludModel.getCod_csalud())) {
+			support.addError("cod_csalud",PluginServices.getText(this, "needed_is_pk"));
+		}
 		// Check numerics and no black fields ************************************
 		//edad_men5
 		if (!ValidationUtils.isNumeric(centroSaludModel.getEdad_men5())) {

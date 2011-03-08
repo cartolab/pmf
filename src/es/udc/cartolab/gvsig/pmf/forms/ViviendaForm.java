@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.navtableformsexample;
+package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.Container;
 import java.io.IOException;
@@ -16,8 +16,8 @@ import es.udc.cartolab.gvsig.arqueoponte.preferences.Preferences;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
-import es.udc.cartolab.gvsig.navtableformsexample.validation.ViviendaBinding;
-import es.udc.cartolab.gvsig.navtableformsexample.validation.ViviendaModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.ViviendaBinding;
+import es.udc.cartolab.gvsig.pmf.forms.validation.ViviendaModel;
 
 public class ViviendaForm extends AbstractForm
 {

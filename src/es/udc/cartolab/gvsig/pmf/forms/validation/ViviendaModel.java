@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.navtableformsexample.validation;
+package es.udc.cartolab.gvsig.pmf.forms.validation;
 
 import java.awt.Container;
 import java.util.Map;
