@@ -1,12 +1,14 @@
-package es.udc.cartolab.gvsig.pmf.forms.validation;
+package es.udc.cartolab.gvsig.pmf.forms.validation.validator;
 
+import com.iver.andami.PluginServices;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.Validator;
 import com.jgoodies.validation.util.PropertyValidationSupport;
 import com.jgoodies.validation.util.ValidationUtils;
 
 import es.udc.cartolab.gvsig.navtableforms.validation.ValidationCheckingUtils;
-import es.udc.cartolab.gvsig.navtableformsexample.validation.CentroEducativoModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroEducativoModel;
+
 
 public final class CentroEducativoValidator implements Validator<CentroEducativoModel> {
 
@@ -24,6 +26,9 @@ public final class CentroEducativoValidator implements Validator<CentroEducativo
 		PropertyValidationSupport support =
 			new PropertyValidationSupport(centroEducativoModel, "CentroEducativoModel");
 
+		if (ValidationUtils.isBlank(centroEducativoModel.getCod_cedu())) {
+			support.addError("cod_cedu",PluginServices.getText(this, "needed_is_pk"));
+		}
 		// Check numerics and no black fields ************************************
 		//n_ninhas
 		if (!ValidationUtils.isNumeric(centroEducativoModel.getN_ninhas())) {

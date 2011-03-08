@@ -1,8 +1,10 @@
 package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.Container;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -12,12 +14,12 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.jeta.forms.components.panel.FormPanel;
 
-import es.udc.cartolab.gvsig.arqueoponte.preferences.Preferences;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
-import es.udc.cartolab.gvsig.pmf.forms.validation.CentroEducativoBinding;
-import es.udc.cartolab.gvsig.pmf.forms.validation.CentroEducativoModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.binding.CentroEducativoBinding;
+import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroEducativoModel;
+import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
 public class CentroEducativoForm extends AbstractForm
 {
@@ -26,7 +28,7 @@ public class CentroEducativoForm extends AbstractForm
 		super(layer);
 		viewInfo.setHeight(500);
 		viewInfo.setWidth(450);
-		viewInfo.setTitle(PluginServices.getText(this, "Centros educativos"));
+		viewInfo.setTitle(PluginServices.getText(this, "_centro_educativo"));
 	}
 
 	@Override
@@ -59,15 +61,6 @@ public class CentroEducativoForm extends AbstractForm
 		return "centros_educativos";
 	}
 
-
-	protected String getBaseDirectory() {
-		try {
-			return Preferences.getPreferences().getBaseDirectory();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			return "";
-		}
-	}
 
 	protected boolean isPKAlreadyInUse() {
 		try {
@@ -131,7 +124,42 @@ public class CentroEducativoForm extends AbstractForm
 		return true;
 	}
 
+	protected void setListeners() {
+		super.setListeners();
+		JComboBox tipoCEdu = (JComboBox) formBody.getComponentByName("tipo_cedu.CB");
+		tipoCEdu.setActionCommand("merEscolar");
+		tipoCEdu.addActionListener(this);
+	}
+
+	private void setMerEscolarEnabledIfNeeded() {
+		JCheckBox merEscol = (JCheckBox) formBody.getComponentByName("mer_escol.CHB");
+		JComboBox tipoCEdu = (JComboBox) formBody.getComponentByName("tipo_cedu.CB");
+
+		if (tipoCEdu.getSelectedItem().equals("Jardín de niños")) {
+			merEscol.setEnabled(true);
+		} else {
+			merEscol.setEnabled(false);
+		}
+	}
+
 	@Override
 	protected void fillSpecificValues() {
+		setMerEscolarEnabledIfNeeded();
+	}
+
+	@Override
+	protected void removeListeners() {
+		JComboBox tipoCEdu = (JComboBox) formBody.getComponentByName("tipo_cedu.CB");
+		tipoCEdu.removeActionListener(this);
+		super.removeListeners();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
+		String action = e.getActionCommand();
+		if (action.equals("merEscolar")) {
+			setMerEscolarEnabledIfNeeded();
+		}
 	}
 }
