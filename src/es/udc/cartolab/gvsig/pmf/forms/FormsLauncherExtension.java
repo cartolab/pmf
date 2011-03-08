@@ -37,7 +37,7 @@ public class FormsLauncherExtension extends Extension {
 		} else if (layerName.equals("centros_salud")) {
 			dialog = new CentroSaludForm(layer);
 		} else if (layerName.equals("centros_reuniones")) {
-			dialog = new CentroComunalForm(layer);
+			dialog = new CentroReunionesForm(layer);
 		} else if (layerName.equals("vivienda")) {
 			dialog = new ViviendaForm(layer);
 		} else if (layerName.equals("parcela")) {
@@ -61,7 +61,7 @@ public class FormsLauncherExtension extends Extension {
 		PluginServices.getIconTheme().registerDefault(
 				"forms-launcher-icon",
 				this.getClass().getClassLoader()
-				.getResource("images/example1.png"));
+				.getResource("images/form.png"));
 	}
 
 	public void initialize() {

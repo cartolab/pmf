@@ -25,7 +25,6 @@ public final class CentroSaludValidator implements Validator<CentroSaludModel> {
 		PropertyValidationSupport support =
 			new PropertyValidationSupport(centroSaludModel, "CentroSaludModel");
 
-		// numUniEst (Check PrimaryKey + numeric)
 		if (ValidationUtils.isBlank(centroSaludModel.getCod_csalud())) {
 			support.addError("cod_csalud",PluginServices.getText(this, "needed_is_pk"));
 		}

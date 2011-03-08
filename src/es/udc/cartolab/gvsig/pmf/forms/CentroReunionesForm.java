@@ -1,7 +1,6 @@
 package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.Container;
-import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -15,33 +14,33 @@ import com.jeta.forms.components.panel.FormPanel;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
-import es.udc.cartolab.gvsig.pmf.forms.validation.CentroComunalBinding;
-import es.udc.cartolab.gvsig.pmf.forms.validation.CentroComunalModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.binding.CentroReunionesBinding;
+import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroReunionesModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-public class CentroComunalForm extends AbstractForm
+public class CentroReunionesForm extends AbstractForm
 {
 
-	public CentroComunalForm(FLyrVect layer) {
+	public CentroReunionesForm(FLyrVect layer) {
 		super(layer);
 		viewInfo.setHeight(500);
 		viewInfo.setWidth(450);
-		viewInfo.setTitle(PluginServices.getText(this, "Centros comunales"));
+		viewInfo.setTitle(PluginServices.getText(this, "_centro_reuniones"));
 	}
 
 	@Override
 	public FormPanel getFormBody() {
-		return new FormPanel("centro_comunal.xml");
+		return new FormPanel("centros_reuniones.xml");
 	}
 
 	@Override
 	public FormModel getFormModel(Container c) {
-		return new CentroComunalModel(c);
+		return new CentroReunionesModel(c);
 	}
 
 	@Override
 	public FormBinding getFormBinding(FormModel model) {
-		return new CentroComunalBinding(model);
+		return new CentroReunionesBinding(model);
 	}
 
 	@Override
@@ -56,18 +55,9 @@ public class CentroComunalForm extends AbstractForm
 
 
 	protected String getAliasInXML() {
-		return "centros_comunales";
+		return "centros_reuniones";
 	}
 
-
-	protected String getBaseDirectory() {
-		try {
-			return Preferences.getPreferences().getBaseDirectory();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			return "";
-		}
-	}
 
 	protected boolean isPKAlreadyInUse() {
 		try {

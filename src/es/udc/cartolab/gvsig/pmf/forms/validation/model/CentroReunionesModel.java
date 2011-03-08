@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.forms.validation;
+package es.udc.cartolab.gvsig.pmf.forms.validation.model;
 
 import java.awt.Container;
 import java.util.Map;
@@ -13,7 +13,7 @@ import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
  *    - variable "idaltrio" has to be: getIdalt and setIdalt as its getter and setter
  *    - variable "idAltrio" has to be: getIdAlt and setIdAlt as its getter and setter
  */
-public class CentroComunalModel extends FormModel {
+public class CentroReunionesModel extends FormModel {
 
 	// Private variables needed for framework ********************************************
 	private String x;
@@ -27,13 +27,13 @@ public class CentroComunalModel extends FormModel {
 
 
 	// Constructor and initialization methods *************************************************************
-	public CentroComunalModel(Container c){
+	public CentroReunionesModel(Container c){
 		super(c);
 	}
 
 	@Override
 	public String getModelName() {
-		return "CentroComunalModel";
+		return "CentroReunionesModel";
 	}
 
 	@Override
