@@ -39,9 +39,17 @@
 	  	<jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}" includes="es/udc/cartolab/**"
 	    />
 
+	  	<!--
 	  	<jar update="true" jarfile="${dist}/lib/${plugin}.jar" basedir="images" includes="*"/>
-
+-->
 	  	<copy file="config/config.xml" todir="${dist}"/>
+	  	<copy file="config/pmf.xml" todir="${dist}"/>
+	  	<copy todir="${dist}/images">
+	  	  			<fileset dir="images" includes="*"/>
+	  	</copy>
+	  	<copy todir="${dist}">
+	  	    	<fileset dir="config" includes="text*.properties"/>
+	  	</copy>
 
 	    <move todir="${extensionsDir}/${plugin}/">
 	    	<fileset dir="${dist}" includes="**/**"/>
@@ -61,15 +69,12 @@
 
 		<target name="copy-data-files">
 		    <copy file="config/config.xml" todir="${dist}"/>
+			<!--
 			<copy todir="${dist}/images" overwrite="true">
 				<fileset dir="images" includes="*" />
 			</copy>
-			<copy todir="${dist}/SHP" overwrite="true">
-				<fileset dir="data/SHP" includes="*" />
-			</copy>
-			<copy todir="${dist}/DBF" overwrite="true">
-				<fileset dir="data/DBF" includes="*" />
-			</copy>
+			-->
+			
 			<copy todir="${dist}" overwrite="true">
 				<fileset dir="forms" includes="*" />
 			</copy>
