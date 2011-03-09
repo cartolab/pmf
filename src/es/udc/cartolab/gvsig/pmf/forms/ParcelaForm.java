@@ -1,7 +1,6 @@
 package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.Container;
-import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -12,12 +11,12 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.jeta.forms.components.panel.FormPanel;
 
-import es.udc.cartolab.gvsig.arqueoponte.preferences.Preferences;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
 import es.udc.cartolab.gvsig.pmf.forms.validation.ParcelaBinding;
 import es.udc.cartolab.gvsig.pmf.forms.validation.ParcelaModel;
+import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
 public class ParcelaForm extends AbstractForm
 {
@@ -57,16 +56,6 @@ public class ParcelaForm extends AbstractForm
 
 	protected String getAliasInXML() {
 		return "parcelas";
-	}
-
-
-	protected String getBaseDirectory() {
-		try {
-			return Preferences.getPreferences().getBaseDirectory();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			return "";
-		}
 	}
 
 	protected boolean isPKAlreadyInUse() {
