@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.forms.validation;
+package es.udc.cartolab.gvsig.pmf.forms.validation.model;
 
 import java.awt.Container;
 import java.util.Map;

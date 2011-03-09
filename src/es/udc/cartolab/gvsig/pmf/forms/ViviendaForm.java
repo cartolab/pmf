@@ -14,8 +14,8 @@ import com.jeta.forms.components.panel.FormPanel;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
-import es.udc.cartolab.gvsig.pmf.forms.validation.ViviendaBinding;
-import es.udc.cartolab.gvsig.pmf.forms.validation.ViviendaModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.binding.ViviendaBinding;
+import es.udc.cartolab.gvsig.pmf.forms.validation.model.ViviendaModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
 public class ViviendaForm extends AbstractForm

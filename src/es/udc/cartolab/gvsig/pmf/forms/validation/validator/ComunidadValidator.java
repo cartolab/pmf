@@ -1,11 +1,12 @@
-package es.udc.cartolab.gvsig.pmf.forms.validation;
+package es.udc.cartolab.gvsig.pmf.forms.validation.validator;
 
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.Validator;
 import com.jgoodies.validation.util.PropertyValidationSupport;
 import com.jgoodies.validation.util.ValidationUtils;
 
-import es.udc.cartolab.gvsig.navtableformsexample.validation.ComunidadModel;
+import es.udc.cartolab.gvsig.pmf.forms.validation.model.ComunidadModel;
+
 
 public final class ComunidadValidator implements Validator<ComunidadModel> {
 
