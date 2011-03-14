@@ -63,6 +63,7 @@ public class ViviendaModel extends FormModel {
 	private boolean agua_pot;
 	private boolean alcantar;
 	private boolean hay_in_viv;
+	private boolean alum_publ;
 	private boolean silos;
 	private boolean trojas_mej;
 	private boolean sacos;
@@ -635,6 +636,16 @@ public class ViviendaModel extends FormModel {
 		firePropertyChange((String) PROPERTIES_MAP.get("HAY_IN_VIV"), oldValue, newValue);
 	}
 
+	public boolean getAlum_publ(){
+		return alum_publ;
+	}
+
+	public void setAlum_publ(boolean newValue) {
+		boolean oldValue = getAlum_publ();
+		alum_publ = newValue;
+		firePropertyChange((String) PROPERTIES_MAP.get("ALUM_PUBL"), oldValue, newValue);
+	}
+
 	public boolean getSilos(){
 		return silos;
 	}
@@ -770,8 +781,7 @@ public class ViviendaModel extends FormModel {
 
 	public void setNonwidgetvalues(String key, String newValue){
 		nonWidgetValues.put(key, newValue);
-	}
-	 */
+	}*/
 
 	//map with widget values
 	@Override
@@ -822,6 +832,7 @@ public class ViviendaModel extends FormModel {
 		widgetValues.put("agua_pot", String.valueOf(agua_pot));
 		widgetValues.put("alcantar", String.valueOf(alcantar));
 		widgetValues.put("hay_in_viv", String.valueOf(hay_in_viv));
+		widgetValues.put("alum_publ", String.valueOf(alum_publ));
 		widgetValues.put("silos", String.valueOf(silos));
 		widgetValues.put("trojas_mej", String.valueOf(trojas_mej));
 		widgetValues.put("sacos", String.valueOf(sacos));
@@ -844,6 +855,5 @@ public class ViviendaModel extends FormModel {
     @Override
     public Map<String, String> getWidgetValues() {
     return widgetValues;
-    }
-	 */
+    }*/
 }
