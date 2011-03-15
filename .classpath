@@ -27,9 +27,11 @@
 	<classpathentry kind="lib" path="/extNavTableForms/lib/jgoodies-binding-2.1.0rc.jar"/>
 	<classpathentry kind="lib" path="/extNavTableForms/lib/jgoodies-common-0.9.9.jar"/>
 	<classpathentry kind="lib" path="/extNavTableForms/lib/validation-2.1.0.jar"/>
-	<classpathentry kind="lib" path="/extArqueoPonte/lib/es.udc.cartolab.gvsig.navtableforms.jar" sourcepath="/extNavTableForms/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extLoadData"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extNavTable"/>
 	<classpathentry kind="src" path="/CopyFeature"/>
+	<classpathentry kind="lib" path="lib/es.udc.cartolab.gvsig.navtableforms.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
