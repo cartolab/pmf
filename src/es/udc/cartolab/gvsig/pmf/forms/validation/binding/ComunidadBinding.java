@@ -14,15 +14,15 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.validator.ComunidadValidator;
  */
 public class  ComunidadBinding extends FormBinding<ComunidadModel> {
 
-	// Instance Creation ******************************************************
+       // Instance Creation ******************************************************
 
-	public ComunidadBinding(Model model) {
-		super(model);
-	}
+       public ComunidadBinding(Model model) {
+              super(model);
+              }
 
-	@Override
-	protected Validator getValidator() {
-		return new ComunidadValidator();
-	}
+              @Override
+              protected Validator getValidator() {
+                        return new ComunidadValidator();
+                        }
 
 }

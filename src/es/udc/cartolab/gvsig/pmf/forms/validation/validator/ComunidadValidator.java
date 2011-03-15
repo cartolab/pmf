@@ -7,7 +7,6 @@ import com.jgoodies.validation.util.ValidationUtils;
 
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.ComunidadModel;
 
-
 public final class ComunidadValidator implements Validator<ComunidadModel> {
 
 

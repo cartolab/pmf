@@ -5,7 +5,6 @@ import java.util.Map;
 
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
 
-
 /*
  * Some notes of JValidation framework:
  * 1) it gets the Getters and Setters methods from introspection, so the names of these methods are quite strict.
@@ -22,9 +21,6 @@ public class ComunidadModel extends FormModel {
 	private String cod_com;
 	private String municip;
 	private String n_fam;
-	private String cod_cedu;
-	private String cod_csalud;
-	private String cod_creu;
 
 	private boolean cent_jard;
 	private boolean cent_esc;
@@ -33,8 +29,8 @@ public class ComunidadModel extends FormModel {
 	private boolean creunion;
 	private boolean luz_elec;
 	private boolean alcantar;
-	private boolean agua_pot;
 	private boolean tfn_fijo;
+	private boolean agua_pot;
 
 	// Constructor and initialization methods *************************************************************
 	public ComunidadModel(Container c){
@@ -50,6 +46,7 @@ public class ComunidadModel extends FormModel {
 	protected void setDefaultValues() {
 		setDefaultValuesForIntFields();
 		setDefaultValuesForStringFields();
+		setDefaultValuesForBooleanFields();
 		setDefaultValuesForWidgetMap();
 	}
 
@@ -63,13 +60,17 @@ public class ComunidadModel extends FormModel {
 		widgetValues.put("departa", departa);
 		widgetValues.put("cod_com", cod_com);
 		widgetValues.put("municip", municip);
-		widgetValues.put("cod_cedu", cod_cedu);
-		widgetValues.put("cod_cedu", cod_cedu);
-		widgetValues.put("cod_cedu", cod_cedu);
-		widgetValues.put("cod_csalud", cod_csalud);
-		widgetValues.put("cod_creu", cod_creu);
 
-
+		//boolean values
+		widgetValues.put("cent_jard", String.valueOf(cent_jard));
+		widgetValues.put("cent_esc", String.valueOf(cent_esc));
+		widgetValues.put("cent_ccyd", String.valueOf(cent_ccyd));
+		widgetValues.put("csalud", String.valueOf(csalud));
+		widgetValues.put("creunion", String.valueOf(creunion));
+		widgetValues.put("luz_elec", String.valueOf(luz_elec));
+		widgetValues.put("alcantar", String.valueOf(alcantar));
+		widgetValues.put("tfn_fijo", String.valueOf(tfn_fijo));
+		widgetValues.put("agua_pot", String.valueOf(agua_pot));
 	}
 
 	private void setDefaultValuesForStringFields() {
@@ -77,11 +78,6 @@ public class ComunidadModel extends FormModel {
 		departa = getGvsigDefaultString();
 		cod_com = getGvsigDefaultString();
 		municip = getGvsigDefaultString();
-		cod_cedu = getGvsigDefaultString();
-		cod_cedu = getGvsigDefaultString();
-		cod_cedu = getGvsigDefaultString();
-		cod_csalud = getGvsigDefaultString();
-		cod_creu = getGvsigDefaultString();
 	}
 
 	private void setDefaultValuesForIntFields() {
@@ -89,6 +85,19 @@ public class ComunidadModel extends FormModel {
 		n_habit = Integer.toString(getGvsigDefaultInt());
 		n_fam = Integer.toString(getGvsigDefaultInt());
 	}
+
+	private void setDefaultValuesForBooleanFields() {
+		cent_jard = getGvsigDefaultBoolean();
+		cent_esc = getGvsigDefaultBoolean();
+		cent_ccyd = getGvsigDefaultBoolean();
+		csalud = getGvsigDefaultBoolean();
+		creunion = getGvsigDefaultBoolean();
+		luz_elec = getGvsigDefaultBoolean();
+		alcantar = getGvsigDefaultBoolean();
+		tfn_fijo = getGvsigDefaultBoolean();
+		agua_pot = getGvsigDefaultBoolean();
+	}
+
 
 
 	// Getters & Setters *************************************************************
@@ -150,36 +159,6 @@ public class ComunidadModel extends FormModel {
 		String oldValue = getN_fam();
 		n_fam = newValue;
 		firePropertyChange((String) PROPERTIES_MAP.get("N_FAM"), oldValue, newValue);
-	}
-
-	public String getCod_cedu(){
-		return cod_cedu;
-	}
-
-	public void setCod_cedu(String newValue) {
-		String oldValue = getCod_cedu();
-		cod_cedu = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("COD_CEDU"), oldValue, newValue);
-	}
-
-	public String getCod_csalud(){
-		return cod_csalud;
-	}
-
-	public void setCod_csalud(String newValue) {
-		String oldValue = getCod_csalud();
-		cod_csalud = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("COD_CSALUD"), oldValue, newValue);
-	}
-
-	public String getCod_creu(){
-		return cod_creu;
-	}
-
-	public void setCod_creu(String newValue) {
-		String oldValue = getCod_creu();
-		cod_creu = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("COD_CREU"), oldValue, newValue);
 	}
 
 
@@ -253,16 +232,6 @@ public class ComunidadModel extends FormModel {
 		firePropertyChange((String) PROPERTIES_MAP.get("ALCANTAR"), oldValue, newValue);
 	}
 
-	public boolean getAgua_pot(){
-		return agua_pot;
-	}
-
-	public void setAgua_pot(boolean newValue) {
-		boolean oldValue = getAgua_pot();
-		agua_pot = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("AGUA_POT"), oldValue, newValue);
-	}
-
 	public boolean getTfn_fijo(){
 		return tfn_fijo;
 	}
@@ -273,37 +242,34 @@ public class ComunidadModel extends FormModel {
 		firePropertyChange((String) PROPERTIES_MAP.get("TFN_FIJO"), oldValue, newValue);
 	}
 
+	public boolean getAgua_pot(){
+		return agua_pot;
+	}
+
+	public void setAgua_pot(boolean newValue) {
+		boolean oldValue = getAgua_pot();
+		agua_pot = newValue;
+		firePropertyChange((String) PROPERTIES_MAP.get("AGUA_POT"), oldValue, newValue);
+	}
+
 
 	// Maps **************************************************************************
 
-	/*
-	//map with non-widget values
-	public Map<String, String> getNonwidgetvalues(){
-		return nonWidgetValues;
-	}
 
-	public String getNonwidgetvalues(String key) {
-		return nonWidgetValues.get(key);
-	}
-
-	public void setNonwidgetvalues(String key, String newValue){
-		nonWidgetValues.put(key, newValue);
-	}*/
-
-	//map with widget values
+	// map with widget values
 	@Override
 	public Map<String, String> getWidgetValues() {
+		//int values
+		widgetValues.put("n_habit", n_habit);
+		widgetValues.put("n_fam", n_fam);
+
+		// string values
 		widgetValues.put("nombre", nombre);
 		widgetValues.put("departa", departa);
-		widgetValues.put("n_habit", n_habit);
 		widgetValues.put("cod_com", cod_com);
 		widgetValues.put("municip", municip);
-		widgetValues.put("n_fam", n_fam);
-		widgetValues.put("cod_cedu", cod_cedu);
-		widgetValues.put("cod_cedu", cod_cedu);
-		widgetValues.put("cod_cedu", cod_cedu);
-		widgetValues.put("cod_csalud", cod_csalud);
-		widgetValues.put("cod_creu", cod_creu);
+
+		//boolean values
 		widgetValues.put("cent_jard", String.valueOf(cent_jard));
 		widgetValues.put("cent_esc", String.valueOf(cent_esc));
 		widgetValues.put("cent_ccyd", String.valueOf(cent_ccyd));
@@ -311,17 +277,8 @@ public class ComunidadModel extends FormModel {
 		widgetValues.put("creunion", String.valueOf(creunion));
 		widgetValues.put("luz_elec", String.valueOf(luz_elec));
 		widgetValues.put("alcantar", String.valueOf(alcantar));
-		widgetValues.put("agua_pot", String.valueOf(agua_pot));
 		widgetValues.put("tfn_fijo", String.valueOf(tfn_fijo));
-
+		widgetValues.put("agua_pot", String.valueOf(agua_pot));
 		return widgetValues;
 	}
-
-	// maps for every layer
-	/*
-	// map with widget values
-	@Override
-	public Map<String, String> getWidgetValues() {
-		return widgetValues;
-	}*/
 }
