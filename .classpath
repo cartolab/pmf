@@ -2,36 +2,30 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry kind="src" path="/_fwAndami"/>
 	<classpathentry kind="src" path="/appgvSIG"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
-	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles"/>
-	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="src" path="/libFMap"/>
+	<classpathentry kind="src" path="/libGDBMS"/>
+	<classpathentry kind="src" path="/libDriverManager"/>
+	<classpathentry kind="src" path="/libIverUtiles"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/extCAD"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="src" path="/extLoadData"/>
+	<classpathentry kind="src" path="/CopyFeature"/>
+	<classpathentry kind="lib" path="lib/jasperreports-4.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-binding-2.1.0rc.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-common-0.9.9.jar"/>
 	<classpathentry kind="lib" path="lib/jodconverter-2.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/jodconverter-cli-2.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/juh-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/jurt-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/ridl-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.5.6.jar"/>
-	<classpathentry kind="lib" path="lib/unoil-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/jasperreports-4.0.0.jar"/>
-	<classpathentry kind="lib" path="/extNavTable/lib/miglayout-3.7.3.1.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
-	<classpathentry kind="lib" path="/extNavTableForms/lib/formsrt.jar"/>
-	<classpathentry kind="lib" path="/extNavTableForms/lib/jgoodies-binding-2.1.0rc.jar"/>
-	<classpathentry kind="lib" path="/extNavTableForms/lib/jgoodies-common-0.9.9.jar"/>
-	<classpathentry kind="lib" path="/extNavTableForms/lib/validation-2.1.0.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/extLoadData"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/extNavTable"/>
-	<classpathentry kind="src" path="/CopyFeature"/>
+	<classpathentry kind="lib" path="lib/formsrt.jar"/>
+	<classpathentry kind="lib" path="lib/validation-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/miglayout-3.7.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/es.udc.cartolab.gvsig.navtableforms.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
+	<classpathentry kind="lib" path="lib/jts-1.9.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.ui.jar"/>
+	<classpathentry kind="lib" path="lib/ridl-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/es.udc.cartolab.gvsig.navtable.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
