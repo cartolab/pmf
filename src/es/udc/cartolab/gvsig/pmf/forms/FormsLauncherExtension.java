@@ -67,7 +67,7 @@ public class FormsLauncherExtension extends Extension {
 	public void initialize() {
 		registerIcons();
 		CopyFeaturesExtension cfe = ((CopyFeaturesExtension) PluginServices.getExtension(CopyFeaturesExtension.class));
-		cfe.setDefaultPath(LoadDataConfigDialog.getConfigPath(false));
+		cfe.setDefaultPath(LoadDataConfigDialog.getConfigPath());
 	}
 
 	public boolean isEnabled() {
