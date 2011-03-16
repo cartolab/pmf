@@ -21,13 +21,14 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.binding.CentroEducativoBinding
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroEducativoModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
+
 public class CentroEducativoForm extends AbstractForm
 {
 
 	public CentroEducativoForm(FLyrVect layer) {
 		super(layer);
-		viewInfo.setHeight(500);
-		viewInfo.setWidth(450);
+		viewInfo.setHeight(550);
+		viewInfo.setWidth(500);
 		viewInfo.setTitle(PluginServices.getText(this, "_centro_educativo"));
 	}
 

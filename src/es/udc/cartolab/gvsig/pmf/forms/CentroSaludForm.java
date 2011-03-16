@@ -23,7 +23,7 @@ public class CentroSaludForm extends AbstractForm
 
 	public CentroSaludForm(FLyrVect layer) {
 		super(layer);
-		viewInfo.setHeight(500);
+		viewInfo.setHeight(550);
 		viewInfo.setWidth(450);
 		viewInfo.setTitle(PluginServices.getText(this, "_centro_salud"));
 	}

@@ -27,8 +27,8 @@ public class ViviendaForm extends AbstractForm
 
 	public ViviendaForm(FLyrVect layer) {
 		super(layer);
-		viewInfo.setHeight(500);
-		viewInfo.setWidth(450);
+		viewInfo.setHeight(800);
+		viewInfo.setWidth(650);
 		viewInfo.setTitle(PluginServices.getText(this, "Viviendas"));
 	}
 

@@ -23,8 +23,8 @@ public class CentroReunionesForm extends AbstractForm
 
 	public CentroReunionesForm(FLyrVect layer) {
 		super(layer);
-		viewInfo.setHeight(500);
-		viewInfo.setWidth(450);
+		viewInfo.setHeight(470);
+		viewInfo.setWidth(520);
 		viewInfo.setTitle(PluginServices.getText(this, "_centro_reuniones"));
 	}
 
