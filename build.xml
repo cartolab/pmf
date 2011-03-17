@@ -44,6 +44,7 @@
 -->
 	  	<copy file="config/config.xml" todir="${dist}"/>
 	  	<copy file="config/pmf.xml" todir="${dist}"/>
+	  	<copy file="config/about.htm" todir="${dist}"/>
 	  	<copy todir="${dist}/images">
 	  	  			<fileset dir="images" includes="*"/>
 	  	</copy>
