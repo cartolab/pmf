@@ -24,7 +24,7 @@
     </at>
     <at name="componentclass">com.jeta.forms.gui.form.FormComponent</at>
    </super>
-   <at name="id">/home/fran/checkout/pmf/extPMF/forms/comunidad.xml</at>
+   <at name="id">/home/jlopez/10gvsig/extPMF/forms/comunidad.xml</at>
    <at name="rowspecs">CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:2DLU:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:2DLU:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE,CENTER:DEFAULT:NONE,CENTER:4DLU:NONE</at>
    <at name="colspecs">FILL:4DLU:NONE,FILL:8DLU:NONE,FILL:120PX:NONE,FILL:8DLU:NONE,FILL:120PX:NONE,FILL:8DLU:NONE,FILL:120PX:NONE,FILL:8DLU:NONE,FILL:120PX:NONE,FILL:8DLU:NONE,FILL:4DLU:NONE</at>
    <at name="components">
@@ -53,9 +53,15 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Departamento:</at>
-            <at name="height">15</at>
+            <at name="height">14</at>
+            <at name="width">116</at>
+            <at name="name">departa.LB</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -76,12 +82,6 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">departa.LB</at>
            </object>
           </at>
          </object>
@@ -113,9 +113,15 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Nombre:</at>
-            <at name="height">15</at>
+            <at name="height">14</at>
+            <at name="width">116</at>
+            <at name="name">nombre.LB</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -136,12 +142,6 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">nombre.LB</at>
            </object>
           </at>
          </object>
@@ -173,9 +173,15 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Nº de habitantes:</at>
-            <at name="height">15</at>
+            <at name="height">14</at>
+            <at name="width">116</at>
+            <at name="name">n_habit.LB</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -196,12 +202,6 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">n_habit.LB</at>
            </object>
           </at>
          </object>
@@ -233,9 +233,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Datos generales</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -256,7 +257,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -288,9 +288,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Educación</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -311,7 +312,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -343,8 +343,9 @@
           <at name="classname">javax.swing.JTextField</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
+            <at name="height">20</at>
             <at name="width">116</at>
-            <at name="height">19</at>
+            <at name="name">nombre.TF</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -365,7 +366,6 @@
               </at>
              </object>
             </at>
-            <at name="name">nombre.TF</at>
            </object>
           </at>
          </object>
@@ -397,8 +397,9 @@
           <at name="classname">javax.swing.JTextField</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
+            <at name="height">20</at>
             <at name="width">116</at>
-            <at name="height">19</at>
+            <at name="name">departa.TF</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -419,7 +420,6 @@
               </at>
              </object>
             </at>
-            <at name="name">departa.TF</at>
            </object>
           </at>
          </object>
@@ -451,8 +451,9 @@
           <at name="classname">javax.swing.JTextField</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
+            <at name="height">20</at>
             <at name="width">116</at>
-            <at name="height">19</at>
+            <at name="name">n_habit.TF.INT</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -473,7 +474,6 @@
               </at>
              </object>
             </at>
-            <at name="name">n_habit.TF.INT</at>
            </object>
           </at>
          </object>
@@ -505,10 +505,11 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">388</at>
-            <at name="text">Existe centro educativo tipo jardín de niños</at>
-            <at name="height">17</at>
             <at name="enabled">false</at>
+            <at name="text">Existe centro educativo tipo jardín de niños</at>
+            <at name="height">16</at>
+            <at name="width">384</at>
+            <at name="name">cent_jard.CHB</at>
             <at name="actionCommand">Existe centro educativo tipo jardín de niños.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -530,7 +531,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cent_jard.CHB</at>
            </object>
           </at>
          </object>
@@ -562,10 +562,11 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">252</at>
-            <at name="text">Existe centro educativo escolar</at>
-            <at name="height">17</at>
             <at name="enabled">false</at>
+            <at name="text">Existe centro educativo escolar</at>
+            <at name="height">16</at>
+            <at name="width">250</at>
+            <at name="name">cent_esc.CHB</at>
             <at name="actionCommand">Existe centro educativo escolar.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -587,7 +588,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cent_esc.CHB</at>
            </object>
           </at>
          </object>
@@ -619,10 +619,11 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">404</at>
-            <at name="text">Existe centro educativo a nivel de ciclo común y diversificado</at>
-            <at name="height">17</at>
             <at name="enabled">false</at>
+            <at name="text">Existe centro educativo a nivel de ciclo común y diversificado</at>
+            <at name="height">16</at>
+            <at name="width">398</at>
+            <at name="name">cent_ccyd.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -644,7 +645,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cent_ccyd.CHB</at>
            </object>
           </at>
          </object>
@@ -676,9 +676,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Salud</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -699,7 +700,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -731,10 +731,11 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">268</at>
-            <at name="text">Existe centro de salud en la comunidad</at>
-            <at name="height">17</at>
             <at name="enabled">false</at>
+            <at name="text">Existe centro de salud en la comunidad</at>
+            <at name="height">16</at>
+            <at name="width">264</at>
+            <at name="name">csalud.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -756,7 +757,6 @@
               </at>
              </object>
             </at>
-            <at name="name">csalud.CHB</at>
            </object>
           </at>
          </object>
@@ -788,9 +788,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Centro de reuniones</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -811,7 +812,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -843,10 +843,11 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">388</at>
-            <at name="text">Existe centro de reuniones en la comunidad</at>
-            <at name="height">17</at>
             <at name="enabled">false</at>
+            <at name="text">Existe centro de reuniones en la comunidad</at>
+            <at name="height">16</at>
+            <at name="width">384</at>
+            <at name="name">creunion.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -868,7 +869,6 @@
               </at>
              </object>
             </at>
-            <at name="name">creunion.CHB</at>
            </object>
           </at>
          </object>
@@ -900,9 +900,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Servicios públicos presentes</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -923,7 +924,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -955,9 +955,10 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Luz eléctrica</at>
-            <at name="height">17</at>
+            <at name="height">16</at>
+            <at name="width">116</at>
+            <at name="name">luz_elec.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -979,7 +980,6 @@
               </at>
              </object>
             </at>
-            <at name="name">luz_elec.CHB</at>
            </object>
           </at>
          </object>
@@ -1011,9 +1011,10 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Alcantarillado</at>
-            <at name="height">17</at>
+            <at name="height">16</at>
+            <at name="width">116</at>
+            <at name="name">alcantar.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -1035,7 +1036,6 @@
               </at>
              </object>
             </at>
-            <at name="name">alcantar.CHB</at>
            </object>
           </at>
          </object>
@@ -1067,9 +1067,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Organización base</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1090,7 +1091,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -1122,28 +1122,9 @@
           <at name="classname">javax.swing.JTable</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">521</at>
             <at name="height">32</at>
-            <at name="border">
-             <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
-              <super classname="com.jeta.forms.store.properties.BorderProperty">
-               <at name="name">border</at>
-              </super>
-              <at name="borders">
-               <object classname="java.util.LinkedList">
-                <item >
-                 <at name="value">
-                  <object classname="com.jeta.forms.store.properties.DefaultBorderProperty">
-                   <super classname="com.jeta.forms.store.properties.BorderProperty">
-                    <at name="name">border</at>
-                   </super>
-                  </object>
-                 </at>
-                </item>
-               </object>
-              </at>
-             </object>
-            </at>
+            <at name="width">516</at>
+            <at name="name">orgBase</at>
             <at name="scollBars">
              <object classname="com.jeta.forms.store.properties.ScrollBarsProperty">
               <at name="name">scollBars</at>
@@ -1171,7 +1152,26 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
+            <at name="border">
+             <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
+              <super classname="com.jeta.forms.store.properties.BorderProperty">
+               <at name="name">border</at>
+              </super>
+              <at name="borders">
+               <object classname="java.util.LinkedList">
+                <item >
+                 <at name="value">
+                  <object classname="com.jeta.forms.store.properties.DefaultBorderProperty">
+                   <super classname="com.jeta.forms.store.properties.BorderProperty">
+                    <at name="name">border</at>
+                   </super>
+                  </object>
+                 </at>
+                </item>
+               </object>
+              </at>
+             </object>
+            </at>
            </object>
           </at>
          </object>
@@ -1203,9 +1203,10 @@
           <at name="classname">com.jeta.forms.components.separator.TitledSeparator</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">524</at>
             <at name="text">Presencia institucional</at>
             <at name="height">15</at>
+            <at name="name"/>
+            <at name="width">518</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1226,7 +1227,6 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
            </object>
           </at>
          </object>
@@ -1258,28 +1258,9 @@
           <at name="classname">javax.swing.JTable</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">521</at>
             <at name="height">32</at>
-            <at name="border">
-             <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
-              <super classname="com.jeta.forms.store.properties.BorderProperty">
-               <at name="name">border</at>
-              </super>
-              <at name="borders">
-               <object classname="java.util.LinkedList">
-                <item >
-                 <at name="value">
-                  <object classname="com.jeta.forms.store.properties.DefaultBorderProperty">
-                   <super classname="com.jeta.forms.store.properties.BorderProperty">
-                    <at name="name">border</at>
-                   </super>
-                  </object>
-                 </at>
-                </item>
-               </object>
-              </at>
-             </object>
-            </at>
+            <at name="width">516</at>
+            <at name="name">presInst</at>
             <at name="scollBars">
              <object classname="com.jeta.forms.store.properties.ScrollBarsProperty">
               <at name="name">scollBars</at>
@@ -1307,7 +1288,26 @@
               </at>
              </object>
             </at>
-            <at name="name"/>
+            <at name="border">
+             <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
+              <super classname="com.jeta.forms.store.properties.BorderProperty">
+               <at name="name">border</at>
+              </super>
+              <at name="borders">
+               <object classname="java.util.LinkedList">
+                <item >
+                 <at name="value">
+                  <object classname="com.jeta.forms.store.properties.DefaultBorderProperty">
+                   <super classname="com.jeta.forms.store.properties.BorderProperty">
+                    <at name="name">border</at>
+                   </super>
+                  </object>
+                 </at>
+                </item>
+               </object>
+              </at>
+             </object>
+            </at>
            </object>
           </at>
          </object>
@@ -1339,11 +1339,24 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="verifyInputWhenFocusTarget">false</at>
-            <at name="width">252</at>
-            <at name="text">Comunidad</at>
-            <at name="height">20</at>
             <at name="focusable">false</at>
+            <at name="text">Comunidad</at>
+            <at name="height">19</at>
+            <at name="requestFocusEnabled">false</at>
+            <at name="font">
+             <object classname="com.jeta.forms.store.properties.FontProperty">
+              <at name="family">Dialog</at>
+              <at name="style">1</at>
+              <at name="size">16</at>
+             </object>
+            </at>
+            <at name="width">250</at>
+            <at name="name">cedu_form_title</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1364,21 +1377,8 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">cedu_form_title</at>
+            <at name="verifyInputWhenFocusTarget">false</at>
             <at name="foreground" object="color">49,106,196</at>
-            <at name="requestFocusEnabled">false</at>
-            <at name="font">
-             <object classname="com.jeta.forms.store.properties.FontProperty">
-              <at name="family">Dialog</at>
-              <at name="style">1</at>
-              <at name="size">16</at>
-             </object>
-            </at>
            </object>
           </at>
          </object>
@@ -1410,9 +1410,10 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Telefonía</at>
-            <at name="height">17</at>
+            <at name="height">16</at>
+            <at name="width">116</at>
+            <at name="name">tfn_fijo.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -1434,7 +1435,6 @@
               </at>
              </object>
             </at>
-            <at name="name">tfn_fijo.CHB</at>
            </object>
           </at>
          </object>
@@ -1466,10 +1466,11 @@
           <at name="classname">javax.swing.JButton</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
-            <at name="text">Información</at>
-            <at name="height">25</at>
             <at name="enabled">false</at>
+            <at name="text">Información</at>
+            <at name="height">22</at>
+            <at name="width">116</at>
+            <at name="name">cent_jard.BT</at>
             <at name="actionCommand">Información</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -1491,7 +1492,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cent_jard.BT</at>
            </object>
           </at>
          </object>
@@ -1523,10 +1523,11 @@
           <at name="classname">javax.swing.JButton</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
-            <at name="text">Información</at>
-            <at name="height">25</at>
             <at name="enabled">false</at>
+            <at name="text">Información</at>
+            <at name="height">22</at>
+            <at name="width">116</at>
+            <at name="name">cent_esc.BT</at>
             <at name="actionCommand">Información</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -1548,7 +1549,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cent_esc.BT</at>
            </object>
           </at>
          </object>
@@ -1580,10 +1580,11 @@
           <at name="classname">javax.swing.JButton</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
-            <at name="text">Información</at>
-            <at name="height">25</at>
             <at name="enabled">false</at>
+            <at name="text">Información</at>
+            <at name="height">22</at>
+            <at name="width">116</at>
+            <at name="name">csalud.BT</at>
             <at name="actionCommand">Información</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -1605,7 +1606,6 @@
               </at>
              </object>
             </at>
-            <at name="name">csalud.BT</at>
            </object>
           </at>
          </object>
@@ -1637,10 +1637,11 @@
           <at name="classname">javax.swing.JButton</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
-            <at name="text">Información</at>
-            <at name="height">25</at>
             <at name="enabled">false</at>
+            <at name="text">Información</at>
+            <at name="height">22</at>
+            <at name="width">116</at>
+            <at name="name">creunion.BT</at>
             <at name="actionCommand">Información</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -1662,7 +1663,6 @@
               </at>
              </object>
             </at>
-            <at name="name">creunion.BT</at>
            </object>
           </at>
          </object>
@@ -1694,9 +1694,15 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Código:</at>
-            <at name="height">15</at>
+            <at name="height">14</at>
+            <at name="width">116</at>
+            <at name="name">cod_com.LB</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1717,12 +1723,6 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">cod_com.LB</at>
            </object>
           </at>
          </object>
@@ -1754,9 +1754,15 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Municipio:</at>
-            <at name="height">15</at>
+            <at name="height">14</at>
+            <at name="width">116</at>
+            <at name="name">municip.LB</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1777,12 +1783,6 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">municip.LB</at>
            </object>
           </at>
          </object>
@@ -1814,9 +1814,15 @@
           <at name="classname">com.jeta.forms.components.label.JETALabel</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Nº de familias:</at>
-            <at name="height">15</at>
+            <at name="height">14</at>
+            <at name="width">116</at>
+            <at name="name">n_fam.LB</at>
+            <at name="fill">
+             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+              <at name="name">fill</at>
+             </object>
+            </at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1837,12 +1843,6 @@
               </at>
              </object>
             </at>
-            <at name="fill">
-             <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-              <at name="name">fill</at>
-             </object>
-            </at>
-            <at name="name">n_fam.LB</at>
            </object>
           </at>
          </object>
@@ -1874,8 +1874,9 @@
           <at name="classname">javax.swing.JTextField</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
+            <at name="height">20</at>
             <at name="width">116</at>
-            <at name="height">19</at>
+            <at name="name">cod_com.TF</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1896,7 +1897,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cod_com.TF</at>
            </object>
           </at>
          </object>
@@ -1928,8 +1928,9 @@
           <at name="classname">javax.swing.JTextField</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
+            <at name="height">20</at>
             <at name="width">116</at>
-            <at name="height">19</at>
+            <at name="name">municip.TF</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -1950,7 +1951,6 @@
               </at>
              </object>
             </at>
-            <at name="name">municip.TF</at>
            </object>
           </at>
          </object>
@@ -1982,8 +1982,9 @@
           <at name="classname">javax.swing.JTextField</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
+            <at name="height">20</at>
             <at name="width">116</at>
-            <at name="height">19</at>
+            <at name="name">n_fam.TF.INT</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
               <super classname="com.jeta.forms.store.properties.BorderProperty">
@@ -2004,7 +2005,6 @@
               </at>
              </object>
             </at>
-            <at name="name">n_fam.TF.INT</at>
            </object>
           </at>
          </object>
@@ -2036,9 +2036,10 @@
           <at name="classname">javax.swing.JCheckBox</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
             <at name="text">Agua potable</at>
-            <at name="height">17</at>
+            <at name="height">16</at>
+            <at name="width">116</at>
+            <at name="name">agua_pot.CHB</at>
             <at name="actionCommand">Existe centro educativo a nivel de ciclo común y diversificado.</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -2060,7 +2061,6 @@
               </at>
              </object>
             </at>
-            <at name="name">agua_pot.CHB</at>
            </object>
           </at>
          </object>
@@ -2092,10 +2092,11 @@
           <at name="classname">javax.swing.JButton</at>
           <at name="properties">
            <object classname="com.jeta.forms.store.support.PropertyMap">
-            <at name="width">116</at>
-            <at name="text">Información</at>
-            <at name="height">25</at>
             <at name="enabled">false</at>
+            <at name="text">Información</at>
+            <at name="height">22</at>
+            <at name="width">116</at>
+            <at name="name">cent_ccyd.BT</at>
             <at name="actionCommand">Información</at>
             <at name="border">
              <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
@@ -2117,7 +2118,6 @@
               </at>
              </object>
             </at>
-            <at name="name">cent_ccyd.BT</at>
            </object>
           </at>
          </object>
@@ -2132,14 +2132,10 @@
      <at name="classname">com.jeta.forms.gui.form.GridView</at>
      <at name="properties">
       <object classname="com.jeta.forms.store.support.PropertyMap">
-       <at name="border">
-        <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
-         <super classname="com.jeta.forms.store.properties.BorderProperty">
-          <at name="name">border</at>
-         </super>
-         <at name="borders">
-          <object classname="java.util.LinkedList"/>
-         </at>
+       <at name="name"></at>
+       <at name="fill">
+        <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
+         <at name="name">fill</at>
         </object>
        </at>
        <at name="scollBars">
@@ -2169,12 +2165,16 @@
          </at>
         </object>
        </at>
-       <at name="fill">
-        <object classname="com.jeta.forms.store.properties.effects.PaintProperty">
-         <at name="name">fill</at>
+       <at name="border">
+        <object classname="com.jeta.forms.store.properties.CompoundBorderProperty">
+         <super classname="com.jeta.forms.store.properties.BorderProperty">
+          <at name="name">border</at>
+         </super>
+         <at name="borders">
+          <object classname="java.util.LinkedList"/>
+         </at>
         </object>
        </at>
-       <at name="name"/>
       </object>
      </at>
     </object>
