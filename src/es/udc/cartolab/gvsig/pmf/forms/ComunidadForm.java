@@ -364,94 +364,58 @@ public class ComunidadForm extends AbstractForm implements MouseListener, Intern
 	private boolean getCHBChanged() {
 		return chbChanged;
 	}
+	
+	private void displayNavTable(JTable refTable, String dbfName) {
+		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+		boolean found = false;
+		for (int i=0; i<windows.length; i++) {
+			if (windows[i] instanceof Table) {
+				String name = ((Table) windows[i]).getModel().getName();
+				if (name.endsWith(".dbf")) {
+					name = name.substring(0, name.lastIndexOf(".dbf"));
+					if (name.equals(dbfName)) {
+						IEditableSource source = ((Table) windows[i]).getModel().getModelo();
+						found = true;
+						AlphanumericNavTable navTable;
+						try {
+							navTable = new AlphanumericNavTable(source, dbfName);
+						
+							if (navTable.init()) {
+								int selected = refTable.getSelectedRow();
+								ArrayList<String> where = new ArrayList<String>();
+								TableModel model = refTable.getModel();
+								for (int j=0; j<model.getColumnCount(); j++){
+									where.add(model.getValueAt(selected, j).toString());
+								}
+								try {
+									navTable.setPosition(doFilter(source,where));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								PluginServices.getMDIManager().addCentredWindow(navTable);
+								JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
+								parent.addInternalFrameListener(this);
+							}
+						} catch (ReadDriverException e) {
+							e.printStackTrace();
+						}
+						break;
+					}
+				}
+			}
+		}
+		if (!found) {
+			JOptionPane.showMessageDialog(this, "La tabla \"" + dbfName + "\" no esta cargada");
+		}
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		
 		if ((event.getSource() == orgBaseTable) &&(event.getClickCount() == 2)) {
-			IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-			boolean found = false;
-			for (int i=0; i<windows.length; i++) {
-				if (windows[i] instanceof Table) {
-					String name = ((Table) windows[i]).getModel().getName();
-					if (name.endsWith(".dbf")) {
-						name = name.substring(0, name.lastIndexOf(".dbf"));
-						if (name.equals("organizacion_base")) {
-							IEditableSource source = ((Table) windows[i]).getModel().getModelo();
-							found = true;
-							AlphanumericNavTable navTable;
-							try {
-								navTable = new AlphanumericNavTable(source, "organizacion_base");
-							
-								if (navTable.init()) {
-									int selected = orgBaseTable.getSelectedRow();
-									ArrayList<String> where = new ArrayList<String>();
-									TableModel model = orgBaseTable.getModel();
-									for (int j=0; j<model.getColumnCount(); j++){
-										where.add(model.getValueAt(selected, j).toString());
-									}
-									try {
-										navTable.setPosition(doFilter(source,where));
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-									PluginServices.getMDIManager().addCentredWindow(navTable);
-									JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
-									parent.addInternalFrameListener(this);
-								}
-							} catch (ReadDriverException e) {
-								e.printStackTrace();
-							}
-							break;
-						}
-					}
-				}
-			}
-			if (!found) {
-				JOptionPane.showMessageDialog(this, "La tabla \"organizacion_base\" no esta cargada");
-			}
+			displayNavTable(orgBaseTable, "organizacion_base");
 		} else if ((event.getSource() == presInstTable) &&(event.getClickCount() == 2)) {
-			IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-			boolean found = false;
-			for (int i=0; i<windows.length; i++) {
-				if (windows[i] instanceof Table) {
-					String name = ((Table) windows[i]).getModel().getName();
-					if (name.endsWith(".dbf")) {
-						name = name.substring(0, name.lastIndexOf(".dbf"));
-						if (name.equals("presencia_institucional")) {
-							IEditableSource source = ((Table) windows[i]).getModel().getModelo();
-							found = true;
-							AlphanumericNavTable navTable;
-							try {
-								navTable = new AlphanumericNavTable(source, "presencia_institucional");
-							
-								if (navTable.init()) {
-									int selected = presInstTable.getSelectedRow();
-									ArrayList<String> where = new ArrayList<String>();
-									TableModel model = presInstTable.getModel();
-									for (int j=0; j<model.getColumnCount(); j++){
-										where.add(model.getValueAt(selected, j).toString());
-									}
-									try {
-										navTable.setPosition(doFilter(source,where));
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-									PluginServices.getMDIManager().addCentredWindow(navTable);
-									JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
-									parent.addInternalFrameListener(this);
-								}
-							} catch (ReadDriverException e) {
-								e.printStackTrace();
-							}
-							break;
-						}
-					}
-				}
-			}
-			if (!found) {
-				JOptionPane.showMessageDialog(this, "La tabla \"organizacion_base\" no esta cargada");
-			}
+			displayNavTable(presInstTable, "presencia_institucional");
 		}
 		
 	}

@@ -506,51 +506,55 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 														}
 	}
 	
+	private void displayNavTable(JTable refTable, String dbfName) {
+		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+		boolean found = false;
+		for (int i=0; i<windows.length; i++) {
+			if (windows[i] instanceof Table) {
+				String name = ((Table) windows[i]).getModel().getName();
+				if (name.endsWith(".dbf")) {
+					name = name.substring(0, name.lastIndexOf(".dbf"));
+					if (name.equals(dbfName)) {
+						IEditableSource source = ((Table) windows[i]).getModel().getModelo();
+						found = true;
+						AlphanumericNavTable navTable;
+						try {
+							navTable = new AlphanumericNavTable(source, dbfName);
+						
+							if (navTable.init()) {
+								int selected = refTable.getSelectedRow();
+								ArrayList<String> where = new ArrayList<String>();
+								TableModel model = refTable.getModel();
+								for (int j=0; j<model.getColumnCount(); j++){
+									where.add(model.getValueAt(selected, j).toString());
+								}
+								try {
+									navTable.setPosition(doFilter(source,where));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								PluginServices.getMDIManager().addCentredWindow(navTable);
+								JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
+								parent.addInternalFrameListener(this);
+							}
+						} catch (ReadDriverException e) {
+							e.printStackTrace();
+						}
+						break;
+					}
+				}
+			}
+		}
+		if (!found) {
+			JOptionPane.showMessageDialog(this, "La tabla \"" + dbfName + "\" no esta cargada");
+		}
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		
 		if ((event.getSource() == cultivosTable) &&(event.getClickCount() == 2)) {
-			IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-			boolean found = false;
-			for (int i=0; i<windows.length; i++) {
-				if (windows[i] instanceof Table) {
-					String name = ((Table) windows[i]).getModel().getName();
-					if (name.endsWith(".dbf")) {
-						name = name.substring(0, name.lastIndexOf(".dbf"));
-						if (name.equals("cultivos")) {
-							IEditableSource source = ((Table) windows[i]).getModel().getModelo();
-							found = true;
-							AlphanumericNavTable navTable;
-							try {
-								navTable = new AlphanumericNavTable(source, "cultivos");
-							
-								if (navTable.init()) {
-									int selected = cultivosTable.getSelectedRow();
-									ArrayList<String> where = new ArrayList<String>();
-									TableModel model = cultivosTable.getModel();
-									for (int j=0; j<model.getColumnCount(); j++){
-										where.add(model.getValueAt(selected, j).toString());
-									}
-									try {
-										navTable.setPosition(doFilter(source,where));
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-									PluginServices.getMDIManager().addCentredWindow(navTable);
-									JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
-									parent.addInternalFrameListener(this);
-								}
-							} catch (ReadDriverException e) {
-								e.printStackTrace();
-							}
-							break;
-						}
-					}
-				}
-			}
-			if (!found) {
-				JOptionPane.showMessageDialog(this, "La tabla \"cultivos\" no esta cargada");
-			}
+			displayNavTable(cultivosTable, "cultivos");
 		}
 		
 	}
