@@ -52,19 +52,19 @@ public final class ParcelaValidator implements Validator<ParcelaModel> {
 		}
 
 		//d_fue_tano
-		if (!ValidationCheckingUtils.isReal(parcelaModel.getD_fue_tano())) {
-			support.addError("d_fue_tano", "debe ser un numero");
+		if (!ValidationUtils.isNumeric(parcelaModel.getD_fue_tan())) {
+			support.addError("d_fue_tan", "debe ser un numero");
 		}
-		else if (ValidationUtils.isBlank(parcelaModel.getD_fue_tano())) {
-			support.addError("d_fue_tano", "es obligatorio");
+		else if (ValidationUtils.isBlank(parcelaModel.getD_fue_tan())) {
+			support.addError("d_fue_tan", "es obligatorio");
 		}
 
 		//d_tan_hueo
-		if (!ValidationCheckingUtils.isReal(parcelaModel.getD_tan_hueo())) {
-			support.addError("d_tan_hueo", "debe ser un numero");
+		if (!ValidationUtils.isNumeric(parcelaModel.getD_tan_hue())) {
+			support.addError("d_tan_hue", "debe ser un numero");
 		}
-		else if (ValidationUtils.isBlank(parcelaModel.getD_tan_hueo())) {
-			support.addError("d_tan_hueo", "es obligatorio");
+		else if (ValidationUtils.isBlank(parcelaModel.getD_tan_hue())) {
+			support.addError("d_tan_hue", "es obligatorio");
 		}
 
 		//area_cul

@@ -22,8 +22,8 @@ public class ParcelaModel extends FormModel {
     private String area_tot;
     private String codigo_fc;
     private String ot_legal_p;
-    private String d_fue_tano;
-    private String d_tan_hueo;
+    private String d_fue_tan;
+    private String d_tan_hue;
     private String area_cul;
     private String otrocspe;
     private String ot_tip_su;
@@ -44,8 +44,6 @@ public class ParcelaModel extends FormModel {
     private String p_coc_mejo;
     private String pro_finsex;
     private String legal_par;
-    private String d_fue_tan;
-    private String d_tan_hue;
     private String tip_suelo;
     private String pendiente;
     private String deg_suelo;
@@ -103,8 +101,8 @@ public class ParcelaModel extends FormModel {
        widgetValues.put("fam_cant", fam_cant);
        widgetValues.put("con_cant", con_cant);
        widgetValues.put("area_tot", area_tot);
-       widgetValues.put("d_fue_tano", d_fue_tano);
-       widgetValues.put("d_tan_hueo", d_tan_hueo);
+       widgetValues.put("d_fue_tan", d_fue_tan);
+       widgetValues.put("d_tan_hue", d_tan_hue);
        widgetValues.put("area_cul", area_cul);
 
        // string values
@@ -130,8 +128,6 @@ public class ParcelaModel extends FormModel {
                   widgetValues.put("p_coc_mejo", p_coc_mejo);
                   widgetValues.put("pro_finsex", pro_finsex);
                   widgetValues.put("legal_par", legal_par);
-                  widgetValues.put("d_fue_tan", d_fue_tan);
-                  widgetValues.put("d_tan_hue", d_tan_hue);
                   widgetValues.put("tip_suelo", tip_suelo);
                   widgetValues.put("pendiente", pendiente);
                   widgetValues.put("deg_suelo", deg_suelo);
@@ -162,8 +158,6 @@ public class ParcelaModel extends FormModel {
                   p_coc_mejo = getGvsigDefaultString();
                   pro_finsex = getGvsigDefaultString();
                   legal_par = getGvsigDefaultString();
-                  d_fue_tan = getGvsigDefaultString();
-                  d_tan_hue = getGvsigDefaultString();
                   tip_suelo = getGvsigDefaultString();
                   pendiente = getGvsigDefaultString();
                   deg_suelo = getGvsigDefaultString();
@@ -174,8 +168,8 @@ public class ParcelaModel extends FormModel {
        fam_cant = Integer.toString(getGvsigDefaultInt());
        con_cant = Integer.toString(getGvsigDefaultInt());
        area_tot = Integer.toString(getGvsigDefaultInt());
-       d_fue_tano = Integer.toString(getGvsigDefaultInt());
-       d_tan_hueo = Integer.toString(getGvsigDefaultInt());
+       d_fue_tan = Integer.toString(getGvsigDefaultInt());
+       d_tan_hue = Integer.toString(getGvsigDefaultInt());
        area_cul = Integer.toString(getGvsigDefaultInt());
     }
 
@@ -241,23 +235,23 @@ public class ParcelaModel extends FormModel {
         firePropertyChange((String) PROPERTIES_MAP.get("OT_LEGAL_P"), oldValue, newValue);
     }
 
-    public String getD_fue_tano(){
-        return d_fue_tano;
+    public String getD_fue_tan(){
+        return d_fue_tan;
     }
 
-    public void setD_fue_tano(String newValue) {
-        String oldValue = getD_fue_tano();
-        d_fue_tano = newValue;
+    public void setD_fue_tan(String newValue) {
+        String oldValue = getD_fue_tan();
+        d_fue_tan = newValue;
         firePropertyChange((String) PROPERTIES_MAP.get("D_FUE_TANO"), oldValue, newValue);
     }
 
-    public String getD_tan_hueo(){
-        return d_tan_hueo;
+    public String getD_tan_hue(){
+        return d_tan_hue;
     }
 
-    public void setD_tan_hueo(String newValue) {
-        String oldValue = getD_tan_hueo();
-        d_tan_hueo = newValue;
+    public void setD_tan_hue(String newValue) {
+        String oldValue = getD_tan_hue();
+        d_tan_hue = newValue;
         firePropertyChange((String) PROPERTIES_MAP.get("D_TAN_HUEO"), oldValue, newValue);
     }
 
@@ -461,26 +455,7 @@ public class ParcelaModel extends FormModel {
         firePropertyChange((String) PROPERTIES_MAP.get("LEGAL_PAR"), oldValue, newValue);
     }
 
-    public String getD_fue_tan(){
-        return d_fue_tan;
-    }
-
-    public void setD_fue_tan(String newValue) {
-        String oldValue = getD_fue_tan();
-        d_fue_tan = newValue;
-        firePropertyChange((String) PROPERTIES_MAP.get("D_FUE_TAN"), oldValue, newValue);
-    }
-
-    public String getD_tan_hue(){
-        return d_tan_hue;
-    }
-
-    public void setD_tan_hue(String newValue) {
-        String oldValue = getD_tan_hue();
-        d_tan_hue = newValue;
-        firePropertyChange((String) PROPERTIES_MAP.get("D_TAN_HUE"), oldValue, newValue);
-    }
-
+    
     public String getTip_suelo(){
         return tip_suelo;
     }
@@ -813,22 +788,6 @@ public class ParcelaModel extends FormModel {
     }
 
 
-    // Maps **************************************************************************
-
-/*
-	//map with non-widget values
-	public Map<String, String> getNonwidgetvalues(){
-		return nonWidgetValues;
-	}
-
-	public String getNonwidgetvalues(String key) {
-		return nonWidgetValues.get(key);
-	}
-
-	public void setNonwidgetvalues(String key, String newValue){
-		nonWidgetValues.put(key, newValue);
-	}
-*/
 
 	//map with widget values
 	@Override
@@ -839,8 +798,8 @@ public class ParcelaModel extends FormModel {
 		widgetValues.put("area_tot", area_tot);
 		widgetValues.put("codigo_fc", codigo_fc);
 		widgetValues.put("ot_legal_p", ot_legal_p);
-		widgetValues.put("d_fue_tano", d_fue_tano);
-		widgetValues.put("d_tan_hueo", d_tan_hueo);
+		widgetValues.put("d_fue_tan", d_fue_tan);
+		widgetValues.put("d_tan_hue", d_tan_hue);
 		widgetValues.put("area_cul", area_cul);
 		widgetValues.put("otrocspe", otrocspe);
 		widgetValues.put("ot_tip_su", ot_tip_su);
@@ -861,8 +820,6 @@ public class ParcelaModel extends FormModel {
 		widgetValues.put("p_coc_mejo", p_coc_mejo);
 		widgetValues.put("pro_finsex", pro_finsex);
 		widgetValues.put("legal_par", legal_par);
-		widgetValues.put("d_fue_tan", d_fue_tan);
-		widgetValues.put("d_tan_hue", d_tan_hue);
 		widgetValues.put("tip_suelo", tip_suelo);
 		widgetValues.put("pendiente", pendiente);
 		widgetValues.put("deg_suelo", deg_suelo);
@@ -900,12 +857,5 @@ public class ParcelaModel extends FormModel {
 		return widgetValues;
 	}
 
-        // maps for every layer
-/*
-   // map with widget values
-    @Override
-    public Map<String, String> getWidgetValues() {
-    return widgetValues;
-    }
-*/
+
 }

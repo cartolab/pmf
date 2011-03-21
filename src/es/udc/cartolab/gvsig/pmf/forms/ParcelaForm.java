@@ -239,27 +239,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 		}
 	}
 
-	private void setD_fue_tanoEnabledIfNeeded() {
-		JComboBox d_fue_tan = (JComboBox) formBody.getComponentByName("d_fue_tan.CB");
-		JTextField d_fue_tano = (JTextField) formBody.getComponentByName("d_fue_tano.TF.REAL");
-
-		if (d_fue_tan.getSelectedItem().equals("Otra")) {
-			d_fue_tano.setEnabled(true);
-		} else {
-			d_fue_tano.setEnabled(false);
-		}
-	}
-
-	private void setD_tan_hueoEnabledIfNeeded() {
-		JComboBox d_tan_hue = (JComboBox) formBody.getComponentByName("d_tan_hue.CB");
-		JTextField d_tan_hueo = (JTextField) formBody.getComponentByName("d_tan_hueo.TF.REAL");
-
-		if (d_tan_hue.getSelectedItem().equals("Otra")) {
-			d_tan_hueo.setEnabled(true);
-		} else {
-			d_tan_hueo.setEnabled(false);
-		}
-	}
+	
 
 	private void setOt_tip_suEnabledIfNeeded() {
 		JComboBox tip_suelo = (JComboBox) formBody.getComponentByName("tip_suelo.CB");
@@ -374,8 +354,6 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 	protected void fillSpecificValues() {
 		setCodigo_fcEnabledIfNeeded();
 		setOt_legal_pEnabledIfNeeded();
-		setD_tan_hueoEnabledIfNeeded();
-		setD_fue_tanoEnabledIfNeeded();
 		setOt_tip_suEnabledIfNeeded();
 		setCercasEnabledIfNeeded();
 		setOt_cercaEnabledIfNeeded();
@@ -395,12 +373,6 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 		JComboBox legal_par = (JComboBox) formBody.getComponentByName("legal_par.CB");
 		legal_par.setActionCommand("ot_legal_p");
 		legal_par.addActionListener(this);
-		JComboBox d_fue_tan = (JComboBox) formBody.getComponentByName("d_fue_tan.CB");
-		d_fue_tan.setActionCommand("d_fue_tano");
-		d_fue_tan.addActionListener(this);
-		JComboBox d_tan_hue = (JComboBox) formBody.getComponentByName("d_tan_hue.CB");
-		d_tan_hue.setActionCommand("d_tan_hueo");
-		d_tan_hue.addActionListener(this);
 		JComboBox tip_suelo = (JComboBox) formBody.getComponentByName("tip_suelo.CB");
 		tip_suelo.setActionCommand("ot_tip_su");
 		tip_suelo.addActionListener(this);
@@ -436,10 +408,6 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 		fuente_co.removeActionListener(this);
 		JComboBox legal_par = (JComboBox) formBody.getComponentByName("legal_par.CB");
 		legal_par.removeActionListener(this);
-		JComboBox d_fue_tan = (JComboBox) formBody.getComponentByName("d_fue_tan.CB");
-		d_fue_tan.removeActionListener(this);
-		JComboBox d_tan_hue = (JComboBox) formBody.getComponentByName("d_tan_hue.CB");
-		d_tan_hue.removeActionListener(this);
 		JComboBox tip_suelo = (JComboBox) formBody.getComponentByName("tip_suelo.CB");
 		tip_suelo.removeActionListener(this);
 		JCheckBox cerca = (JCheckBox) formBody.getComponentByName("cerca.CHB");
@@ -471,12 +439,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 			if (action.equals("ot_legal_p")) {
 				setOt_legal_pEnabledIfNeeded();
 			} else
-				if (action.equals("d_fue_tano")) {
-					setD_fue_tanoEnabledIfNeeded();
-				} else
-					if (action.equals("d_tan_hueo")) {
-						setD_tan_hueoEnabledIfNeeded();
-					} else
+				
 						if (action.equals("ot_tip_su")) {
 							setOt_tip_suEnabledIfNeeded();
 						} else
