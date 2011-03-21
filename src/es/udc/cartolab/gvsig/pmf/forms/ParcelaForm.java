@@ -2,35 +2,60 @@ package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import javax.swing.table.TableModel;
 
 import org.apache.log4j.Logger;
 
+import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.hardcode.gdbms.engine.instruction.EvaluationException;
+import com.hardcode.gdbms.engine.instruction.SemanticException;
+import com.hardcode.gdbms.parser.ParseException;
 import com.iver.andami.PluginServices;
+import com.iver.andami.ui.mdiManager.IWindow;
+import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
+import com.iver.cit.gvsig.fmap.edition.IEditableSource;
+import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.jeta.forms.components.panel.FormPanel;
 
+import es.udc.cartolab.gvsig.navtable.AlphanumericNavTable;
 import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
+import es.udc.cartolab.gvsig.pmf.forms.table.NonEditableTableModel;
 import es.udc.cartolab.gvsig.pmf.forms.validation.binding.ParcelaBinding;
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.ParcelaModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-public class ParcelaForm extends AbstractForm
+public class ParcelaForm extends AbstractForm implements MouseListener, InternalFrameListener
 {
+	private JTable cultivosTable;
 
 	public ParcelaForm(FLyrVect layer) {
 		super(layer);
 		viewInfo.setHeight(800);
 		viewInfo.setWidth(650);
-		viewInfo.setTitle(PluginServices.getText(this, "Parcelas"));
+		viewInfo.setTitle(PluginServices.getText(this, "_parcelas"));
+		cultivosTable = (JTable) formBody.getComponentByName("cultivos");
+		
+		fillJTable(cultivosTable, "cultivos");
+		
 	}
 
 	@Override
@@ -92,6 +117,51 @@ public class ParcelaForm extends AbstractForm
 			return false;
 		}
 	}
+	
+	public void fillJTable(JTable table, String sourcename){
+		
+		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+		FieldDescription[] columns = {};
+		for (int i=0; i<windows.length; i++) {
+			if (windows[i] instanceof Table) {
+				String name = ((Table) windows[i]).getModel().getName();
+				if (name.endsWith(".dbf")) {
+					name = name.substring(0, name.lastIndexOf(".dbf"));
+					if (name.equals(sourcename)) {
+						IEditableSource source = ((Table) windows[i]).getModel().getModelo();
+						columns = source.getFieldsDescription();
+						
+						ArrayList<String> columnNames = new ArrayList<String>();
+						
+						for (int j=0; j < columns.length; j++) {
+							columnNames.add(columns[j].getFieldName());							
+						}
+						
+						ArrayList<Object[]> rows = new ArrayList<Object[]>();
+						Object[] row;
+						
+						try {
+							for (int j = 0; j < source.getRowCount(); j++) {
+								IRowEdited sourceRow = source.getRow(j);
+								row = sourceRow.getAttributes();
+								rows.add(row);
+							}
+						} catch (ReadDriverException e) {
+							e.printStackTrace();
+						}
+						
+						Object[][] data = new Object[1][1];
+						table.setModel(new NonEditableTableModel(rows.toArray(data), columnNames.toArray()));
+						break;
+					}
+				}
+			}
+		}
+		
+		table.removeMouseListener(this);
+		table.addMouseListener(this);
+
+	}
 
 	private boolean isUpdatingTheSameRegister(int index, long currentPosition) {
 		if (index == (int) currentPosition) {
@@ -123,6 +193,25 @@ public class ParcelaForm extends AbstractForm
 			return false;
 		}
 		return true;
+	}
+	
+	private long doFilter(IEditableSource recordset, ArrayList<String> where) throws ReadDriverException, DriverLoadException, ParseException, SemanticException, EvaluationException, IOException {
+		long recordPosition = 0;
+		for (int i=0; i<recordset.getRowCount(); i++) {
+			IRowEdited row = recordset.getRow(i);
+			boolean same = true;
+			for (int j=0; j<where.size(); j++) {
+				if (!where.get(j).equals(row.getAttribute(j).toString())) {
+					same = false;
+					break;
+				}
+			}
+			if (same) {
+				recordPosition = i;
+				break;
+			}
+		}
+		return recordPosition+1;
 	}
 
 	private void setCodigo_fcEnabledIfNeeded() {
@@ -415,5 +504,111 @@ public class ParcelaForm extends AbstractForm
 														if (action.equals("uso_quim")) {
 															setC_quimEnabledIfNeeded();
 														}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		
+		if ((event.getSource() == cultivosTable) &&(event.getClickCount() == 2)) {
+			IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+			boolean found = false;
+			for (int i=0; i<windows.length; i++) {
+				if (windows[i] instanceof Table) {
+					String name = ((Table) windows[i]).getModel().getName();
+					if (name.endsWith(".dbf")) {
+						name = name.substring(0, name.lastIndexOf(".dbf"));
+						if (name.equals("cultivos")) {
+							IEditableSource source = ((Table) windows[i]).getModel().getModelo();
+							found = true;
+							AlphanumericNavTable navTable;
+							try {
+								navTable = new AlphanumericNavTable(source, "cultivos");
+							
+								if (navTable.init()) {
+									int selected = cultivosTable.getSelectedRow();
+									ArrayList<String> where = new ArrayList<String>();
+									TableModel model = cultivosTable.getModel();
+									for (int j=0; j<model.getColumnCount(); j++){
+										where.add(model.getValueAt(selected, j).toString());
+									}
+									try {
+										navTable.setPosition(doFilter(source,where));
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+									PluginServices.getMDIManager().addCentredWindow(navTable);
+									JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
+									parent.addInternalFrameListener(this);
+								}
+							} catch (ReadDriverException e) {
+								e.printStackTrace();
+							}
+							break;
+						}
+					}
+				}
+			}
+			if (!found) {
+				JOptionPane.showMessageDialog(this, "La tabla \"cultivos\" no esta cargada");
+			}
+		}
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void internalFrameActivated(InternalFrameEvent e) {
+		
+	}
+
+	@Override
+	public void internalFrameClosed(InternalFrameEvent e) {
+		
+	}
+
+	@Override
+	public void internalFrameClosing(InternalFrameEvent e) {
+		
+	}
+
+	@Override
+	public void internalFrameDeactivated(InternalFrameEvent e) {
+
+		fillJTable(cultivosTable, "cultivos");
+		
+	}
+
+	@Override
+	public void internalFrameDeiconified(InternalFrameEvent e) {
+		
+	}
+
+	@Override
+	public void internalFrameIconified(InternalFrameEvent e) {
+		
+	}
+
+	@Override
+	public void internalFrameOpened(InternalFrameEvent e) {
+		
 	}
 }
