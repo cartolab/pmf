@@ -29,7 +29,7 @@ public class ViviendaForm extends AbstractForm
 		super(layer);
 		viewInfo.setHeight(800);
 		viewInfo.setWidth(650);
-		viewInfo.setTitle(PluginServices.getText(this, "Viviendas"));
+		viewInfo.setTitle(PluginServices.getText(this, "_viviendas"));
 	}
 
 	@Override
