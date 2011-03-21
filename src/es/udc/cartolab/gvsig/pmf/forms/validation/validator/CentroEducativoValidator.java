@@ -75,12 +75,15 @@ public final class CentroEducativoValidator implements Validator<CentroEducativo
 		//i_deserc
 		if (!ValidationCheckingUtils.isReal(centroEducativoModel.getI_deserc())) {
 			support.addError("i_deserc", "debe ser un numero");
-		}
-		else if (ValidationUtils.isBlank(centroEducativoModel.getI_deserc())) {
+		} else if (ValidationUtils.isBlank(centroEducativoModel.getI_deserc())) {
 			support.addError("i_deserc", "es obligatorio");
+		} else {
+		    double n = Double.parseDouble(centroEducativoModel.getI_deserc());
+		    if ((n<0) || (n>100)) {
+			support.addError("i_deserc", "debe estar entre 0 y 100");
+		    }
 		}
-
-
+		    
 		return support.getResult();
 	}
 
