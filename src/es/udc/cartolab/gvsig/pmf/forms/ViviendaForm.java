@@ -123,117 +123,54 @@ public class ViviendaForm extends AbstractForm
 		}
 		return true;
 	}
+	
+	private void checkBoxEnablesTextField(String checkBoxName, String textFieldName) {
+		JCheckBox checkBox = (JCheckBox) formBody.getComponentByName(checkBoxName);
+		JTextField textField = (JTextField) formBody.getComponentByName(textFieldName);
 
-	private void setOtras_actEnabledIfNeeded() {
-		JCheckBox hay_ot_act = (JCheckBox) formBody.getComponentByName("hay_ot_act.CHB");
-		JTextField otras_act = (JTextField) formBody.getComponentByName("otras_act.TF");
-
-		if (hay_ot_act.isSelected()) {
-			otras_act.setEnabled(true);
+		if (checkBox.isSelected()) {
+			textField.setEnabled(true);
 		} else {
-			otras_act.setEnabled(false);
+			textField.setEnabled(false);
+			textField.setText("");
 		}
 	}
+	
+	private void comboBoxEnablesTextField(String comboBoxName, String enabledValue, String textFieldName) {
+		JComboBox comboBox = (JComboBox) formBody.getComponentByName(comboBoxName);
+		JTextField textField = (JTextField) formBody.getComponentByName(textFieldName);
 
-	private void setOtros_ingEnabledIfNeeded() {
-		JCheckBox hay_ot_ing = (JCheckBox) formBody.getComponentByName("hay_ot_ing.CHB");
-		JTextField otros_ing = (JTextField) formBody.getComponentByName("otros_ing.TF");
-
-		if (hay_ot_ing.isSelected()) {
-			otros_ing.setEnabled(true);
+		if (comboBox.getSelectedItem().equals(enabledValue)) {
+			textField.setEnabled(true);
 		} else {
-			otros_ing.setEnabled(false);
+			textField.setEnabled(false);
+			textField.setText("");
 		}
 	}
+	
+	private void checkBoxEnablesComboBox(String checkBoxName, String comboBoxName) {
+		JCheckBox checkBox = (JCheckBox) formBody.getComponentByName(checkBoxName);
+		JComboBox comboBox = (JComboBox) formBody.getComponentByName(comboBoxName);
 
-	private void setOt_stat_viEnabledIfNeeded() {
-		JComboBox estatus_vi = (JComboBox) formBody.getComponentByName("estatus_vi.CB");
-		JTextField ot_stat_vi = (JTextField) formBody.getComponentByName("ot_stat_vi.TF");
-
-		if (estatus_vi.getSelectedItem().equals("Otro")) {
-			ot_stat_vi.setEnabled(true);
+		if (checkBox.isSelected()) {
+			comboBox.setEnabled(true);
 		} else {
-			ot_stat_vi.setEnabled(false);
-		}
-	}
-
-	private void setPro_vivsexEnabledIfNeeded() {
-		JCheckBox pro_viv = (JCheckBox) formBody.getComponentByName("pro_viv.CHB");
-		JComboBox pro_vivsex = (JComboBox) formBody.getComponentByName("pro_vivsex.CB");
-
-		if (pro_viv.isSelected()) {
-			pro_vivsex.setEnabled(true);
-		} else {
-			pro_vivsex.setEnabled(false);
-		}
-	}
-
-	private void setOt_mat_paEnabledIfNeeded() {
-		JComboBox mat_pared = (JComboBox) formBody.getComponentByName("mat_pared.CB");
-		JTextField ot_mat_pa = (JTextField) formBody.getComponentByName("ot_mat_pa.TF");
-
-		if (mat_pared.getSelectedItem().equals("Otro")) {
-			ot_mat_pa.setEnabled(true);
-		} else {
-			ot_mat_pa.setEnabled(false);
-		}
-	}
-
-	private void setOt_mat_teEnabledIfNeeded() {
-		JComboBox mat_techo = (JComboBox) formBody.getComponentByName("mat_techo.CB");
-		JTextField ot_mat_te = (JTextField) formBody.getComponentByName("ot_mat_te.TF");
-
-		if (mat_techo.getSelectedItem().equals("Otro")) {
-			ot_mat_te.setEnabled(true);
-		} else {
-			ot_mat_te.setEnabled(false);
-		}
-	}
-
-	private void setOt_mat_piEnabledIfNeeded() {
-		JComboBox mat_piso = (JComboBox) formBody.getComponentByName("mat_piso.CB");
-		JTextField ot_mat_pi = (JTextField) formBody.getComponentByName("ot_mat_pi.TF");
-
-		if (mat_piso.getSelectedItem().equals("Otro")) {
-			ot_mat_pi.setEnabled(true);
-		} else {
-			ot_mat_pi.setEnabled(false);
-		}
-	}
-
-	private void setCual_chEnabledIfNeeded() {
-		JCheckBox consumo_h = (JCheckBox) formBody.getComponentByName("consumo_h.CHB");
-		JTextField cual_ch = (JTextField) formBody.getComponentByName("cual_ch.TF");
-
-		if (consumo_h.isSelected()) {
-			cual_ch.setEnabled(true);
-		} else {
-			cual_ch.setEnabled(false);
-		}
-	}
-
-	private void setOt_dep_almEnabledIfNeeded() {
-		JCheckBox dep_almac = (JCheckBox) formBody.getComponentByName("dep_almac.CHB");
-		JTextField ot_dep_alm = (JTextField) formBody.getComponentByName("ot_dep_alm.TF");
-
-		if (dep_almac.isSelected()) {
-			ot_dep_alm.setEnabled(true);
-		} else {
-			ot_dep_alm.setEnabled(false);
+			comboBox.setEnabled(false);
+			comboBox.setSelectedIndex(0);
 		}
 	}
 
 	@Override
 	protected void fillSpecificValues() {
-		setOtras_actEnabledIfNeeded();
-		setOtros_ingEnabledIfNeeded();
-		setOt_stat_viEnabledIfNeeded();
-		setPro_vivsexEnabledIfNeeded();
-		setOt_mat_paEnabledIfNeeded();
-		setOt_mat_teEnabledIfNeeded();
-		setOt_mat_piEnabledIfNeeded();
-		setCual_chEnabledIfNeeded();
-		setOt_dep_almEnabledIfNeeded();
+		checkBoxEnablesTextField("hay_ot_act.CHB", "otras_act.TF");
+		checkBoxEnablesTextField("hay_ot_ing.CHB", "otros_ing.TF");
+		comboBoxEnablesTextField("estatus_vi.CB", "Otro", "ot_stat_vi.TF");
+		checkBoxEnablesComboBox("pro_viv.CHB", "pro_vivsex.CB");
+		comboBoxEnablesTextField("mat_piso.CB", "Otro", "ot_mat_pi.TF");
+		comboBoxEnablesTextField("mat_pared.CB", "Otro", "ot_mat_pa.TF");
+		comboBoxEnablesTextField("mat_techo.CB", "Otro", "ot_mat_te.TF");
+		checkBoxEnablesTextField("consumo_h.CHB", "cual_ch.TF");
+		checkBoxEnablesTextField("dep_almac.CHB", "ot_dep_alm.TF");
 	}
 
 	protected void setListeners() {
@@ -295,31 +232,40 @@ public class ViviendaForm extends AbstractForm
 		super.actionPerformed(e);
 		String action = e.getActionCommand();
 		if (action.equals("otras_act")) {
-			setOtras_actEnabledIfNeeded();
-		} else 
-			if (action.equals("otros_ing")) {
-				setOtros_ingEnabledIfNeeded();
-			} else 
-				if (action.equals("ot_stat_vi")) {
-					setOt_stat_viEnabledIfNeeded();
-				} else 
-					if (action.equals("pro_vivsex")) {
-						setPro_vivsexEnabledIfNeeded();
-					} else 
-						if (action.equals("ot_mat_pi")) {
-							setOt_mat_piEnabledIfNeeded();
-						} else 
-							if (action.equals("ot_mat_pa")) {
-								setOt_mat_paEnabledIfNeeded();
-							} else 
-								if (action.equals("ot_mat_te")) {
-									setOt_mat_teEnabledIfNeeded();
-								} else 
-									if (action.equals("cual_ch")) {
-										setCual_chEnabledIfNeeded();
-									} else 
-										if (action.equals("ot_dep_alm")) {
-											setOt_dep_almEnabledIfNeeded();
-										}
+			checkBoxEnablesTextField("hay_ot_act.CHB", "otras_act.TF");
+			return;
+		}
+		if (action.equals("otros_ing")) {
+			checkBoxEnablesTextField("hay_ot_ing.CHB", "otros_ing.TF");
+			return;
+		}
+		if (action.equals("ot_stat_vi")) {
+			comboBoxEnablesTextField("estatus_vi.CB", "Otro", "ot_stat_vi.TF");
+			return;
+		}
+		if (action.equals("pro_vivsex")) {
+			checkBoxEnablesComboBox("pro_viv.CHB", "pro_vivsex.CB");
+			return;
+		}
+		if (action.equals("ot_mat_pi")) {
+			comboBoxEnablesTextField("mat_piso.CB", "Otro", "ot_mat_pi.TF");
+			return;
+		}
+		if (action.equals("ot_mat_pa")) {
+			comboBoxEnablesTextField("mat_pared.CB", "Otro", "ot_mat_pa.TF");
+			return;
+		}
+		if (action.equals("ot_mat_te")) {
+			comboBoxEnablesTextField("mat_techo.CB", "Otro", "ot_mat_te.TF");
+			return;
+		}
+		if (action.equals("cual_ch")) {
+			checkBoxEnablesTextField("consumo_h.CHB", "cual_ch.TF");
+			return;
+		}
+		if (action.equals("ot_dep_alm")) {
+			checkBoxEnablesTextField("dep_almac.CHB", "ot_dep_alm.TF");
+			return;
+		}
 	}
 }

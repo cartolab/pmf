@@ -213,6 +213,30 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 		}
 		return recordPosition+1;
 	}
+	
+	private void checkBoxEnablesTextField(String checkBoxName, String textFieldName) {
+		JCheckBox checkBox = (JCheckBox) formBody.getComponentByName(checkBoxName);
+		JTextField textField = (JTextField) formBody.getComponentByName(textFieldName);
+
+		if (checkBox.isSelected()) {
+			textField.setEnabled(true);
+		} else {
+			textField.setEnabled(false);
+			textField.setText("");
+		}
+	}
+	
+	private void comboBoxEnablesTextField(String comboBoxName, String enabledValue, String textFieldName) {
+		JComboBox comboBox = (JComboBox) formBody.getComponentByName(comboBoxName);
+		JTextField textField = (JTextField) formBody.getComponentByName(textFieldName);
+
+		if (comboBox.getSelectedItem().equals(enabledValue)) {
+			textField.setEnabled(true);
+		} else {
+			textField.setEnabled(false);
+			textField.setText("");
+		}
+	}
 
 	private void setCodigo_fcEnabledIfNeeded() {
 		JCheckBox fuente_co = (JCheckBox) formBody.getComponentByName("fuente_co.CHB");
@@ -224,31 +248,8 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 			codigo_fc_bt.setEnabled(true);
 		} else {
 			codigo_fc.setEnabled(false);
+			codigo_fc.setText("");
 			codigo_fc_bt.setEnabled(false);
-		}
-	}
-
-	private void setOt_legal_pEnabledIfNeeded() {
-		JComboBox legal_par = (JComboBox) formBody.getComponentByName("legal_par.CB");
-		JTextField ot_legal_p = (JTextField) formBody.getComponentByName("ot_legal_p.TF");
-
-		if (legal_par.getSelectedItem().equals("Otro")) {
-			ot_legal_p.setEnabled(true);
-		} else {
-			ot_legal_p.setEnabled(false);
-		}
-	}
-
-	
-
-	private void setOt_tip_suEnabledIfNeeded() {
-		JComboBox tip_suelo = (JComboBox) formBody.getComponentByName("tip_suelo.CB");
-		JTextField ot_tip_su = (JTextField) formBody.getComponentByName("ot_tip_su.TF");
-
-		if (tip_suelo.getSelectedItem().equals("Otro")) {
-			ot_tip_su.setEnabled(true);
-		} else {
-			ot_tip_su.setEnabled(false);
 		}
 	}
 
@@ -273,96 +274,19 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 		}
 	}
 
-	private void setOt_cercaEnabledIfNeeded() {
-		JCheckBox hay_ot_cer = (JCheckBox) formBody.getComponentByName("hay_ot_cer.CHB");
-		JTextField ot_cerca = (JTextField) formBody.getComponentByName("ot_cerca.TF");
-
-		if (hay_ot_cer.isSelected()) {
-			ot_cerca.setEnabled(true);
-		} else {
-			ot_cerca.setEnabled(false);
-		}
-	}
-
-	private void setOtrocanEnabledIfNeeded() {
-		JCheckBox hay_ot_cul = (JCheckBox) formBody.getComponentByName("hay_ot_cul.CHB");
-		JTextField otrocan = (JTextField) formBody.getComponentByName("otrocan.TF");
-
-		if (hay_ot_cul.isSelected()) {
-			otrocan.setEnabled(true);
-		} else {
-			otrocan.setEnabled(false);
-		}
-	}
-
-	private void setOtrocspeEnabledIfNeeded() {
-		JCheckBox hay_ot_sp = (JCheckBox) formBody.getComponentByName("hay_ot_sp.CHB");
-		JTextField otrocspe = (JTextField) formBody.getComponentByName("otrocspe.TF");
-
-		if (hay_ot_sp.isSelected()) {
-			otrocspe.setEnabled(true);
-		} else {
-			otrocspe.setEnabled(false);
-		}
-	}
-
-	private void setC_conseEnabledIfNeeded() {
-		JCheckBox prac_conse = (JCheckBox) formBody.getComponentByName("prac_conse.CHB");
-		JTextField c_conse = (JTextField) formBody.getComponentByName("c_conse.TF");
-
-		if (prac_conse.isSelected()) {
-			c_conse.setEnabled(true);
-		} else {
-			c_conse.setEnabled(false);
-		}
-	}
-
-	private void setC_aborgEnabledIfNeeded() {
-		JCheckBox uso_aborg = (JCheckBox) formBody.getComponentByName("uso_aborg.CHB");
-		JTextField c_aborg = (JTextField) formBody.getComponentByName("c_aborg.TF");
-
-		if (uso_aborg.isSelected()) {
-			c_aborg.setEnabled(true);
-		} else {
-			c_aborg.setEnabled(false);
-		}
-	}
-
-	private void setC_insectEnabledIfNeeded() {
-		JCheckBox insect_org = (JCheckBox) formBody.getComponentByName("insect_org.CHB");
-		JTextField c_insect = (JTextField) formBody.getComponentByName("c_insect.TF");
-
-		if (insect_org.isSelected()) {
-			c_insect.setEnabled(true);
-		} else {
-			c_insect.setEnabled(false);
-		}
-	}
-
-	private void setC_quimEnabledIfNeeded() {
-		JCheckBox uso_quim = (JCheckBox) formBody.getComponentByName("uso_quim.CHB");
-		JTextField c_quim = (JTextField) formBody.getComponentByName("c_quim.TF");
-
-		if (uso_quim.isSelected()) {
-			c_quim.setEnabled(true);
-		} else {
-			c_quim.setEnabled(false);
-		}
-	}
-
 	@Override
 	protected void fillSpecificValues() {
 		setCodigo_fcEnabledIfNeeded();
-		setOt_legal_pEnabledIfNeeded();
-		setOt_tip_suEnabledIfNeeded();
+		comboBoxEnablesTextField("legal_par.CB", "Otro", "ot_legal_p.TF");
+		comboBoxEnablesTextField("tip_suelo.CB", "Otro", "ot_tip_su.TF");
 		setCercasEnabledIfNeeded();
-		setOt_cercaEnabledIfNeeded();
-		setOtrocanEnabledIfNeeded();
-		setOtrocspeEnabledIfNeeded();
-		setC_quimEnabledIfNeeded();
-		setC_insectEnabledIfNeeded();
-		setC_aborgEnabledIfNeeded();
-		setC_conseEnabledIfNeeded();
+		checkBoxEnablesTextField("hay_ot_cer.CHB", "ot_cerca.TF");
+		checkBoxEnablesTextField("hay_ot_cul.CHB", "otrocan.TF");
+		checkBoxEnablesTextField("hay_ot_sp.CHB", "otrocspe.TF");
+		checkBoxEnablesTextField("prac_conse.CHB", "c_conse.TF");
+		checkBoxEnablesTextField("uso_aborg.CHB", "c_aborg.TF");
+		checkBoxEnablesTextField("insect_org.CHB", "c_insect.TF");
+		checkBoxEnablesTextField("uso_quim.CHB", "c_quim.TF");
 	}
 
 	protected void setListeners() {
@@ -435,38 +359,48 @@ public class ParcelaForm extends AbstractForm implements MouseListener, Internal
 		String action = e.getActionCommand();
 		if (action.equals("codigo_fc")) {
 			setCodigo_fcEnabledIfNeeded();
-		} else 
-			if (action.equals("ot_legal_p")) {
-				setOt_legal_pEnabledIfNeeded();
-			} else
-				
-						if (action.equals("ot_tip_su")) {
-							setOt_tip_suEnabledIfNeeded();
-						} else
-							if (action.equals("cercas")) {
-								setCercasEnabledIfNeeded();
-							} else
-								if (action.equals("hay_ot_cer")) {
-									setOt_cercaEnabledIfNeeded();
-								} else
-									if (action.equals("hay_ot_cul")) {
-										setOtrocanEnabledIfNeeded();
-									} else
-										if (action.equals("hay_ot_sp")) {
-											setOtrocspeEnabledIfNeeded();
-										} else
-											if (action.equals("prac_conse")) {
-												setC_conseEnabledIfNeeded();
-											} else
-												if (action.equals("uso_aborg")) {
-													setC_aborgEnabledIfNeeded();
-												} else
-													if (action.equals("insect_org")) {
-														setC_insectEnabledIfNeeded();
-													} else
-														if (action.equals("uso_quim")) {
-															setC_quimEnabledIfNeeded();
-														}
+			return;
+		}
+		if (action.equals("ot_legal_p")) {
+			comboBoxEnablesTextField("legal_par.CB", "Otro", "ot_legal_p.TF");
+			return;
+		}
+		if (action.equals("ot_tip_su")) {
+			comboBoxEnablesTextField("tip_suelo.CB", "Otro", "ot_tip_su.TF");
+			return;
+		}
+		if (action.equals("cercas")) {
+			setCercasEnabledIfNeeded();
+			return;
+		}
+		if (action.equals("hay_ot_cer")) {
+			checkBoxEnablesTextField("hay_ot_cer.CHB", "ot_cerca.TF");
+			return;
+		}
+		if (action.equals("hay_ot_cul")) {
+			checkBoxEnablesTextField("hay_ot_cul.CHB", "otrocan.TF");
+			return;
+		}
+		if (action.equals("hay_ot_sp")) {
+			checkBoxEnablesTextField("hay_ot_sp.CHB", "otrocspe.TF");
+			return;
+		}
+		if (action.equals("prac_conse")) {
+			checkBoxEnablesTextField("prac_conse.CHB", "c_conse.TF");
+			return;
+		}
+		if (action.equals("uso_aborg")) {
+			checkBoxEnablesTextField("uso_aborg.CHB", "c_aborg.TF");
+			return;
+		}
+		if (action.equals("insect_org")) {
+			checkBoxEnablesTextField("insect_org.CHB", "c_insect.TF");
+			return;
+		}
+		if (action.equals("uso_quim")) {
+			checkBoxEnablesTextField("uso_quim.CHB", "c_quim.TF");
+			return;
+		}
 	}
 	
 	private void displayNavTable(JTable refTable, String dbfName) {
