@@ -76,6 +76,7 @@ public class ParcelaModel extends FormModel {
     private boolean uso_quim;
     private boolean maicillo;
     private boolean frijol;
+    private boolean hay_in_par;
     private boolean hay_ot_cul;
     private boolean cerca;
 
@@ -771,10 +772,20 @@ public class ParcelaModel extends FormModel {
         return hay_ot_cul;
     }
 
+    public boolean getHay_in_par(){
+        return hay_in_par;
+    }
+
     public void setHay_ot_cul(boolean newValue) {
         boolean oldValue = getHay_ot_cul();
         hay_ot_cul = newValue;
         firePropertyChange((String) PROPERTIES_MAP.get("HAY_OT_CUL"), oldValue, newValue);
+    }
+
+    public void setHay_in_par(boolean newValue) {
+        boolean oldValue = getHay_in_par();
+        hay_in_par = newValue;
+        firePropertyChange((String) PROPERTIES_MAP.get("HAY_IN_CUL"), oldValue, newValue);
     }
 
     public boolean getCerca(){
@@ -852,6 +863,7 @@ public class ParcelaModel extends FormModel {
 		widgetValues.put("maicillo", String.valueOf(maicillo));
 		widgetValues.put("frijol", String.valueOf(frijol));
 		widgetValues.put("hay_ot_cul", String.valueOf(hay_ot_cul));
+		widgetValues.put("hay_in_par", String.valueOf(hay_in_par));
 		widgetValues.put("cerca", String.valueOf(cerca));
 
 		return widgetValues;
