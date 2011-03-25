@@ -23,5 +23,8 @@
 	<classpathentry kind="src" path="/extLoadData"/>
 	<classpathentry kind="src" path="/CopyFeature"/>
 	<classpathentry kind="src" path="/libCorePlugin"/>
+	<classpathentry kind="lib" path="lib/iText-2.1.5.jar"/>
+	<classpathentry kind="lib" path="lib/iText-rtf-2.1.5.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
