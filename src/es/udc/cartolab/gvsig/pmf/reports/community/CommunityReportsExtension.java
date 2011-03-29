@@ -1,25 +1,31 @@
-package es.udc.cartolab.gvsig.pmf.reports;
+package es.udc.cartolab.gvsig.pmf.reports.community;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.fmap.layers.FLayer;
+import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 import es.udc.cartolab.gvsig.navtableforms.Utils;
-import es.udc.cartolab.gvsig.navtableforms.ormlite.ORMLite;
-import es.udc.cartolab.gvsig.navtableforms.ormlite.ORMLiteDataBase.ORMLiteTable;
-import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-public class ReportsExtension extends Extension {
+public class CommunityReportsExtension extends Extension {
 
 	FLyrVect layer;
 	BaseView view = null;
 	private String layerName;
+
+	/**
+	 * String used for identifying the output directory parameter.
+	 */
+	private String DEFAULT_OUTPUT_DIR_KEY_NAME = "ReportOutput";
+
+	public final String getDefaultReportOutputDirKeyName() {
+		return DEFAULT_OUTPUT_DIR_KEY_NAME;
+	}
 
 	@Override
 	public void execute(String actionCommand) {
@@ -43,7 +49,9 @@ public class ReportsExtension extends Extension {
 			SelectableDataSource source;
 			source = readable.getRecordset();
 
-			new RtfCommunityReport(0, source, "test.rtf", view);
+			SelectCommunityDialog dialog = new SelectCommunityDialog(source,
+					view);
+			PluginServices.getMDIManager().addWindow(dialog);
 
 		} catch (ReadDriverException e) {
 			// TODO Auto-generated catch block
@@ -52,13 +60,20 @@ public class ReportsExtension extends Extension {
 
 	}
 
+	protected void registerIcons() {
+		PluginServices.getIconTheme().registerDefault(
+				"community-reports-launcher-icon",
+				this.getClass().getClassLoader().getResource(
+						"images/report.png"));
+	}
+
 	private FLyrVect getLayerNameFromXML() {
 		return Utils.getFlyrVect(view, layerName);
 	}
 
 	@Override
 	public void initialize() {
-
+		registerIcons();
 	}
 
 	@Override
@@ -67,14 +82,12 @@ public class ReportsExtension extends Extension {
 		boolean isEnabled = false;
 		if (window instanceof BaseView) {
 			view = (BaseView) window;
-			FLayer[] actives = view.getMapControl().getMapContext().getLayers()
-					.getActives();
-			if (1 == actives.length) {
-				layerName = actives[0].getName();
-				ORMLiteTable table = ORMLite.getDataBaseObject(
-						Preferences.getXMLFileName()).getTable(layerName);
-				if (table != null) {
+			FLayers layers = view.getMapControl().getMapContext().getLayers();
+			for (int i = 0; i < layers.getLayersCount(); i++) {
+				layerName = layers.getLayer(i).getName();
+				if (layerName.toLowerCase().equals("comunidad")) {
 					isEnabled = true;
+					break;
 				}
 			}
 		}
