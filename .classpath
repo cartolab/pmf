@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="lib/iText-2.1.5.jar"/>
 	<classpathentry kind="lib" path="lib/iText-rtf-2.1.5.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
+	<classpathentry kind="lib" path="/extNavTable/lib/miglayout-3.7.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

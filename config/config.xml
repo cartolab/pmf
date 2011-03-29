@@ -17,13 +17,22 @@
 				action-command="FormsLauncher"
 				 /> 
 		</extension>
-		<extension class-name="es.udc.cartolab.gvsig.pmf.reports.ReportsExtension" description="REPORTS_PANEL" active="true">
+		<extension class-name="es.udc.cartolab.gvsig.pmf.reports.community.CommunityReportsExtension" description="REPORTS_PANEL" active="true">
 			<tool-bar name="_tool-bar-name">
-				<action-tool icon="reports-launcher-icon" tooltip="_reports-launcher-tooltip"
+				<action-tool icon="community-reports-launcher-icon" tooltip="_community-report-launcher-tooltip"
 					action-command="Reports" />
 			</tool-bar>
-			<menu text="_menu_name/_reports-launcher"
-				action-command="ReportsLauncher"
+			<menu text="_menu_name/_reports_menu/_community-report-launcher"
+				action-command="Reports"
+				 /> 
+		</extension>
+		<extension class-name="es.udc.cartolab.gvsig.pmf.reports.housing.HousingReportsExtension" description="REPORTS_PANEL" active="true">
+			<tool-bar name="_tool-bar-name">
+				<action-tool icon="housing-reports-launcher-icon" tooltip="_housing-report-launcher-tooltip"
+					action-command="Reports" />
+			</tool-bar>
+			<menu text="_menu_name/_reports_menu/_housing-report-launcher"
+				action-command="Reports"
 				 /> 
 		</extension>
 	</extensions>
