@@ -236,16 +236,10 @@ public class RtfCommunityReport {
 		list.setIndentationLeft(20);
 		list.setSymbolIndent(15);
 		list.setListSymbol(new Chunk("\u2022", normalBoldTextFont));
-		Phrase phrase = new Phrase();
-		phrase.add(new Chunk("Existe centro comunal de reuniones: ",
-				normalBoldTextFont));
+		Phrase phrase;
 		SelectableDataSource shpSource;
 		if (source.getFieldValue(nRow, source.getFieldIndexByName("creunion"))
 				.toString().equals("true")) {
-			phrase.add(new Chunk("Sí", normalItalicTextFont));
-			sectionBody.add(phrase);
-			document.add(sectionBody);
-			sectionBody = new Paragraph();
 			layer = Utils.getFlyrVect(view, "centros_reuniones");
 			shpSource = this.layer.getSource().getRecordset();
 			for (int i = 0; i < shpSource.getRowCount(); i++) {
@@ -278,7 +272,9 @@ public class RtfCommunityReport {
 				}
 			}
 		} else {
-			phrase.add(new Chunk("No\n\n", normalItalicTextFont));
+			phrase = new Phrase();
+			phrase.add(new Chunk("\tNo presenta Centro de Reuniones.\n\n",
+					normalItalicTextFont));
 			sectionBody.add(phrase);
 		}
 		document.add(sectionBody);
@@ -388,7 +384,6 @@ public class RtfCommunityReport {
 		// Inst. presence table
 		table = new Table(3);
 		darkColor = true;
-		// we add a cell with colspan 3
 		cell = new RtfCell(new Phrase("NOMBRE DE LA ORGANIZACIÓN",
 				tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -426,16 +421,18 @@ public class RtfCommunityReport {
 		if (found) {
 			FieldDescription[] descriptions = dbfSource.getFieldsDescription();
 			HashMap<String, Integer> indexes = new HashMap<String, Integer>();
+			boolean hasRows = false;
 			for (int i = 0; i < descriptions.length; i++) {
 				indexes.put(descriptions[i].getFieldName(), i);
 			}
 			for (int i = 0; i < dbfSource.getRowCount(); i++) {
-				darkColor = !darkColor;
 				IRowEdited row = dbfSource.getRow(i);
 				if (row.getAttribute(indexes.get("cod_com")).toString().equals(
 						source.getFieldValue(nRow,
 								source.getFieldIndexByName("cod_com"))
 								.toString())) {
+					darkColor = !darkColor;
+					hasRows = true;
 					cell = new RtfCell(new Phrase(row.getAttribute(
 							indexes.get("cod_com")).toString(),
 							normalBoldTextFont));
@@ -457,20 +454,32 @@ public class RtfCommunityReport {
 				}
 
 			}
+			if (!hasRows) {
+				darkColor = !darkColor;
+				cell = new RtfCell(new Phrase(""));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+				cell = new RtfCell(new Phrase(""));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+				cell = new RtfCell(new Phrase(""));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+			}
 		} else {
 			darkColor = !darkColor;
-			cell = new RtfCell(new Phrase("(presencia_institucional.nom_org)",
-					normalBoldTextFont));
+			cell = new RtfCell(new Phrase(""));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase("(presencia_institucional.fun_org)",
-					normalBoldTextFont));
+			cell = new RtfCell(new Phrase(""));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase("(presencia_institucional.per_res)",
-					normalBoldTextFont));
+			cell = new RtfCell(new Phrase(""));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			setCellColor(cell);
 			table.addCell(cell);
@@ -542,8 +551,6 @@ public class RtfCommunityReport {
 		list.setIndentationLeft(20);
 		list.setSymbolIndent(15);
 		list.setListSymbol(new Chunk("\u2022", normalBoldTextFont));
-		phrase = new Phrase();
-		phrase.add(new Chunk("Existe centro educativo: ", normalBoldTextFont));
 		if (!source
 				.getFieldValue(nRow, source.getFieldIndexByName("cent_jard"))
 				.toString().equals("true")
@@ -553,13 +560,11 @@ public class RtfCommunityReport {
 				&& !source.getFieldValue(nRow,
 						source.getFieldIndexByName("cent_ccyd")).toString()
 						.equals("true")) {
-			phrase.add(new Chunk("No\n\n", normalItalicTextFont));
+			phrase = new Phrase();
+			phrase.add(new Chunk("\tNo presenta Centro Educativo.\n\n",
+					normalItalicTextFont));
 			sectionBody.add(phrase);
 		} else {
-			phrase.add(new Chunk("Sí", normalItalicTextFont));
-			sectionBody.add(phrase);
-			document.add(sectionBody);
-			sectionBody = new Paragraph();
 			layer = Utils.getFlyrVect(view, "centros_educativos");
 			SelectableDataSource shpSource = this.layer.getSource()
 					.getRecordset();
@@ -632,14 +637,8 @@ public class RtfCommunityReport {
 		list.setIndentationLeft(20);
 		list.setSymbolIndent(15);
 		list.setListSymbol(new Chunk("\u2022", normalBoldTextFont));
-		phrase = new Phrase();
-		phrase.add(new Chunk("Existe centro de salud: ", normalBoldTextFont));
 		if (source.getFieldValue(nRow, source.getFieldIndexByName("csalud"))
 				.toString().equals("true")) {
-			phrase.add(new Chunk("Sí", normalItalicTextFont));
-			sectionBody.add(phrase);
-			document.add(sectionBody);
-			sectionBody = new Paragraph();
 			layer = Utils.getFlyrVect(view, "centros_salud");
 			SelectableDataSource shpSource = this.layer.getSource()
 					.getRecordset();
@@ -708,7 +707,9 @@ public class RtfCommunityReport {
 				}
 			}
 		} else {
-			phrase.add(new Chunk("No", normalItalicTextFont));
+			phrase = new Phrase();
+			phrase.add(new Chunk("\tNo presenta Centro de Salud.",
+					normalItalicTextFont));
 			sectionBody.add(phrase);
 		}
 		document.add(sectionBody);
@@ -754,6 +755,7 @@ public class RtfCommunityReport {
 		if (found) {
 			FieldDescription[] descriptions = dbfSource.getFieldsDescription();
 			HashMap<String, Integer> indexes = new HashMap<String, Integer>();
+			boolean hasRows = false;
 			for (int i = 0; i < descriptions.length; i++) {
 				indexes.put(descriptions[i].getFieldName(), i);
 			}
@@ -764,6 +766,7 @@ public class RtfCommunityReport {
 						source.getFieldValue(nRow,
 								source.getFieldIndexByName("cod_com"))
 								.toString())) {
+					hasRows = true;
 					cell = new RtfCell(
 							new Phrase(row.getAttribute(indexes.get("area"))
 									.toString(), normalBoldTextFont));
@@ -779,16 +782,23 @@ public class RtfCommunityReport {
 				}
 
 			}
+			if (!hasRows) {
+				darkColor = !darkColor;
+				cell = new RtfCell(new Phrase(""));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+				cell = new RtfCell(new Phrase(""));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+			}
 		} else {
 			darkColor = !darkColor;
-			cell = new RtfCell(
-					new Phrase("(cultivos.area)", normalBoldTextFont));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell = new RtfCell(new Phrase(""));
 			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase("(cultivos.tipo_cul)",
-					normalBoldTextFont));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell = new RtfCell(new Phrase(""));
 			setCellColor(cell);
 			table.addCell(cell);
 		}
