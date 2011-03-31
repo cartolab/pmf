@@ -12,7 +12,7 @@ import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 import es.udc.cartolab.gvsig.loadData.preferences.LoadDataConfigDialog;
-import es.udc.cartolab.gvsig.navtableforms.AbstractForm;
+import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.navtableforms.Utils;
 import es.udc.cartolab.gvsig.navtableforms.ormlite.ORMLite;
 import es.udc.cartolab.gvsig.navtableforms.ormlite.ORMLiteDataBase.ORMLiteTable;
@@ -21,81 +21,85 @@ import es.udc.cartolab.gvsig.tools.CopyFeaturesExtension;
 
 public class FormsLauncherExtension extends Extension {
 
-	FLyrVect layer;
-	BaseView view = null;
-	private String layerName;
+    FLyrVect layer;
+    BaseView view = null;
+    private String layerName;
 
-	private static Logger logger = Logger.getLogger("PMF");
+    private static Logger logger = Logger.getLogger("PMF");
 
-	public void execute(String actionCommand) {
+    public void execute(String actionCommand) {
 
-		layer = getLayerNameFromXML();
-		AbstractForm dialog = null;
+	layer = getLayerNameFromXML();
+	AbstractNavTable dialog = null;
 
-		if (layerName.equals("comunidad")) {
-			dialog = new ComunidadForm(layer);
-		} else if (layerName.equals("centros_educativos")) {
-			dialog = new CentroEducativoForm(layer);
-		} else if (layerName.equals("centros_salud")) {
-			dialog = new CentroSaludForm(layer);
-		} else if (layerName.equals("centros_reuniones")) {
-			dialog = new CentroReunionesForm(layer);
-		} else if (layerName.equals("vivienda")) {
-			dialog = new ViviendaForm(layer);
-		} else if (layerName.equals("parcela")) {
-			dialog = new ParcelaForm(layer);
-		} else if (layerName.equals("fuentes_comunitarias")) {
-
-		} else if (layerName.equals("limites_parcela")) {
-
-		}
-
-		if (dialog.init()) {
-			PluginServices.getMDIManager().addWindow(dialog);
-		}
+	if (layerName.equals("comunidad")) {
+	    dialog = new ComunidadForm(layer);
+	} else if (layerName.equals("centros_educativos")) {
+	    dialog = new CentroEducativoForm(layer);
+	} else if (layerName.equals("centros_salud")) {
+	    dialog = new CentroSaludForm(layer);
+	} else if (layerName.equals("centros_reuniones")) {
+	    dialog = new CentroReunionesForm(layer);
+	} else if (layerName.equals("vivienda")) {
+	    dialog = new ViviendaForm(layer);
+	} else if (layerName.equals("parcela")) {
+	    dialog = new ParcelaForm(layer);
 	}
 
-	private FLyrVect getLayerNameFromXML() {
-		return Utils.getFlyrVect(view, layerName);
+	if (dialog != null) {
+	    if (dialog.init()) {
+		PluginServices.getMDIManager().addWindow(dialog);
+	    }
 	}
+    }
 
-	protected void registerIcons() {
-		PluginServices.getIconTheme().registerDefault(
-				"forms-launcher-icon",
-				this.getClass().getClassLoader()
+    private FLyrVect getLayerNameFromXML() {
+	return Utils.getFlyrVect(view, layerName);
+    }
+
+    protected void registerIcons() {
+	PluginServices.getIconTheme()
+		.registerDefault(
+			"forms-launcher-icon",
+			this.getClass().getClassLoader()
 				.getResource("images/form.png"));
-	}
+    }
 
-	public void initialize() {
-		registerIcons();
-		CopyFeaturesExtension cfe = ((CopyFeaturesExtension) PluginServices.getExtension(CopyFeaturesExtension.class));
-		cfe.setDefaultPath(LoadDataConfigDialog.getConfigPath(false));
-		About about = (About) PluginServices.getExtension(About.class);
-		FPanelAbout panelAbout = about.getAboutPanel();
-		java.net.URL aboutURL = this.getClass().getResource("/about.htm");
-		panelAbout.addAboutUrl("PMF", aboutURL);
-	}
+    public void initialize() {
+	registerIcons();
+	CopyFeaturesExtension cfe = ((CopyFeaturesExtension) PluginServices
+		.getExtension(CopyFeaturesExtension.class));
+	cfe.setDefaultPath(LoadDataConfigDialog.getConfigPath(false));
+	About about = (About) PluginServices.getExtension(About.class);
+	FPanelAbout panelAbout = about.getAboutPanel();
+	java.net.URL aboutURL = this.getClass().getResource("/about.htm");
+	panelAbout.addAboutUrl("PMF", aboutURL);
+    }
 
-	public boolean isEnabled() {
-		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		boolean isEnabled = false;
-		if (window instanceof BaseView) {
-			view = (BaseView) window;
-			FLayer[] actives = view.getMapControl().getMapContext().getLayers().getActives();
-			if (1 == actives.length){
-				layerName = actives[0].getName();
-				ORMLiteTable table = ORMLite.getDataBaseObject(
-						Preferences.getXMLFileName()).getTable(layerName);
-				if (table != null) {
-					isEnabled = true;
-				}
-			}
+    public boolean isEnabled() {
+	IWindow window = PluginServices.getMDIManager().getActiveWindow();
+	boolean isEnabled = false;
+	if (window instanceof BaseView) {
+	    view = (BaseView) window;
+	    FLayer[] actives = view.getMapControl().getMapContext().getLayers()
+		    .getActives();
+	    if (1 == actives.length) {
+		layerName = actives[0].getName();
+		if (!((layerName.equals("fuentes_comunitarias") || layerName
+			.equals("limites_parcela")))) {
+		    ORMLiteTable table = ORMLite.getDataBaseObject(
+			    Preferences.getXMLFileName()).getTable(layerName);
+		    if (table != null) {
+			isEnabled = true;
+		    }
 		}
-
-		return isEnabled;
+	    }
 	}
 
-	public boolean isVisible() {
-		return true;
-	}
+	return isEnabled;
+    }
+
+    public boolean isVisible() {
+	return true;
+    }
 }
