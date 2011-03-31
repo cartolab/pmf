@@ -21,9 +21,7 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.binding.CentroEducativoBinding
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroEducativoModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-
-public class CentroEducativoForm extends AbstractForm
-{
+public class CentroEducativoForm extends AbstractForm {
 
 	public CentroEducativoForm(FLyrVect layer) {
 		super(layer);
@@ -52,16 +50,13 @@ public class CentroEducativoForm extends AbstractForm
 		return Logger.getLogger("PMF");
 	}
 
-
 	protected String getXmlFileName() {
 		return Preferences.getXMLFileName();
 	}
 
-
 	protected String getAliasInXML() {
 		return "centros_educativos";
 	}
-
 
 	protected boolean isPKAlreadyInUse() {
 		try {
@@ -74,7 +69,7 @@ public class CentroEducativoForm extends AbstractForm
 						nameOfKeyInModel);
 				for (int index = 0; index < recordset.getRowCount(); index++) {
 					int indiceCampo = recordset
-					.getFieldIndexByName(nameOfKeyInRecordSet);
+							.getFieldIndexByName(nameOfKeyInRecordSet);
 					String valueFromRecordSet = recordset.getFieldValue(index,
 							indiceCampo).toString();
 					if (valueFromRecordSet.equals(valueFromModel)) {
@@ -103,12 +98,9 @@ public class CentroEducativoForm extends AbstractForm
 
 	protected boolean primaryKeyHasErrors() {
 		if (isPKAlreadyInUse()) {
-			JOptionPane
-			.showMessageDialog(
-					this,
-					PluginServices.getText(this, "choose_other_pk"),
-					PluginServices.getText(this, "pk_already_used"),
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
+					"choose_other_pk"), PluginServices.getText(this,
+					"pk_already_used"), JOptionPane.ERROR_MESSAGE);
 			return true;
 		} else {
 			return false;
@@ -125,21 +117,26 @@ public class CentroEducativoForm extends AbstractForm
 		return true;
 	}
 
+	@Override
 	protected void setListeners() {
 		super.setListeners();
-		JComboBox tipoCEdu = (JComboBox) formBody.getComponentByName("tipo_cedu.CB");
+		JComboBox tipoCEdu = (JComboBox) formBody
+				.getComponentByName("tipo_cedu.CB");
 		tipoCEdu.setActionCommand("merEscolar");
 		tipoCEdu.addActionListener(this);
 	}
 
 	private void setMerEscolarEnabledIfNeeded() {
-		JCheckBox merEscol = (JCheckBox) formBody.getComponentByName("mer_escol.CHB");
-		JComboBox tipoCEdu = (JComboBox) formBody.getComponentByName("tipo_cedu.CB");
+		JCheckBox merEscol = (JCheckBox) formBody
+				.getComponentByName("mer_escol.CHB");
+		JComboBox tipoCEdu = (JComboBox) formBody
+				.getComponentByName("tipo_cedu.CB");
 
 		if (tipoCEdu.getSelectedItem().equals("Jardín de niños")) {
 			merEscol.setEnabled(true);
 		} else {
 			merEscol.setEnabled(false);
+			merEscol.setSelected(false);
 		}
 	}
 
@@ -150,7 +147,8 @@ public class CentroEducativoForm extends AbstractForm
 
 	@Override
 	protected void removeListeners() {
-		JComboBox tipoCEdu = (JComboBox) formBody.getComponentByName("tipo_cedu.CB");
+		JComboBox tipoCEdu = (JComboBox) formBody
+				.getComponentByName("tipo_cedu.CB");
 		tipoCEdu.removeActionListener(this);
 		super.removeListeners();
 	}
