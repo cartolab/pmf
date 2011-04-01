@@ -23,6 +23,8 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -49,6 +51,10 @@ import com.lowagie.text.rtf.table.RtfCell;
 import es.udc.cartolab.gvsig.navtableforms.Utils;
 
 public class RtfPlotReport {
+
+	private Set<String> cul_an;
+	private Set<String> cul_sp;
+	private Set<String> cul_per;
 
 	private FLyrVect layer;
 	private BaseView view = null;
@@ -82,6 +88,70 @@ public class RtfPlotReport {
 			RtfFont.STYLE_BOLD);
 	private final RtfFont subsectionFont = new RtfFont("Century Gothic", 12,
 			RtfFont.STYLE_BOLD);
+
+	private void setCultAn() {
+
+		cul_an = new HashSet<String>();
+		String[] cul_an_array = { "maiz", "maíz", "frijol", "maicillo", "yuca",
+				"hortalizas" };
+		for (int i = 0; i < cul_an_array.length; i++) {
+			cul_an.add(cul_an_array[i]);
+		}
+
+		try {
+			if (plotSource.getFieldValue(nPlotRow,
+					plotSource.getFieldIndexByName("hay_ot_cul")).toString()
+					.equals("true")) {
+				String[] ot_cul_an = plotSource.getFieldValue(nPlotRow,
+						plotSource.getFieldIndexByName("otrocan")).toString()
+						.split(" *[,y] *");
+				for (int i = 0; i < ot_cul_an.length; i++) {
+					cul_an.add(ot_cul_an[i].toLowerCase());
+				}
+			}
+		} catch (ReadDriverException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void setCultSemi() {
+
+		cul_sp = new HashSet<String>();
+		String[] cul_sp_array = { "musáceas", "musaceas", "papaya", "pastos" };
+		for (int i = 0; i < cul_sp_array.length; i++) {
+			cul_sp.add(cul_sp_array[i]);
+		}
+
+		try {
+			if (plotSource.getFieldValue(nPlotRow,
+					plotSource.getFieldIndexByName("hay_ot_sp")).toString()
+					.equals("true")) {
+				String[] ot_cul_sp = plotSource.getFieldValue(nPlotRow,
+						plotSource.getFieldIndexByName("otrocspe")).toString()
+						.split(" *[,y] *");
+				for (int i = 0; i < ot_cul_sp.length; i++) {
+					cul_sp.add(ot_cul_sp[i].toLowerCase());
+				}
+			}
+		} catch (ReadDriverException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void setCultPer() {
+
+		cul_per = new HashSet<String>();
+		String[] cul_per_array = { "árboles forestales", "arboles forestales",
+				"árboles frutales", "arboles frutales" };
+		for (int i = 0; i < cul_per_array.length; i++) {
+			cul_per.add(cul_per_array[i]);
+		}
+
+	}
 
 	public RtfPlotReport(int nRow, SelectableDataSource source,
 			String fileName, BaseView view) {
@@ -120,6 +190,10 @@ public class RtfPlotReport {
 					break;
 				}
 			}
+
+			setCultAn();
+			setCultSemi();
+			setCultPer();
 
 			startDocument();
 			createSection1();
@@ -216,7 +290,7 @@ public class RtfPlotReport {
 		sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 		document.add(sectionBody);
 
-		// Base organizations table
+		// Community public services table
 		Table table = new Table(2);
 		RtfCell cell = new RtfCell(new Phrase("SERVICIO", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -275,7 +349,7 @@ public class RtfPlotReport {
 		}
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
-		cell = new RtfCell(new Phrase("Centro de salud", normalTextFont));
+		cell = new RtfCell(new Phrase("Centro de salud", normalBoldTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
 		if (comSource.getFieldValue(nComRow,
@@ -1087,7 +1161,7 @@ public class RtfPlotReport {
 
 	private void createSection2() throws DocumentException, ReadDriverException {
 
-		// Section 1
+		// Section 2
 		Paragraph sectionTitle = new Paragraph(
 				"\n\n2. DATOS DE LA FINCA E INFRAESTRUCTURA PRODUCTIVA\n",
 				sectionFont);
@@ -1620,7 +1694,7 @@ public class RtfPlotReport {
 		sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 		document.add(sectionBody);
 
-		// Base organizations table
+		// Farming practices table
 		Table table = new Table(3);
 		RtfCell cell = new RtfCell(new Phrase("Tipo", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1722,8 +1796,13 @@ public class RtfPlotReport {
 		sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 		document.add(sectionBody);
 
-		table = new Table(3);
+		// Farming table
+		table = new Table(4);
 		cell = new RtfCell(new Phrase("Cultivo", tableTitleTextFont));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setBackgroundColor(Color.LIGHT_GRAY);
+		table.addCell(cell);
+		cell = new RtfCell(new Phrase("Tipo", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell.setBackgroundColor(Color.LIGHT_GRAY);
 		table.addCell(cell);
@@ -1762,7 +1841,6 @@ public class RtfPlotReport {
 				indexes.put(descriptions[i].getFieldName(), i);
 			}
 			for (int i = 0; i < dbfSource.getRowCount(); i++) {
-				darkColor = !darkColor;
 				IRowEdited row = dbfSource.getRow(i);
 				if (row.getAttribute(indexes.get("cod_com")).toString().equals(
 						plotSource.getFieldValue(nPlotRow,
@@ -1772,6 +1850,20 @@ public class RtfPlotReport {
 					cell = new RtfCell(new Phrase(row.getAttribute(
 							indexes.get("tipo_cul")).toString(),
 							normalBoldTextFont));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table.addCell(cell);
+					if (cul_an.contains(row.getAttribute(
+							indexes.get("tipo_cul")).toString().toLowerCase())) {
+						cell = new RtfCell("Anual");
+					} else if (cul_sp.contains(row.getAttribute(
+							indexes.get("tipo_cul")).toString().toLowerCase())) {
+						cell = new RtfCell("Semi perenne");
+					} else if (cul_per.contains(row.getAttribute(
+							indexes.get("tipo_cul")).toString().toLowerCase())) {
+						cell = new RtfCell("Permanente");
+					} else {
+						cell = new RtfCell("Indeterminado");
+					}
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
 					cell = new RtfCell(
@@ -1788,7 +1880,8 @@ public class RtfPlotReport {
 
 			}
 			if (!hasRows) {
-				darkColor = !darkColor;
+				cell = new RtfCell(new Phrase(""));
+				table.addCell(cell);
 				cell = new RtfCell(new Phrase(""));
 				table.addCell(cell);
 				cell = new RtfCell(new Phrase(""));
@@ -1797,7 +1890,8 @@ public class RtfPlotReport {
 				table.addCell(cell);
 			}
 		} else {
-			darkColor = !darkColor;
+			cell = new RtfCell(new Phrase(""));
+			table.addCell(cell);
 			cell = new RtfCell(new Phrase(""));
 			table.addCell(cell);
 			cell = new RtfCell(new Phrase(""));
@@ -1820,7 +1914,7 @@ public class RtfPlotReport {
 		sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 		document.add(sectionBody);
 
-		// Base organizations table
+		// Improvements table
 		table = new Table(2);
 		cell = new RtfCell(new Phrase("Tipo de mejora", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
