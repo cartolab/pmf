@@ -51,7 +51,6 @@ import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
 public class ParcelaForm extends AbstractForm implements MouseListener,
 	InternalFrameListener {
-    private final JTable cultivosTable;
     private final JTable volumenesTable;
 
     public ParcelaForm(FLyrVect layer) {
@@ -59,10 +58,8 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 	viewInfo.setHeight(800);
 	viewInfo.setWidth(650);
 	viewInfo.setTitle(PluginServices.getText(this, "_parcelas"));
-	cultivosTable = (JTable) formBody.getComponentByName("cultivos");
 	volumenesTable = (JTable) formBody.getComponentByName("volumenes");
 
-	fillJTable(cultivosTable, "cultivos");
 	fillJTable(volumenesTable, "cultivos");
 
     }
@@ -564,12 +561,6 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
     @Override
     public void mouseClicked(MouseEvent event) {
 
-	if ((event.getSource() == cultivosTable)
-		&& (event.getClickCount() == 2)) {
-	    displayNavTable(cultivosTable, "cultivos");
-	    return;
-	}
-
 	if ((event.getSource() == volumenesTable)
 		&& (event.getClickCount() == 2)) {
 	    displayNavTable(volumenesTable, "cultivos");
@@ -615,10 +606,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
-
-	fillJTable(cultivosTable, "cultivos");
 	fillJTable(volumenesTable, "cultivos");
-
     }
 
     @Override
