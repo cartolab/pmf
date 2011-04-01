@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.reports.housing;
+package es.udc.cartolab.gvsig.pmf.reports.plot;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -25,8 +25,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-public class SelectHousingDialog extends JPanel implements IWindow,
-		ActionListener {
+public class SelectPlotDialog extends JPanel implements IWindow, ActionListener {
 
 	private static Logger logger = Logger.getLogger("ReportsExtension");
 	private SelectableDataSource source;
@@ -50,7 +49,7 @@ public class SelectHousingDialog extends JPanel implements IWindow,
 		if (windowInfo == null) {
 			windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
 					| WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-			windowInfo.setTitle(PluginServices.getText(this, "Housing_report"));
+			windowInfo.setTitle(PluginServices.getText(this, "Plot_report"));
 			Dimension dim = getPreferredSize();
 			int width, height = 0;
 			if (dim.getHeight() > 550) {
@@ -69,7 +68,7 @@ public class SelectHousingDialog extends JPanel implements IWindow,
 		return windowInfo;
 	}
 
-	public SelectHousingDialog(SelectableDataSource source, BaseView view) {
+	public SelectPlotDialog(SelectableDataSource source, BaseView view) {
 		super();
 		this.source = source;
 		this.view = view;
@@ -152,7 +151,7 @@ public class SelectHousingDialog extends JPanel implements IWindow,
 								.getSelectedIndex(), source
 								.getFieldIndexByName("nom_produ"))
 						+ "-report.rtf";
-				new RtfHousingReport(communityCombo.getSelectedIndex(), source,
+				new RtfPlotReport(communityCombo.getSelectedIndex(), source,
 						outputReport, view);
 			} catch (ReadDriverException e) {
 				e.printStackTrace();

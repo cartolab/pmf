@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.reports.housing;
+package es.udc.cartolab.gvsig.pmf.reports.plot;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -12,7 +12,7 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 import es.udc.cartolab.gvsig.navtableforms.Utils;
 
-public class HousingReportsExtension extends Extension {
+public class PlotReportsExtension extends Extension {
 
 	FLyrVect layer;
 	BaseView view = null;
@@ -49,7 +49,7 @@ public class HousingReportsExtension extends Extension {
 			SelectableDataSource source;
 			source = readable.getRecordset();
 
-			SelectHousingDialog dialog = new SelectHousingDialog(source, view);
+			SelectPlotDialog dialog = new SelectPlotDialog(source, view);
 			PluginServices.getMDIManager().addWindow(dialog);
 
 		} catch (ReadDriverException e) {
@@ -61,7 +61,7 @@ public class HousingReportsExtension extends Extension {
 
 	protected void registerIcons() {
 		PluginServices.getIconTheme().registerDefault(
-				"housing-reports-launcher-icon",
+				"plot-reports-launcher-icon",
 				this.getClass().getClassLoader().getResource(
 						"images/report.png"));
 	}

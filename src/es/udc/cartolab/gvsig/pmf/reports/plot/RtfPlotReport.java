@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.reports.housing;
+package es.udc.cartolab.gvsig.pmf.reports.plot;
 
 /*
  * Copyright (c) 2010. Cartolab (Universidade da Coruña)
@@ -48,7 +48,7 @@ import com.lowagie.text.rtf.table.RtfCell;
 
 import es.udc.cartolab.gvsig.navtableforms.Utils;
 
-public class RtfHousingReport {
+public class RtfPlotReport {
 
 	private FLyrVect layer;
 	private BaseView view = null;
@@ -83,7 +83,7 @@ public class RtfHousingReport {
 	private final RtfFont subsectionFont = new RtfFont("Century Gothic", 12,
 			RtfFont.STYLE_BOLD);
 
-	public RtfHousingReport(int nRow, SelectableDataSource source,
+	public RtfPlotReport(int nRow, SelectableDataSource source,
 			String fileName, BaseView view) {
 
 		this.view = view;
@@ -1114,12 +1114,12 @@ public class RtfHousingReport {
 				plotSource.getFieldIndexByName("legal_par")).toString()
 				.toLowerCase().equals("otro")) {
 			sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-					plotSource.getFieldIndexByName("ot_legal_p")).toString(),
-					normalTextFont));
+					plotSource.getFieldIndexByName("ot_legal_p")).toString()
+					.toLowerCase(), normalTextFont));
 		} else {
 			sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-					plotSource.getFieldIndexByName("legal_par")).toString(),
-					normalTextFont));
+					plotSource.getFieldIndexByName("legal_par")).toString()
+					.toLowerCase(), normalTextFont));
 		}
 		sectionBody.add(new Chunk("."));
 		sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
@@ -1150,7 +1150,8 @@ public class RtfHousingReport {
 		}
 		sectionBody.add(new Chunk(" y se encuentra en un nivel "));
 		sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("deg_suelo")).toString()));
+				plotSource.getFieldIndexByName("deg_suelo")).toString()
+				.toLowerCase()));
 		sectionBody.add(new Chunk(" de degradación.\n\t"));
 
 		if (plotSource.getFieldValue(nPlotRow,
