@@ -35,5 +35,15 @@
 				action-command="Reports"
 				 /> 
 		</extension>
+		
+		<extension class-name="es.udc.cartolab.gvsig.pmf.queries.QueryExtension" description="QUERIES_PANEL" active="true">
+			<tool-bar name="_tool-bar-name">
+				<action-tool icon="query-launcher-icon" tooltip="_query-launcher-tooltip"
+					action-command="Queries" />
+			</tool-bar>
+			<menu text="_menu_name/_query-report-launcher"
+				action-command="Queries"
+				 /> 
+		</extension>
 	</extensions>
 </plugin-config>
