@@ -45,437 +45,472 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.binding.ComunidadBinding;
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.ComunidadModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-public class ComunidadForm extends AbstractForm implements MouseListener, InternalFrameListener
-{
-    private JTable orgBaseTable;
-    private JTable presInstTable;
+public class ComunidadForm extends AbstractForm implements MouseListener,
+		InternalFrameListener {
+	private JTable orgBaseTable;
+	private JTable presInstTable;
 
-    private long csaludPosition;
-    private long creunionPosition;
-    private long centJardPosition;
-    private long centEscPosition;
-    private long centCCYDPosition;
+	private long csaludPosition;
+	private long creunionPosition;
+	private long centJardPosition;
+	private long centEscPosition;
+	private long centCCYDPosition;
 
-    private boolean chbChanged = false;
+	private boolean chbChanged = false;
 
-    public ComunidadForm(FLyrVect layer) {
-	super(layer);
-	viewInfo.setHeight(800);
-	viewInfo.setWidth(575);
-	viewInfo.setTitle(PluginServices.getText(this, "_comunidades"));
-	orgBaseTable = (JTable) formBody.getComponentByName("orgBase");
-	presInstTable = (JTable) formBody.getComponentByName("presInst");
+	public ComunidadForm(FLyrVect layer) {
+		super(layer);
+		viewInfo.setHeight(800);
+		viewInfo.setWidth(575);
+		viewInfo.setTitle(PluginServices.getText(this, "_comunidades"));
+		orgBaseTable = (JTable) formBody.getComponentByName("orgBase");
+		presInstTable = (JTable) formBody.getComponentByName("presInst");
 
-	fillJTable(orgBaseTable, "organizacion_base");
-	fillJTable(presInstTable, "presencia_institucional");
-    }
+		fillJTable(orgBaseTable, "organizacion_base");
+		fillJTable(presInstTable, "presencia_institucional");
+	}
 
-    public boolean init() {
-	boolean  r = super.init();
-	setChangedValues(getCHBChanged());
-	return r;
-    }
+	@Override
+	public boolean init() {
+		boolean r = super.init();
+		setChangedValues(getCHBChanged());
+		return r;
+	}
 
-    @Override
-    public FormPanel getFormBody() {
-	return new FormPanel("comunidad.xml");
-    }
+	@Override
+	public FormPanel getFormBody() {
+		return new FormPanel("comunidad.xml");
+	}
 
-    @Override
-    public FormModel getFormModel(Container c) {
-	return new ComunidadModel(c);
-    }
+	@Override
+	public FormModel getFormModel(Container c) {
+		return new ComunidadModel(c);
+	}
 
-    @Override
-    public FormBinding getFormBinding(FormModel model) {
-	return new ComunidadBinding(model);
-    }
+	@Override
+	public FormBinding getFormBinding(FormModel model) {
+		return new ComunidadBinding(model);
+	}
 
-    @Override
-    public Logger getLoggerName() {
-	return Logger.getLogger("PMF");
-    }
+	@Override
+	public Logger getLoggerName() {
+		return Logger.getLogger("PMF");
+	}
 
+	protected String getXmlFileName() {
+		return Preferences.getXMLFileName();
+	}
 
-    protected String getXmlFileName() {
-	return Preferences.getXMLFileName();
-    }
+	protected String getAliasInXML() {
+		return "comunidad";
+	}
 
-
-    protected String getAliasInXML() {
-	return "comunidad";
-    }
-
-    protected boolean isPKAlreadyInUse() {
-	try {
-	    if (recordset.getRowCount() == 0) {
-		return false;
-	    } else {
-		String nameOfKeyInModel = "cod_com";
-		String nameOfKeyInRecordSet = "cod_com";
-		String valueFromModel = formModel.getWidgetValues().get(
-			nameOfKeyInModel);
-		for (int index = 0; index < recordset.getRowCount(); index++) {
-		    int indiceCampo = recordset
-		    .getFieldIndexByName(nameOfKeyInRecordSet);
-		    String valueFromRecordSet = recordset.getFieldValue(index,
-			    indiceCampo).toString();
-		    if (valueFromRecordSet.equals(valueFromModel)) {
-			if (isUpdatingTheSameRegister(index, currentPosition)) {
-			    return false;
+	protected boolean isPKAlreadyInUse() {
+		try {
+			if (recordset.getRowCount() == 0) {
+				return false;
 			} else {
-			    return true;
-			}
-		    }
-		}
-		return false;
-	    }
-	} catch (ReadDriverException e) {
-	    logger.error(e.getMessage(), e);
-	    return false;
-	}
-    }
-
-    public void fillJTable(JTable table, String sourcename){
-
-	IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-	FieldDescription[] columns = {};
-	for (int i=0; i<windows.length; i++) {
-	    if (windows[i] instanceof Table) {
-		String name = ((Table) windows[i]).getModel().getName();
-		if (name.endsWith(".dbf")) {
-		    name = name.substring(0, name.lastIndexOf(".dbf"));
-		    if (name.equals(sourcename)) {
-			IEditableSource source = ((Table) windows[i]).getModel().getModelo();
-			columns = source.getFieldsDescription();
-
-			ArrayList<String> columnNames = new ArrayList<String>();
-
-			for (int j=0; j < columns.length; j++) {
-			    columnNames.add(columns[j].getFieldName());
-			}
-
-			ArrayList<Object[]> rows = new ArrayList<Object[]>();
-			Object[] row;
-
-			try {
-			    for (int j = 0; j < source.getRowCount(); j++) {
-				IRowEdited sourceRow = source.getRow(j);
-				row = sourceRow.getAttributes();
-				rows.add(row);
-			    }
-			} catch (ReadDriverException e) {
-			    e.printStackTrace();
-			}
-
-			Object[][] data = new Object[1][1];
-			table.setModel(new NonEditableTableModel(rows.toArray(data), columnNames.toArray()));
-			break;
-		    }
-		}
-	    }
-	}
-
-	table.removeMouseListener(this);
-	table.addMouseListener(this);
-
-    }
-
-    private boolean isUpdatingTheSameRegister(int index, long currentPosition) {
-	if (index == (int) currentPosition) {
-	    return true;
-	} else {
-	    return false;
-	}
-    }
-
-    protected boolean primaryKeyHasErrors() {
-	if (isPKAlreadyInUse()) {
-	    JOptionPane
-	    .showMessageDialog(
-		    this,
-		    PluginServices.getText(this, "choose_other_pk"),
-		    PluginServices.getText(this, "pk_already_used"),
-		    JOptionPane.ERROR_MESSAGE);
-	    return true;
-	} else {
-	    return false;
-	}
-    }
-
-    @Override
-    protected boolean isSaveable() {
-	if (validationHasErrors()) {
-	    return false;
-	} else if (primaryKeyHasErrors()) {
-	    return false;
-	}
-	return true;
-    }
-
-    private long doFilter(IEditableSource recordset, ArrayList<String> where) throws ReadDriverException, DriverLoadException, ParseException, SemanticException, EvaluationException, IOException {
-	long recordPosition = 0;
-	for (int i=0; i<recordset.getRowCount(); i++) {
-	    IRowEdited row = recordset.getRow(i);
-	    boolean same = true;
-	    for (int j=0; j<where.size(); j++) {
-		if (!where.get(j).equals(row.getAttribute(j).toString())) {
-		    same = false;
-		    break;
-		}
-	    }
-	    if (same) {
-		recordPosition = i;
-		break;
-	    }
-	}
-	return recordPosition+1;
-    }
-
-
-    private long doFilter(String layerName, String where) throws ReadDriverException, DriverLoadException, ParseException, SemanticException, EvaluationException, IOException {
-	long recordPosition = -1;
-	SelectableDataSource recordset = Utils.getFlyrVect(view, layerName).getRecordset();
-	String sql = "select * from " + recordset.getName() + " " + where + ";";
-	recordset.start();
-	FilteredDataSource result = (FilteredDataSource) recordset.getDataSourceFactory().executeSQL(sql, DataSourceFactory.MANUAL_OPENING);
-	if (result.getRowCount() == 1) {
-	    recordPosition = result.getWhereFilter()[0];
-	}
-	recordset.stop();
-
-	return recordPosition;
-    }
-
-
-    private long enableButton(String elementName, String tableName, String where) {
-	long rowPos = 0;
-
-	JButton button = (JButton) formBody.getComponentByName(elementName + ".BT");
-	JCheckBox chb = (JCheckBox) formBody.getComponentByName(elementName + ".CHB");
-
-	try {
-	    rowPos = doFilter(tableName, where) + 1;
-	} catch (Exception e) {
-	    getLoggerName().error(e.getMessage(), e);
-	}
-
-	if (rowPos != 0) {
-	    button.setEnabled(true);
-	    if (! chb.isSelected()) {
-		setCHBChanged(true);
-	    }
-	    chb.setSelected(true);
-
-	} else {
-	    button.setEnabled(false);
-	    if (chb.isSelected()) {
-		setCHBChanged(true);
-	    }
-	    chb.setSelected(false);
-	}
-	return rowPos;
-    }
-
-    @Override
-    protected void fillSpecificValues() {
-	String foreingKey = formModel.getWidgetValues().get("cod_com");
-	String where = "where cod_com = '" + foreingKey + "'";
-	csaludPosition = enableButton("csalud", "centros_salud", where);
-	creunionPosition = enableButton("creunion", "centros_reuniones", where);
-	centJardPosition = enableButton("cent_jard", "centros_educativos", where + " and tipo_cedu = 'Jardín de niños'");
-	centEscPosition = enableButton("cent_esc", "centros_educativos", where + " and tipo_cedu = 'Centro educativo escolar'");
-	centCCYDPosition = enableButton("cent_ccyd", "centros_educativos", where + " and (tipo_cedu = 'Centro educativo diversificado' or tipo_cedu='Centro educativo de ciclo común')");
-    }
-
-    protected void setListeners() {
-	super.setListeners();
-
-	//fpuga: maybe this should be a for
-	JButton csaludBT = (JButton) formBody.getComponentByName("csalud.BT");
-	csaludBT.setActionCommand("csalud.BT");
-	csaludBT.addActionListener(this);
-
-	JButton creunionBT = (JButton) formBody.getComponentByName("creunion.BT");
-	creunionBT.setActionCommand("creunion.BT");
-	creunionBT.addActionListener(this);
-
-	JButton cent_jardBT = (JButton) formBody.getComponentByName("cent_jard.BT");
-	cent_jardBT.setActionCommand("cent_jard.BT");
-	cent_jardBT.addActionListener(this);
-
-	JButton cent_escBT = (JButton) formBody.getComponentByName("cent_esc.BT");
-	cent_escBT.setActionCommand("cent_esc.BT");
-	cent_escBT.addActionListener(this);
-
-	JButton cent_ccydBT = (JButton) formBody.getComponentByName("cent_ccyd.BT");
-	cent_ccydBT.setActionCommand("cent_ccyd.BT");
-	cent_ccydBT.addActionListener(this);
-    }
-
-    protected void removeListeners() {
-	super.removeListeners();
-	JButton csaludBT = (JButton) formBody.getComponentByName("csalud.BT");
-	csaludBT.removeActionListener(this);
-	JButton creunionBT = (JButton) formBody.getComponentByName("creunion.BT");
-	creunionBT.removeActionListener(this);
-	JButton cent_jardBT = (JButton) formBody.getComponentByName("cent_jard.BT");
-	cent_jardBT.removeActionListener(this);
-	JButton cent_escBT = (JButton) formBody.getComponentByName("cent_esc.BT");
-	cent_escBT.removeActionListener(this);
-	JButton cent_ccydBT = (JButton) formBody.getComponentByName("cent_ccyd.BT");
-	cent_ccydBT.removeActionListener(this);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-	super.actionPerformed(e);
-
-	AbstractForm dialog = null;
-	long pos = 0;
-	if (e.getActionCommand().equals("csalud.BT")) {
-	    dialog = new CentroSaludForm(Utils.getFlyrVect(view, "centros_salud"));
-	    pos = csaludPosition;
-	} else if (e.getActionCommand().equals("creunion.BT")) {
-	    dialog = new CentroReunionesForm(Utils.getFlyrVect(view, "centros_reuniones"));
-	    pos = creunionPosition;
-	} else if (e.getActionCommand().equals("cent_jard.BT")) {
-	    dialog = new CentroEducativoForm(Utils.getFlyrVect(view, "centros_educativos"));
-	    pos = centJardPosition;
-	} else if (e.getActionCommand().equals("cent_esc.BT")) {
-	    dialog = new CentroEducativoForm(Utils.getFlyrVect(view, "centros_educativos"));
-	    pos = centEscPosition;
-	} else if (e.getActionCommand().equals("cent_ccyd.BT")) {
-	    dialog = new CentroEducativoForm(Utils.getFlyrVect(view, "centros_educativos"));
-	    pos = centCCYDPosition;
-	}
-
-	if (dialog != null) {
-	    if (dialog.init()) {
-		dialog.setPosition(pos);
-		PluginServices.getMDIManager().addWindow(dialog);
-	    }
-	}
-    }
-
-    private void setCHBChanged(boolean changed) {
-	chbChanged = changed;
-    }
-
-    private boolean getCHBChanged() {
-	return chbChanged;
-    }
-
-    private void displayNavTable(JTable refTable, String dbfName) {
-	IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-	boolean found = false;
-	for (int i=0; i<windows.length; i++) {
-	    if (windows[i] instanceof Table) {
-		String name = ((Table) windows[i]).getModel().getName();
-		if (name.endsWith(".dbf")) {
-		    name = name.substring(0, name.lastIndexOf(".dbf"));
-		    if (name.equals(dbfName)) {
-			IEditableSource source = ((Table) windows[i]).getModel().getModelo();
-			found = true;
-			AlphanumericNavTable navTable;
-			try {
-			    navTable = new AlphanumericNavTable(source, dbfName);
-
-			    if (navTable.init()) {
-				int selected = refTable.getSelectedRow();
-				ArrayList<String> where = new ArrayList<String>();
-				TableModel model = refTable.getModel();
-				for (int j=0; j<model.getColumnCount(); j++){
-				    where.add(model.getValueAt(selected, j).toString());
+				String nameOfKeyInModel = "cod_com";
+				String nameOfKeyInRecordSet = "cod_com";
+				String valueFromModel = formModel.getWidgetValues().get(
+						nameOfKeyInModel);
+				for (int index = 0; index < recordset.getRowCount(); index++) {
+					int indiceCampo = recordset
+							.getFieldIndexByName(nameOfKeyInRecordSet);
+					String valueFromRecordSet = recordset.getFieldValue(index,
+							indiceCampo).toString();
+					if (valueFromRecordSet.equals(valueFromModel)) {
+						if (isUpdatingTheSameRegister(index, currentPosition)) {
+							return false;
+						} else {
+							return true;
+						}
+					}
 				}
-				try {
-				    navTable.setPosition(doFilter(source,where));
-				} catch (Exception e) {
-				    e.printStackTrace();
-				}
-				PluginServices.getMDIManager().addCentredWindow(navTable);
-				JInternalFrame parent = (JInternalFrame) navTable.getRootPane().getParent();
-				parent.addInternalFrameListener(this);
-			    }
-			} catch (ReadDriverException e) {
-			    e.printStackTrace();
+				return false;
 			}
-			break;
-		    }
+		} catch (ReadDriverException e) {
+			logger.error(e.getMessage(), e);
+			return false;
 		}
-	    }
-	}
-	if (!found) {
-	    JOptionPane.showMessageDialog(this, "La tabla \"" + dbfName + "\" no esta cargada");
-	}
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent event) {
-
-	if ((event.getSource() == orgBaseTable) &&(event.getClickCount() == 2)) {
-	    displayNavTable(orgBaseTable, "organizacion_base");
-	} else if ((event.getSource() == presInstTable) &&(event.getClickCount() == 2)) {
-	    displayNavTable(presInstTable, "presencia_institucional");
 	}
 
-    }
+	public void fillJTable(JTable table, String sourcename) {
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
+		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+		FieldDescription[] columns = {};
+		for (int i = 0; i < windows.length; i++) {
+			if (windows[i] instanceof Table) {
+				String name = ((Table) windows[i]).getModel().getName();
+				if (name.endsWith(".dbf")) {
+					name = name.substring(0, name.lastIndexOf(".dbf"));
+					if (name.equals(sourcename)) {
+						IEditableSource source = ((Table) windows[i])
+								.getModel().getModelo();
+						columns = source.getFieldsDescription();
 
-    }
+						ArrayList<String> columnNames = new ArrayList<String>();
 
-    @Override
-    public void mouseExited(MouseEvent e) {
+						for (int j = 0; j < columns.length; j++) {
+							columnNames.add(PluginServices.getText(this,
+									columns[j].getFieldName()));
+						}
 
-    }
+						ArrayList<Object[]> rows = new ArrayList<Object[]>();
+						Object[] row;
 
-    @Override
-    public void mousePressed(MouseEvent e) {
+						try {
+							for (int j = 0; j < source.getRowCount(); j++) {
+								IRowEdited sourceRow = source.getRow(j);
+								row = sourceRow.getAttributes();
+								rows.add(row);
+							}
+						} catch (ReadDriverException e) {
+							e.printStackTrace();
+						}
 
-    }
+						Object[][] data = new Object[1][1];
+						table.setModel(new NonEditableTableModel(rows
+								.toArray(data), columnNames.toArray()));
+						break;
+					}
+				}
+			}
+		}
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
+		table.removeMouseListener(this);
+		table.addMouseListener(this);
 
-    }
+	}
 
-    @Override
-    public void internalFrameActivated(InternalFrameEvent e) {
+	private boolean isUpdatingTheSameRegister(int index, long currentPosition) {
+		if (index == (int) currentPosition) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    }
+	protected boolean primaryKeyHasErrors() {
+		if (isPKAlreadyInUse()) {
+			JOptionPane.showMessageDialog(this,
+					PluginServices.getText(this, "choose_other_pk"),
+					PluginServices.getText(this, "pk_already_used"),
+					JOptionPane.ERROR_MESSAGE);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public void internalFrameClosed(InternalFrameEvent e) {
+	@Override
+	protected boolean isSaveable() {
+		if (validationHasErrors()) {
+			return false;
+		} else if (primaryKeyHasErrors()) {
+			return false;
+		}
+		return true;
+	}
 
-    }
+	private long doFilter(IEditableSource recordset, ArrayList<String> where)
+			throws ReadDriverException, DriverLoadException, ParseException,
+			SemanticException, EvaluationException, IOException {
+		long recordPosition = 0;
+		for (int i = 0; i < recordset.getRowCount(); i++) {
+			IRowEdited row = recordset.getRow(i);
+			boolean same = true;
+			for (int j = 0; j < where.size(); j++) {
+				if (!where.get(j).equals(row.getAttribute(j).toString())) {
+					same = false;
+					break;
+				}
+			}
+			if (same) {
+				recordPosition = i;
+				break;
+			}
+		}
+		return recordPosition + 1;
+	}
 
-    @Override
-    public void internalFrameClosing(InternalFrameEvent e) {
+	private long doFilter(String layerName, String where)
+			throws ReadDriverException, DriverLoadException, ParseException,
+			SemanticException, EvaluationException, IOException {
+		long recordPosition = -1;
+		SelectableDataSource recordset = Utils.getFlyrVect(view, layerName)
+				.getRecordset();
+		String sql = "select * from " + recordset.getName() + " " + where + ";";
+		recordset.start();
+		FilteredDataSource result = (FilteredDataSource) recordset
+				.getDataSourceFactory().executeSQL(sql,
+						DataSourceFactory.MANUAL_OPENING);
+		if (result.getRowCount() == 1) {
+			recordPosition = result.getWhereFilter()[0];
+		}
+		recordset.stop();
 
-    }
+		return recordPosition;
+	}
 
-    @Override
-    public void internalFrameDeactivated(InternalFrameEvent e) {
+	private long enableButton(String elementName, String tableName, String where) {
+		long rowPos = 0;
 
-	fillJTable(orgBaseTable, "organizacion_base");
-	fillJTable(presInstTable, "presencia_institucional");
+		JButton button = (JButton) formBody.getComponentByName(elementName
+				+ ".BT");
+		JCheckBox chb = (JCheckBox) formBody.getComponentByName(elementName
+				+ ".CHB");
 
-    }
+		try {
+			rowPos = doFilter(tableName, where) + 1;
+		} catch (Exception e) {
+			getLoggerName().error(e.getMessage(), e);
+		}
 
-    @Override
-    public void internalFrameDeiconified(InternalFrameEvent e) {
+		if (rowPos != 0) {
+			button.setEnabled(true);
+			if (!chb.isSelected()) {
+				setCHBChanged(true);
+			}
+			chb.setSelected(true);
 
-    }
+		} else {
+			button.setEnabled(false);
+			if (chb.isSelected()) {
+				setCHBChanged(true);
+			}
+			chb.setSelected(false);
+		}
+		return rowPos;
+	}
 
-    @Override
-    public void internalFrameIconified(InternalFrameEvent e) {
+	@Override
+	protected void fillSpecificValues() {
+		String foreingKey = formModel.getWidgetValues().get("cod_com");
+		String where = "where cod_com = '" + foreingKey + "'";
+		csaludPosition = enableButton("csalud", "centros_salud", where);
+		creunionPosition = enableButton("creunion", "centros_reuniones", where);
+		centJardPosition = enableButton("cent_jard", "centros_educativos",
+				where + " and tipo_cedu = 'Jardín de niños'");
+		centEscPosition = enableButton("cent_esc", "centros_educativos", where
+				+ " and tipo_cedu = 'Centro educativo escolar'");
+		centCCYDPosition = enableButton(
+				"cent_ccyd",
+				"centros_educativos",
+				where
+						+ " and (tipo_cedu = 'Centro educativo diversificado' or tipo_cedu='Centro educativo de ciclo común')");
+	}
 
-    }
+	@Override
+	protected void setListeners() {
+		super.setListeners();
 
-    @Override
-    public void internalFrameOpened(InternalFrameEvent e) {
+		// fpuga: maybe this should be a for
+		JButton csaludBT = (JButton) formBody.getComponentByName("csalud.BT");
+		csaludBT.setActionCommand("csalud.BT");
+		csaludBT.addActionListener(this);
 
-    }
+		JButton creunionBT = (JButton) formBody
+				.getComponentByName("creunion.BT");
+		creunionBT.setActionCommand("creunion.BT");
+		creunionBT.addActionListener(this);
+
+		JButton cent_jardBT = (JButton) formBody
+				.getComponentByName("cent_jard.BT");
+		cent_jardBT.setActionCommand("cent_jard.BT");
+		cent_jardBT.addActionListener(this);
+
+		JButton cent_escBT = (JButton) formBody
+				.getComponentByName("cent_esc.BT");
+		cent_escBT.setActionCommand("cent_esc.BT");
+		cent_escBT.addActionListener(this);
+
+		JButton cent_ccydBT = (JButton) formBody
+				.getComponentByName("cent_ccyd.BT");
+		cent_ccydBT.setActionCommand("cent_ccyd.BT");
+		cent_ccydBT.addActionListener(this);
+	}
+
+	@Override
+	protected void removeListeners() {
+		super.removeListeners();
+		JButton csaludBT = (JButton) formBody.getComponentByName("csalud.BT");
+		csaludBT.removeActionListener(this);
+		JButton creunionBT = (JButton) formBody
+				.getComponentByName("creunion.BT");
+		creunionBT.removeActionListener(this);
+		JButton cent_jardBT = (JButton) formBody
+				.getComponentByName("cent_jard.BT");
+		cent_jardBT.removeActionListener(this);
+		JButton cent_escBT = (JButton) formBody
+				.getComponentByName("cent_esc.BT");
+		cent_escBT.removeActionListener(this);
+		JButton cent_ccydBT = (JButton) formBody
+				.getComponentByName("cent_ccyd.BT");
+		cent_ccydBT.removeActionListener(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
+
+		AbstractForm dialog = null;
+		long pos = 0;
+		if (e.getActionCommand().equals("csalud.BT")) {
+			dialog = new CentroSaludForm(Utils.getFlyrVect(view,
+					"centros_salud"));
+			pos = csaludPosition;
+		} else if (e.getActionCommand().equals("creunion.BT")) {
+			dialog = new CentroReunionesForm(Utils.getFlyrVect(view,
+					"centros_reuniones"));
+			pos = creunionPosition;
+		} else if (e.getActionCommand().equals("cent_jard.BT")) {
+			dialog = new CentroEducativoForm(Utils.getFlyrVect(view,
+					"centros_educativos"));
+			pos = centJardPosition;
+		} else if (e.getActionCommand().equals("cent_esc.BT")) {
+			dialog = new CentroEducativoForm(Utils.getFlyrVect(view,
+					"centros_educativos"));
+			pos = centEscPosition;
+		} else if (e.getActionCommand().equals("cent_ccyd.BT")) {
+			dialog = new CentroEducativoForm(Utils.getFlyrVect(view,
+					"centros_educativos"));
+			pos = centCCYDPosition;
+		}
+
+		if (dialog != null) {
+			if (dialog.init()) {
+				dialog.setPosition(pos);
+				PluginServices.getMDIManager().addWindow(dialog);
+			}
+		}
+	}
+
+	private void setCHBChanged(boolean changed) {
+		chbChanged = changed;
+	}
+
+	private boolean getCHBChanged() {
+		return chbChanged;
+	}
+
+	private void displayNavTable(JTable refTable, String dbfName) {
+		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
+		boolean found = false;
+		for (int i = 0; i < windows.length; i++) {
+			if (windows[i] instanceof Table) {
+				String name = ((Table) windows[i]).getModel().getName();
+				if (name.endsWith(".dbf")) {
+					name = name.substring(0, name.lastIndexOf(".dbf"));
+					if (name.equals(dbfName)) {
+						IEditableSource source = ((Table) windows[i])
+								.getModel().getModelo();
+						found = true;
+						AlphanumericNavTable navTable;
+						try {
+							navTable = new AlphanumericNavTable(source, dbfName);
+
+							if (navTable.init()) {
+								int selected = refTable.getSelectedRow();
+								ArrayList<String> where = new ArrayList<String>();
+								TableModel model = refTable.getModel();
+								for (int j = 0; j < model.getColumnCount(); j++) {
+									where.add(model.getValueAt(selected, j)
+											.toString());
+								}
+								try {
+									navTable.setPosition(doFilter(source, where));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								PluginServices.getMDIManager()
+										.addCentredWindow(navTable);
+								JInternalFrame parent = (JInternalFrame) navTable
+										.getRootPane().getParent();
+								parent.addInternalFrameListener(this);
+							}
+						} catch (ReadDriverException e) {
+							e.printStackTrace();
+						}
+						break;
+					}
+				}
+			}
+		}
+		if (!found) {
+			JOptionPane.showMessageDialog(this, "La tabla \"" + dbfName
+					+ "\" no esta cargada");
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent event) {
+
+		if ((event.getSource() == orgBaseTable) && (event.getClickCount() == 2)) {
+			displayNavTable(orgBaseTable, "organizacion_base");
+		} else if ((event.getSource() == presInstTable)
+				&& (event.getClickCount() == 2)) {
+			displayNavTable(presInstTable, "presencia_institucional");
+		}
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	@Override
+	public void internalFrameActivated(InternalFrameEvent e) {
+
+	}
+
+	@Override
+	public void internalFrameClosed(InternalFrameEvent e) {
+
+	}
+
+	@Override
+	public void internalFrameClosing(InternalFrameEvent e) {
+
+	}
+
+	@Override
+	public void internalFrameDeactivated(InternalFrameEvent e) {
+
+		fillJTable(orgBaseTable, "organizacion_base");
+		fillJTable(presInstTable, "presencia_institucional");
+
+	}
+
+	@Override
+	public void internalFrameDeiconified(InternalFrameEvent e) {
+
+	}
+
+	@Override
+	public void internalFrameIconified(InternalFrameEvent e) {
+
+	}
+
+	@Override
+	public void internalFrameOpened(InternalFrameEvent e) {
+
+	}
 
 }
