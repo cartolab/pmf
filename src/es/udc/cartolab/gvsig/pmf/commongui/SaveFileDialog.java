@@ -29,9 +29,9 @@ import com.iver.andami.PluginServices;
  * SaveFileDialog sfd = new SaveFileDialog(&quot;HTML files&quot;, &quot;html&quot;, &quot;htm&quot;);
  * File f = sfd.showDialog();
  * if (f != null) {
- *     if (!sfd.writeFileToDisk(contents, f)) {
- * 	NotificationManager.showMessageError(&quot;error_saving_file&quot;, null);
- *     }
+ * 	if (!sfd.writeFileToDisk(contents, f)) {
+ * 		NotificationManager.showMessageError(&quot;error_saving_file&quot;, null);
+ * 	}
  * }
  * </pre>
  * 
@@ -44,104 +44,104 @@ import com.iver.andami.PluginServices;
 @SuppressWarnings("serial")
 public class SaveFileDialog extends JFileChooser {
 
-    private FileFilter filter = null;
-    private String defaultExtension = null;
+	private FileFilter filter = null;
+	private String defaultExtension = null;
 
-    /**
-     * if extensions are provided extensions[0] will be the appended to the
-     * fileName if it doesn't have jet
-     * 
-     * @param description
-     *            A string to be shown in the filter files combobox
-     * @param extensions
-     *            The extensions wanted to be filtered. Must be lowercase,
-     *            uppercase validity is handled automaticaly. extensions[0] will
-     *            be the default extension.
-     */
-    public SaveFileDialog(String description, String... extensions) {
-	super();
-	this.filter = new FileNameExtensionFilter(description, extensions);
-	this.defaultExtension = extensions[0];
-    }
-
-    public SaveFileDialog() {
-	super();
-    }
-
-    /**
-     * @return null if user cancel save operation, the File to save in other
-     *         case.
-     */
-    public File showDialog() {
-	File file = null;
-	if (filter != null) {
-	    setFileFilter(filter);
+	/**
+	 * if extensions are provided extensions[0] will be the appended to the
+	 * fileName if it doesn't have jet
+	 * 
+	 * @param description
+	 *            A string to be shown in the filter files combobox
+	 * @param extensions
+	 *            The extensions wanted to be filtered. Must be lowercase,
+	 *            uppercase validity is handled automaticaly. extensions[0] will
+	 *            be the default extension.
+	 */
+	public SaveFileDialog(String description, String... extensions) {
+		super();
+		this.filter = new FileNameExtensionFilter(description, extensions);
+		this.defaultExtension = extensions[0];
 	}
 
-	do {
-	    int returnVal = showSaveDialog(null);
-	    if (returnVal == JFileChooser.CANCEL_OPTION) {
-		break;
-	    }
+	public SaveFileDialog() {
+		super();
+	}
 
-	    File tmpFile = getSelectedFile();
-
-	    // Add the default extension
-	    if (defaultExtension != null) {
-		if (!tmpFile.getName().toLowerCase()
-			.endsWith("." + defaultExtension)) {
-		    tmpFile = new File(tmpFile.getAbsolutePath() + "."
-			    + defaultExtension);
+	/**
+	 * @return null if user cancel save operation, the File to save in other
+	 *         case.
+	 */
+	public File showDialog() {
+		File file = null;
+		if (filter != null) {
+			setFileFilter(filter);
 		}
-	    }
 
-	    if (tmpFile.exists()) {
-		int overwriteFile = JOptionPane.showConfirmDialog(null,
-			PluginServices.getText(this, "file_already_exists"),
-			PluginServices.getText(this, "warning"),
-			JOptionPane.YES_NO_OPTION);
-		if (overwriteFile == JOptionPane.NO_OPTION) {
-		    continue;
-		}
-	    }
+		do {
+			int returnVal = showSaveDialog(null);
+			if (returnVal == JFileChooser.CANCEL_OPTION) {
+				break;
+			}
 
-	    file = tmpFile;
+			File tmpFile = getSelectedFile();
 
-	} while (file == null);
+			// Add the default extension
+			if (defaultExtension != null) {
+				if (!tmpFile.getName().toLowerCase()
+						.endsWith("." + defaultExtension)) {
+					tmpFile = new File(tmpFile.getAbsolutePath() + "."
+							+ defaultExtension);
+				}
+			}
 
-	return file;
-    }
+			if (tmpFile.exists()) {
+				int overwriteFile = JOptionPane.showConfirmDialog(null,
+						PluginServices.getText(this, "file_already_exists"),
+						PluginServices.getText(this, "warning"),
+						JOptionPane.YES_NO_OPTION);
+				if (overwriteFile == JOptionPane.NO_OPTION) {
+					continue;
+				}
+			}
 
-    /**
-     * @param contents
-     *            to be write to disk
-     * @param file
-     *            to write
-     * @return true if there was any trouble
-     */
-    public boolean writeFileToDisk(String contents, File file) {
-	FileOutputStream fos = null;
-	PrintStream ps = null;
-	boolean error = false;
-	try {
-	    fos = new FileOutputStream(file);
-	    ps = new PrintStream(fos);
-	    ps.println(contents);
-	} catch (IOException e1) {
-	    error = true;
-	    e1.printStackTrace();
-	} finally {
-	    if (ps != null) {
-		ps.close();
-	    }
-	    if (fos != null) {
+			file = tmpFile;
+
+		} while (file == null);
+
+		return file;
+	}
+
+	/**
+	 * @param contents
+	 *            to be write to disk
+	 * @param file
+	 *            to write
+	 * @return true if there was any trouble
+	 */
+	public static boolean writeFileToDisk(String contents, File file) {
+		FileOutputStream fos = null;
+		PrintStream ps = null;
+		boolean error = false;
 		try {
-		    fos.close();
-		} catch (IOException e) {
-		    error = true;
+			fos = new FileOutputStream(file);
+			ps = new PrintStream(fos);
+			ps.println(contents);
+		} catch (IOException e1) {
+			error = true;
+			e1.printStackTrace();
+		} finally {
+			if (ps != null) {
+				ps.close();
+			}
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					error = true;
+				}
+			}
 		}
-	    }
+		return error;
 	}
-	return error;
-    }
 }

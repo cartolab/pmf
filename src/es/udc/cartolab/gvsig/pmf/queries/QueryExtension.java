@@ -9,46 +9,46 @@ import es.udc.cartolab.gvsig.navtableforms.Utils;
 
 public class QueryExtension extends Extension {
 
-    private final String neededLayers[] = { "vivienda", "parcela", "comunidad",
-	    "areas_protegidas" };
+	private final String neededLayers[] = { "vivienda", "parcela", "comunidad" };
+	// "areas_protegidas" };
 
-    private BaseView view;
+	private BaseView view;
 
-    @Override
-    public void initialize() {
-	PluginServices.getIconTheme().registerDefault(
-		"query-launcher-icon",
-		this.getClass().getClassLoader()
-			.getResource("images/report.png"));
-    }
-
-    @Override
-    public void execute(String actionCommand) {
-	SelectQueryDialog d = new SelectQueryDialog();
-    }
-
-    @Override
-    public boolean isEnabled() {
-	IWindow window = PluginServices.getMDIManager().getActiveWindow();
-	boolean isView = false;
-	boolean neededLayersArePresent = true;
-	if (window instanceof BaseView) {
-	    isView = true;
-	    view = (BaseView) window;
-	    for (String layerName : neededLayers) {
-		if (Utils.getFlyrVect(view, layerName) == null) {
-		    neededLayersArePresent = false;
-		    break;
-		}
-	    }
-
+	@Override
+	public void initialize() {
+		PluginServices.getIconTheme().registerDefault(
+				"query-launcher-icon",
+				this.getClass().getClassLoader()
+						.getResource("images/report.png"));
 	}
-	return isView && neededLayersArePresent;
-    }
 
-    @Override
-    public boolean isVisible() {
-	return true;
-    }
+	@Override
+	public void execute(String actionCommand) {
+		SelectQueryDialog d = new SelectQueryDialog(view);
+	}
+
+	@Override
+	public boolean isEnabled() {
+		IWindow window = PluginServices.getMDIManager().getActiveWindow();
+		boolean isView = false;
+		boolean neededLayersArePresent = true;
+		if (window instanceof BaseView) {
+			isView = true;
+			view = (BaseView) window;
+			for (String layerName : neededLayers) {
+				if (Utils.getFlyrVect(view, layerName) == null) {
+					neededLayersArePresent = false;
+					break;
+				}
+			}
+
+		}
+		return true;// isView && neededLayersArePresent;
+	}
+
+	@Override
+	public boolean isVisible() {
+		return true;
+	}
 
 }

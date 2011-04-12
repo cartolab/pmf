@@ -248,6 +248,7 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 		if (result.getRowCount() == 1) {
 			recordPosition = result.getWhereFilter()[0];
 		}
+		String a = result.getAsString();
 		recordset.stop();
 
 		return recordPosition;
