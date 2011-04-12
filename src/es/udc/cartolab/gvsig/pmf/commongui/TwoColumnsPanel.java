@@ -342,7 +342,7 @@ public class TwoColumnsPanel extends JPanel implements IWindow, IWindowListener 
 	return cancelButton;
     }
 
-    private JButton getCancelButton() {
+    public JButton getCancelButton() {
 	return cancelButton;
     }
 
