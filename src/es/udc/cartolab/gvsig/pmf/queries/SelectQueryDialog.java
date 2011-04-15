@@ -150,15 +150,17 @@ public class SelectQueryDialog implements ActionListener {
 			// + ".cod_viv=" + parcela + ".cod_viv" + " and " + vivienda
 			// + ".cod_com=" + comunidad + "cod_com;";
 
-			String sql = "select " + vivienda + ".nom_produ," + parcela
+			String sql = "select " + vivienda + ".nom_produ," + comunidad
+					+ ".nombre," + comunidad + ".municip," + parcela
 					+ ".area_tot," + parcela + ".area_cul," + parcela
 					+ ".tip_suelo," + parcela + ".deg_suelo," + parcela
 					+ ".pendiente," + vivienda + ".sist_rieg," + parcela
 					+ ".c_conse," + parcela + ".c_aborg," + parcela
 					+ ".c_insect," + parcela + ".c_quim" + " from " + vivienda
-					+ "," + parcela + " where " + vivienda + ".cod_viv="
-					+ parcela + ".cod_viv" + " AND " + vivienda + ".cod_com="
-					+ parcela + "cod_com;";
+					+ "," + parcela + "," + comunidad + " where " + vivienda
+					+ ".cod_viv=" + parcela + ".cod_viv" + " and " + comunidad
+					+ ".cod_com = '01'" + ";";
+
 			str.append(doFilter(viviendaSDS.getDataSourceFactory(), sql));
 		} catch (Exception e) {
 			e.printStackTrace();
