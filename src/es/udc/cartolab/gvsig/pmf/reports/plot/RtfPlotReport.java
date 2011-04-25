@@ -1157,6 +1157,55 @@ public class RtfPlotReport {
 		table.addCell(cell);
 
 		document.add(table);
+
+		sectionBody = new Paragraph();
+		sectionBody.add(new Chunk("\n"));
+		if (plotSource.getFieldValue(nPlotRow,
+				plotSource.getFieldIndexByName("hay_in_par")).toString()
+				.toLowerCase().equals("true")) {
+			if (source.getFieldValue(nRow,
+					source.getFieldIndexByName("hay_in_viv")).toString()
+					.toLowerCase().equals("true")) {
+				sectionBody
+						.add(new Chunk("\tExiste riesgo de ", normalTextFont));
+				sectionBody.add(new Chunk("inundación", normalBoldTextFont));
+				sectionBody.add(new Chunk(" tanto en la ", normalTextFont));
+				sectionBody.add(new Chunk("parcela", normalBoldTextFont));
+				sectionBody.add(new Chunk(" como en la ", normalTextFont));
+				sectionBody.add(new Chunk("vivienda", normalBoldTextFont));
+				sectionBody.add(new Chunk(".", normalTextFont));
+			} else {
+				sectionBody
+						.add(new Chunk("\tExiste riesgo de ", normalTextFont));
+				sectionBody.add(new Chunk("inundación", normalBoldTextFont));
+				sectionBody.add(new Chunk(" en la ", normalTextFont));
+				sectionBody.add(new Chunk("parcela", normalBoldTextFont));
+				sectionBody.add(new Chunk(" pero no en la vivienda.",
+						normalTextFont));
+			}
+		} else {
+			if (source.getFieldValue(nRow,
+					source.getFieldIndexByName("hay_in_viv")).toString()
+					.toLowerCase().equals("true")) {
+				sectionBody.add(new Chunk("\tNo existe riesgo de ",
+						normalTextFont));
+				sectionBody.add(new Chunk("inundación", normalBoldTextFont));
+				sectionBody.add(new Chunk(" en la parcela, pero sí en la ",
+						normalTextFont));
+				sectionBody.add(new Chunk("vivienda", normalBoldTextFont));
+				sectionBody.add(new Chunk(".", normalTextFont));
+			} else {
+				sectionBody.add(new Chunk("\tNo existe riesgo de ",
+						normalTextFont));
+				sectionBody.add(new Chunk("inundación", normalBoldTextFont));
+				sectionBody
+						.add(new Chunk(" ni en la parcela ni en la vivienda.",
+								normalTextFont));
+			}
+		}
+
+		document.add(sectionBody);
+
 	}
 
 	private void createSection2() throws DocumentException, ReadDriverException {
