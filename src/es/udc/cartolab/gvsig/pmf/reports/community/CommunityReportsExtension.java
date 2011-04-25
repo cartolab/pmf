@@ -64,7 +64,7 @@ public class CommunityReportsExtension extends Extension {
 		PluginServices.getIconTheme().registerDefault(
 				"community-reports-launcher-icon",
 				this.getClass().getClassLoader().getResource(
-						"images/report.png"));
+						"images/report-community.png"));
 	}
 
 	private FLyrVect getLayerNameFromXML() {

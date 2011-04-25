@@ -52,7 +52,7 @@ public class PlotReportsExtension extends Extension {
 		PluginServices.getIconTheme().registerDefault(
 				"plot-reports-launcher-icon",
 				this.getClass().getClassLoader().getResource(
-						"images/report.png"));
+						"images/report-plot.png"));
 	}
 
 	private FLyrVect getLayerNameFromXML() {
