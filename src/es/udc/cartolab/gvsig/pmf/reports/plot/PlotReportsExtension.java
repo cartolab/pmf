@@ -30,16 +30,6 @@ public class PlotReportsExtension extends Extension {
 	@Override
 	public void execute(String actionCommand) {
 
-		/*
-		 * HashMap<String,Boolean> orderings = new HashMap<String,Boolean>();
-		 * orderings.put("LimiteN", true);
-		 * 
-		 * if (ReportsGenerator.generateReport("comunidades.shp", orderings,
-		 * "/home/jlopez/ultraSimple.jrxml")) {
-		 * System.out.println("Report generated!"); } else {
-		 * System.out.println("Some error happened while generating the report..."
-		 * ); }
-		 */
 		try {
 
 			layer = getLayerNameFromXML();
@@ -53,7 +43,6 @@ public class PlotReportsExtension extends Extension {
 			PluginServices.getMDIManager().addWindow(dialog);
 
 		} catch (ReadDriverException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
