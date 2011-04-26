@@ -54,9 +54,11 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 	private long creunionPosition;
 	private long centJardPosition;
 	private long centEscPosition;
-	private long centCCYDPosition;
+	private long centCCPosition;
+	private long centDIVPosition;
 
 	private boolean chbChanged = false;
+	private final String COD_COM = "cod_com";
 
 	public ComunidadForm(FLyrVect layer) {
 		super(layer);
@@ -293,11 +295,10 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 				where + " and tipo_cedu = 'Jardín de niños'");
 		centEscPosition = enableButton("cent_esc", "centros_educativos", where
 				+ " and tipo_cedu = 'Centro educativo escolar'");
-		centCCYDPosition = enableButton(
-				"cent_ccyd",
-				"centros_educativos",
-				where
-						+ " and (tipo_cedu = 'Centro educativo diversificado' or tipo_cedu='Centro educativo de ciclo común')");
+		centCCPosition = enableButton("cent_cc", "centros_educativos", where
+				+ " and tipo_cedu='Centro educativo de ciclo común'");
+		centDIVPosition = enableButton("cent_div", "centros_educativos", where
+				+ " and tipo_cedu = 'Centro educativo diversificado'");
 	}
 
 	@Override
@@ -324,10 +325,14 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 		cent_escBT.setActionCommand("cent_esc.BT");
 		cent_escBT.addActionListener(this);
 
-		JButton cent_ccydBT = (JButton) formBody
-				.getComponentByName("cent_ccyd.BT");
-		cent_ccydBT.setActionCommand("cent_ccyd.BT");
-		cent_ccydBT.addActionListener(this);
+		JButton cent_ccBT = (JButton) formBody.getComponentByName("cent_cc.BT");
+		cent_ccBT.setActionCommand("cent_cc.BT");
+		cent_ccBT.addActionListener(this);
+
+		JButton cent_divBT = (JButton) formBody
+				.getComponentByName("cent_div.BT");
+		cent_divBT.setActionCommand("cent_div.BT");
+		cent_divBT.addActionListener(this);
 	}
 
 	@Override
@@ -344,9 +349,11 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 		JButton cent_escBT = (JButton) formBody
 				.getComponentByName("cent_esc.BT");
 		cent_escBT.removeActionListener(this);
-		JButton cent_ccydBT = (JButton) formBody
-				.getComponentByName("cent_ccyd.BT");
-		cent_ccydBT.removeActionListener(this);
+		JButton cent_ccBT = (JButton) formBody.getComponentByName("cent_cc.BT");
+		cent_ccBT.removeActionListener(this);
+		JButton cent_divBT = (JButton) formBody
+				.getComponentByName("cent_div.BT");
+		cent_divBT.removeActionListener(this);
 	}
 
 	@Override
@@ -371,10 +378,14 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 			dialog = new CentroEducativoForm(Utils.getFlyrVect(view,
 					"centros_educativos"));
 			pos = centEscPosition;
-		} else if (e.getActionCommand().equals("cent_ccyd.BT")) {
+		} else if (e.getActionCommand().equals("cent_cc.BT")) {
 			dialog = new CentroEducativoForm(Utils.getFlyrVect(view,
 					"centros_educativos"));
-			pos = centCCYDPosition;
+			pos = centCCPosition;
+		} else if (e.getActionCommand().equals("cent_div.BT")) {
+			dialog = new CentroEducativoForm(Utils.getFlyrVect(view,
+					"centros_educativos"));
+			pos = centDIVPosition;
 		}
 
 		if (dialog != null) {

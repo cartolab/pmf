@@ -14,7 +14,8 @@ import es.udc.cartolab.gvsig.navtableforms.validation.FormModel;
  */
 public class ComunidadModel extends FormModel {
 
-	// Private variables needed for framework ********************************************
+	// Private variables needed for framework
+	// ********************************************
 	private String nombre;
 	private String departa;
 	private String n_habit;
@@ -24,7 +25,8 @@ public class ComunidadModel extends FormModel {
 
 	private boolean cent_jard;
 	private boolean cent_esc;
-	private boolean cent_ccyd;
+	private boolean cent_cc;
+	private boolean cent_div;
 	private boolean csalud;
 	private boolean creunion;
 	private boolean luz_elec;
@@ -32,8 +34,9 @@ public class ComunidadModel extends FormModel {
 	private boolean tfn_fijo;
 	private boolean agua_pot;
 
-	// Constructor and initialization methods *************************************************************
-	public ComunidadModel(Container c){
+	// Constructor and initialization methods
+	// *************************************************************
+	public ComunidadModel(Container c) {
 		super(c);
 	}
 
@@ -51,7 +54,7 @@ public class ComunidadModel extends FormModel {
 	}
 
 	private void setDefaultValuesForWidgetMap() {
-		//int values
+		// int values
 		widgetValues.put("n_habit", n_habit);
 		widgetValues.put("n_fam", n_fam);
 
@@ -61,10 +64,11 @@ public class ComunidadModel extends FormModel {
 		widgetValues.put("cod_com", cod_com);
 		widgetValues.put("municip", municip);
 
-		//boolean values
+		// boolean values
 		widgetValues.put("cent_jard", String.valueOf(cent_jard));
 		widgetValues.put("cent_esc", String.valueOf(cent_esc));
-		widgetValues.put("cent_ccyd", String.valueOf(cent_ccyd));
+		widgetValues.put("cent_cc", String.valueOf(cent_cc));
+		widgetValues.put("cent_div", String.valueOf(cent_div));
 		widgetValues.put("csalud", String.valueOf(csalud));
 		widgetValues.put("creunion", String.valueOf(creunion));
 		widgetValues.put("luz_elec", String.valueOf(luz_elec));
@@ -81,7 +85,7 @@ public class ComunidadModel extends FormModel {
 	}
 
 	private void setDefaultValuesForIntFields() {
-		//int values
+		// int values
 		n_habit = Integer.toString(getGvsigDefaultInt());
 		n_fam = Integer.toString(getGvsigDefaultInt());
 	}
@@ -89,7 +93,8 @@ public class ComunidadModel extends FormModel {
 	private void setDefaultValuesForBooleanFields() {
 		cent_jard = getGvsigDefaultBoolean();
 		cent_esc = getGvsigDefaultBoolean();
-		cent_ccyd = getGvsigDefaultBoolean();
+		cent_cc = getGvsigDefaultBoolean();
+		cent_div = getGvsigDefaultBoolean();
 		csalud = getGvsigDefaultBoolean();
 		creunion = getGvsigDefaultBoolean();
 		luz_elec = getGvsigDefaultBoolean();
@@ -98,168 +103,175 @@ public class ComunidadModel extends FormModel {
 		agua_pot = getGvsigDefaultBoolean();
 	}
 
-
-
-	// Getters & Setters *************************************************************
-	public String getNombre(){
+	// Getters & Setters
+	// *************************************************************
+	public String getNombre() {
 		return nombre;
 	}
 
 	public void setNombre(String newValue) {
 		String oldValue = getNombre();
 		nombre = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("NOMBRE"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("NOMBRE"), oldValue, newValue);
 	}
 
-	public String getDeparta(){
+	public String getDeparta() {
 		return departa;
 	}
 
 	public void setDeparta(String newValue) {
 		String oldValue = getDeparta();
 		departa = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("DEPARTA"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("DEPARTA"), oldValue, newValue);
 	}
 
-	public String getN_habit(){
+	public String getN_habit() {
 		return n_habit;
 	}
 
 	public void setN_habit(String newValue) {
 		String oldValue = getN_habit();
 		n_habit = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("N_HABIT"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("N_HABIT"), oldValue, newValue);
 	}
 
-	public String getCod_com(){
+	public String getCod_com() {
 		return cod_com;
 	}
 
 	public void setCod_com(String newValue) {
 		String oldValue = getCod_com();
 		cod_com = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("COD_COM"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("COD_COM"), oldValue, newValue);
 	}
 
-	public String getMunicip(){
+	public String getMunicip() {
 		return municip;
 	}
 
 	public void setMunicip(String newValue) {
 		String oldValue = getMunicip();
 		municip = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("MUNICIP"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("MUNICIP"), oldValue, newValue);
 	}
 
-	public String getN_fam(){
+	public String getN_fam() {
 		return n_fam;
 	}
 
 	public void setN_fam(String newValue) {
 		String oldValue = getN_fam();
 		n_fam = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("N_FAM"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("N_FAM"), oldValue, newValue);
 	}
 
-
-	public boolean getCent_jard(){
+	public boolean getCent_jard() {
 		return cent_jard;
 	}
 
 	public void setCent_jard(boolean newValue) {
 		boolean oldValue = getCent_jard();
 		cent_jard = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("CENT_JARD"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("CENT_JARD"), oldValue, newValue);
 	}
 
-	public boolean getCent_esc(){
+	public boolean getCent_esc() {
 		return cent_esc;
 	}
 
 	public void setCent_esc(boolean newValue) {
 		boolean oldValue = getCent_esc();
 		cent_esc = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("CENT_ESC"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("CENT_ESC"), oldValue, newValue);
 	}
 
-	public boolean getCent_ccyd(){
-		return cent_ccyd;
+	public boolean getCent_cc() {
+		return cent_cc;
 	}
 
-	public void setCent_ccyd(boolean newValue) {
-		boolean oldValue = getCent_ccyd();
-		cent_ccyd = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("CENT_CCYD"), oldValue, newValue);
+	public void setCent_cc(boolean newValue) {
+		boolean oldValue = getCent_cc();
+		cent_cc = newValue;
+		firePropertyChange(PROPERTIES_MAP.get("CENT_CC"), oldValue, newValue);
 	}
 
-	public boolean getCsalud(){
+	public boolean getCent_div() {
+		return cent_div;
+	}
+
+	public void setCent_div(boolean newValue) {
+		boolean oldValue = getCent_div();
+		cent_div = newValue;
+		firePropertyChange(PROPERTIES_MAP.get("CENT_DIV"), oldValue, newValue);
+	}
+
+	public boolean getCsalud() {
 		return csalud;
 	}
 
 	public void setCsalud(boolean newValue) {
 		boolean oldValue = getCsalud();
 		csalud = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("CSALUD"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("CSALUD"), oldValue, newValue);
 	}
 
-	public boolean getCreunion(){
+	public boolean getCreunion() {
 		return creunion;
 	}
 
 	public void setCreunion(boolean newValue) {
 		boolean oldValue = getCreunion();
 		creunion = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("CREUNION"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("CREUNION"), oldValue, newValue);
 	}
 
-	public boolean getLuz_elec(){
+	public boolean getLuz_elec() {
 		return luz_elec;
 	}
 
 	public void setLuz_elec(boolean newValue) {
 		boolean oldValue = getLuz_elec();
 		luz_elec = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("LUZ_ELEC"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("LUZ_ELEC"), oldValue, newValue);
 	}
 
-	public boolean getAlcantar(){
+	public boolean getAlcantar() {
 		return alcantar;
 	}
 
 	public void setAlcantar(boolean newValue) {
 		boolean oldValue = getAlcantar();
 		alcantar = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("ALCANTAR"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("ALCANTAR"), oldValue, newValue);
 	}
 
-	public boolean getTfn_fijo(){
+	public boolean getTfn_fijo() {
 		return tfn_fijo;
 	}
 
 	public void setTfn_fijo(boolean newValue) {
 		boolean oldValue = getTfn_fijo();
 		tfn_fijo = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("TFN_FIJO"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("TFN_FIJO"), oldValue, newValue);
 	}
 
-	public boolean getAgua_pot(){
+	public boolean getAgua_pot() {
 		return agua_pot;
 	}
 
 	public void setAgua_pot(boolean newValue) {
 		boolean oldValue = getAgua_pot();
 		agua_pot = newValue;
-		firePropertyChange((String) PROPERTIES_MAP.get("AGUA_POT"), oldValue, newValue);
+		firePropertyChange(PROPERTIES_MAP.get("AGUA_POT"), oldValue, newValue);
 	}
 
-
-	// Maps **************************************************************************
-
+	// Maps
+	// **************************************************************************
 
 	// map with widget values
 	@Override
 	public Map<String, String> getWidgetValues() {
-		//int values
+		// int values
 		widgetValues.put("n_habit", n_habit);
 		widgetValues.put("n_fam", n_fam);
 
@@ -269,10 +281,11 @@ public class ComunidadModel extends FormModel {
 		widgetValues.put("cod_com", cod_com);
 		widgetValues.put("municip", municip);
 
-		//boolean values
+		// boolean values
 		widgetValues.put("cent_jard", String.valueOf(cent_jard));
 		widgetValues.put("cent_esc", String.valueOf(cent_esc));
-		widgetValues.put("cent_ccyd", String.valueOf(cent_ccyd));
+		widgetValues.put("cent_cc", String.valueOf(cent_cc));
+		widgetValues.put("cent_div", String.valueOf(cent_div));
 		widgetValues.put("csalud", String.valueOf(csalud));
 		widgetValues.put("creunion", String.valueOf(creunion));
 		widgetValues.put("luz_elec", String.valueOf(luz_elec));
