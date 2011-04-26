@@ -52,6 +52,7 @@ import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 public class ParcelaForm extends AbstractForm implements MouseListener,
 		InternalFrameListener {
 	private final JTable volumenesTable;
+	private final String COD_COM = "cod_com";
 
 	public ParcelaForm(FLyrVect layer) {
 		super(layer);
@@ -60,8 +61,15 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 		viewInfo.setTitle(PluginServices.getText(this, "_parcelas"));
 		volumenesTable = (JTable) formBody.getComponentByName("volumenes");
 
+	}
+
+	@Override
+	public boolean init() {
+		boolean success = super.init();
+
 		fillJTable(volumenesTable, "cultivos");
 
+		return success;
 	}
 
 	@Override
@@ -126,6 +134,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
 		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
 		FieldDescription[] columns = {};
+		String codCom = formModel.getWidgetValues().get(COD_COM);
 		for (int i = 0; i < windows.length; i++) {
 			if (windows[i] instanceof Table) {
 				String name = ((Table) windows[i]).getModel().getName();
@@ -138,9 +147,13 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
 						ArrayList<String> columnNames = new ArrayList<String>();
 
+						int codComPos = -1;
+
 						for (int j = 0; j < columns.length; j++) {
 							columnNames.add(ColumnNamesTranslator
 									.getLongName(columns[j].getFieldName()));
+							if (columns[j].getFieldName().equals(COD_COM))
+								codComPos = j;
 						}
 
 						ArrayList<Object[]> rows = new ArrayList<Object[]>();
@@ -150,7 +163,14 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 							for (int j = 0; j < source.getRowCount(); j++) {
 								IRowEdited sourceRow = source.getRow(j);
 								row = sourceRow.getAttributes();
-								rows.add(row);
+								if (codComPos >= 0) {
+									if (((com.hardcode.gdbms.engine.values.StringValue) row[codComPos])
+											.getValue().equals(codCom)) {
+										rows.add(row);
+									}
+								} else {
+									rows.add(row);
+								}
 							}
 						} catch (ReadDriverException e) {
 							e.printStackTrace();
