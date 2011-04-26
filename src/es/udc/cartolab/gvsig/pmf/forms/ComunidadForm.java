@@ -193,10 +193,9 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 
 	protected boolean primaryKeyHasErrors() {
 		if (isPKAlreadyInUse()) {
-			JOptionPane.showMessageDialog(this,
-					PluginServices.getText(this, "choose_other_pk"),
-					PluginServices.getText(this, "pk_already_used"),
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
+					"choose_other_pk"), PluginServices.getText(this,
+					"pk_already_used"), JOptionPane.ERROR_MESSAGE);
 			return true;
 		} else {
 			return false;
@@ -248,7 +247,6 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 		if (result.getRowCount() == 1) {
 			recordPosition = result.getWhereFilter()[0];
 		}
-		String a = result.getAsString();
 		recordset.stop();
 
 		return recordPosition;
@@ -420,7 +418,8 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 											.toString());
 								}
 								try {
-									navTable.setPosition(doFilter(source, where));
+									navTable
+											.setPosition(doFilter(source, where));
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
