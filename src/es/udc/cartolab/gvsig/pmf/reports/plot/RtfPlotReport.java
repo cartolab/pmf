@@ -1911,15 +1911,18 @@ public class RtfPlotReport {
 					table.addCell(cell);
 					if (cul_an.contains(row.getAttribute(
 							indexes.get("tipo_cul")).toString().toLowerCase())) {
-						cell = new RtfCell("Anual");
+						cell = new RtfCell(new Phrase("Anual", normalTextFont));
 					} else if (cul_sp.contains(row.getAttribute(
 							indexes.get("tipo_cul")).toString().toLowerCase())) {
-						cell = new RtfCell("Semi perenne");
+						cell = new RtfCell(new Phrase("Semi perenne",
+								normalTextFont));
 					} else if (cul_per.contains(row.getAttribute(
 							indexes.get("tipo_cul")).toString().toLowerCase())) {
-						cell = new RtfCell("Permanente");
+						cell = new RtfCell(new Phrase("Permanente",
+								normalTextFont));
 					} else {
-						cell = new RtfCell("Indeterminado");
+						cell = new RtfCell(new Phrase("Indeterminado",
+								normalTextFont));
 					}
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
