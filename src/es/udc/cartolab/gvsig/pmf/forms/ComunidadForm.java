@@ -438,8 +438,9 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 								ArrayList<String> where = new ArrayList<String>();
 								TableModel model = refTable.getModel();
 								for (int j = 0; j < model.getColumnCount(); j++) {
-									where.add(model.getValueAt(selected, j)
-											.toString());
+									if (model.getValueAt(selected, j) != null)
+										where.add(model.getValueAt(selected, j)
+												.toString());
 								}
 								try {
 									navTable
