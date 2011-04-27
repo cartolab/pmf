@@ -74,9 +74,6 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 		boolean r = super.init();
 		setChangedValues(getCHBChanged());
 
-		fillJTable(orgBaseTable, "organizacion_base");
-		fillJTable(presInstTable, "presencia_institucional");
-
 		return r;
 	}
 
@@ -208,9 +205,10 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 
 	protected boolean primaryKeyHasErrors() {
 		if (isPKAlreadyInUse()) {
-			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
-					"choose_other_pk"), PluginServices.getText(this,
-					"pk_already_used"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this,
+					PluginServices.getText(this, "choose_other_pk"),
+					PluginServices.getText(this, "pk_already_used"),
+					JOptionPane.ERROR_MESSAGE);
 			return true;
 		} else {
 			return false;
@@ -300,6 +298,8 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 
 	@Override
 	protected void fillSpecificValues() {
+		fillJTable(orgBaseTable, "organizacion_base");
+		fillJTable(presInstTable, "presencia_institucional");
 		String foreingKey = formModel.getWidgetValues().get("cod_com");
 		String where = "where cod_com = '" + foreingKey + "'";
 		csaludPosition = enableButton("csalud", "centros_salud", where);
@@ -443,8 +443,7 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 												.toString());
 								}
 								try {
-									navTable
-											.setPosition(doFilter(source, where));
+									navTable.setPosition(doFilter(source, where));
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
