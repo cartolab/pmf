@@ -69,6 +69,8 @@ public class RtfCommunityReport {
 			RtfFont.STYLE_NONE);
 	private final RtfFont normalBoldTextFont = new RtfFont("Century Gothic",
 			10, RtfFont.STYLE_BOLD);
+	private final RtfFont normalTextFont = new RtfFont("Century Gothic", 10,
+			RtfFont.STYLE_NONE);
 	private final RtfFont normalItalicTextFont = new RtfFont("Century Gothic",
 			10, RtfFont.STYLE_ITALIC);
 	private final RtfFont tableTitleTextFont = new RtfFont("Century Gothic", 9,
@@ -120,7 +122,8 @@ public class RtfCommunityReport {
 		RtfDocumentSettings settings = writer.getDocumentSettings();
 		settings.setOutputTableRowDefinitionAfter(true);
 
-		HeaderFooter footer = new HeaderFooter(new Phrase(""), true);
+		HeaderFooter footer = new HeaderFooter(new Phrase("", normalTextFont),
+				true);
 		footer.setAlignment(HeaderFooter.ALIGN_RIGHT);
 		document.setFooter(footer);
 
@@ -145,7 +148,7 @@ public class RtfCommunityReport {
 				" "
 						+ source.getFieldValue(0,
 								source.getFieldIndexByName("cod_com"))
-								.toString()));
+								.toString(), normalTextFont));
 		aldea.setAlignment(Paragraph.ALIGN_RIGHT);
 		document.add(aldea);
 
@@ -166,12 +169,14 @@ public class RtfCommunityReport {
 		Phrase phrase = new Phrase();
 		phrase.add(new Chunk("Comunidad: ", normalBoldTextFont));
 		phrase.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("nombre")).toString()));
+				source.getFieldIndexByName("nombre")).toString(),
+				normalTextFont));
 		list.add(new ListItem(phrase));
 		phrase = new Phrase();
 		phrase.add(new Chunk("Código de la comunidad: ", normalBoldTextFont));
 		phrase.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("cod_com")).toString()));
+				source.getFieldIndexByName("cod_com")).toString(),
+				normalTextFont));
 		list.add(new ListItem(phrase));
 		sectionBody.add(list);
 		document.add(sectionBody);
@@ -187,12 +192,14 @@ public class RtfCommunityReport {
 		phrase = new Phrase();
 		phrase.add(new Chunk("Departamento: ", normalBoldTextFont));
 		phrase.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("departa")).toString()));
+				source.getFieldIndexByName("departa")).toString(),
+				normalTextFont));
 		list.add(new ListItem(phrase));
 		phrase = new Phrase();
 		phrase.add(new Chunk("Municipio: ", normalBoldTextFont));
 		phrase.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("municip")).toString()));
+				source.getFieldIndexByName("municip")).toString(),
+				normalTextFont));
 		list.add(new ListItem(phrase));
 		sectionBody.add(list);
 		document.add(sectionBody);
@@ -208,12 +215,15 @@ public class RtfCommunityReport {
 		phrase = new Phrase();
 		phrase.add(new Chunk("Número de habitantes: ", normalBoldTextFont));
 		phrase.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("n_habit")).toString()));
+				source.getFieldIndexByName("n_habit")).toString(),
+				normalTextFont));
 		list.add(new ListItem(phrase));
 		phrase = new Phrase();
 		phrase.add(new Chunk("Número de familias: ", normalBoldTextFont));
-		phrase.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("n_fam")).toString()));
+		phrase
+				.add(new Chunk(source.getFieldValue(nRow,
+						source.getFieldIndexByName("n_fam")).toString(),
+						normalTextFont));
 		list.add(new ListItem(phrase));
 		sectionBody.add(list);
 		document.add(sectionBody);
@@ -254,19 +264,19 @@ public class RtfCommunityReport {
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("nom_creu"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Dirección: ", normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("direccion"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Responsable: ", normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("responsa"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					sectionBody.add(list);
 				}
@@ -306,7 +316,7 @@ public class RtfCommunityReport {
 		String dbfName = "organizacion_base";
 		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
 		IEditableSource dbfSource = null;
-		boolean found = false;
+		boolean found = false, hasRows = false;
 		for (int i = 0; i < windows.length; i++) {
 			if (windows[i] instanceof com.iver.cit.gvsig.project.documents.table.gui.Table) {
 				String name = ((com.iver.cit.gvsig.project.documents.table.gui.Table) windows[i])
@@ -329,12 +339,13 @@ public class RtfCommunityReport {
 				indexes.put(descriptions[i].getFieldName(), i);
 			}
 			for (int i = 0; i < dbfSource.getRowCount(); i++) {
-				darkColor = !darkColor;
 				IRowEdited row = dbfSource.getRow(i);
 				if (row.getAttribute(indexes.get("cod_com")).toString().equals(
 						source.getFieldValue(nRow,
 								source.getFieldIndexByName("cod_com"))
 								.toString())) {
+					darkColor = !darkColor;
+					hasRows = true;
 					cell = new RtfCell(new Phrase(row.getAttribute(
 							indexes.get("cod_com")).toString(),
 							normalBoldTextFont));
@@ -355,6 +366,21 @@ public class RtfCommunityReport {
 					table.addCell(cell);
 				}
 
+			}
+			if (!hasRows) {
+				darkColor = !darkColor;
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				setCellColor(cell);
+				table.addCell(cell);
 			}
 		} else {
 			darkColor = !darkColor;
@@ -421,7 +447,7 @@ public class RtfCommunityReport {
 		if (found) {
 			FieldDescription[] descriptions = dbfSource.getFieldsDescription();
 			HashMap<String, Integer> indexes = new HashMap<String, Integer>();
-			boolean hasRows = false;
+			hasRows = false;
 			for (int i = 0; i < descriptions.length; i++) {
 				indexes.put(descriptions[i].getFieldName(), i);
 			}
@@ -456,30 +482,30 @@ public class RtfCommunityReport {
 			}
 			if (!hasRows) {
 				darkColor = !darkColor;
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				setCellColor(cell);
 				table.addCell(cell);
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				setCellColor(cell);
 				table.addCell(cell);
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				setCellColor(cell);
 				table.addCell(cell);
 			}
 		} else {
 			darkColor = !darkColor;
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			setCellColor(cell);
 			table.addCell(cell);
@@ -558,7 +584,10 @@ public class RtfCommunityReport {
 						source.getFieldIndexByName("cent_esc")).toString()
 						.equals("true")
 				&& !source.getFieldValue(nRow,
-						source.getFieldIndexByName("cent_ccyd")).toString()
+						source.getFieldIndexByName("cent_cc")).toString()
+						.equals("true")
+				&& !source.getFieldValue(nRow,
+						source.getFieldIndexByName("cent_div")).toString()
 						.equals("true")) {
 			phrase = new Phrase();
 			phrase.add(new Chunk("\tNo presenta Centro Educativo.\n\n",
@@ -580,35 +609,35 @@ public class RtfCommunityReport {
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("nom_cedu"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Tipo de centro educativo: ",
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("tipo_cedu"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Número de niños: ",
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("n_ninhos"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Número de niñas: ",
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("n_ninhas"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Índice de deserción (%): ",
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("i_deserc"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk("Merienda escolar: ",
@@ -654,7 +683,7 @@ public class RtfCommunityReport {
 							normalBoldTextFont));
 					phrase.add(new Chunk(shpSource.getFieldValue(i,
 							shpSource.getFieldIndexByName("nom_csalud"))
-							.toString()));
+							.toString(), normalTextFont));
 					list.add(new ListItem(phrase));
 					phrase = new Phrase();
 					phrase.add(new Chunk(
@@ -727,11 +756,13 @@ public class RtfCommunityReport {
 		Table table = new Table(2);
 		darkColor = true;
 		// we add a cell with colspan 3
-		RtfCell cell = new RtfCell(new Phrase("Área"));
+		RtfCell cell = new RtfCell(new Phrase("Área", tableTitleTextFont));
 		setCellColor(cell);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
-		cell = new RtfCell(new Phrase("Tipo de cultivo"));
+		cell = new RtfCell(new Phrase("Tipo de cultivo", tableTitleTextFont));
 		setCellColor(cell);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
 		String dbfName = "cultivos";
 		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
@@ -760,12 +791,12 @@ public class RtfCommunityReport {
 				indexes.put(descriptions[i].getFieldName(), i);
 			}
 			for (int i = 0; i < dbfSource.getRowCount(); i++) {
-				darkColor = !darkColor;
 				IRowEdited row = dbfSource.getRow(i);
 				if (row.getAttribute(indexes.get("cod_com")).toString().equals(
 						source.getFieldValue(nRow,
 								source.getFieldIndexByName("cod_com"))
 								.toString())) {
+					darkColor = !darkColor;
 					hasRows = true;
 					cell = new RtfCell(
 							new Phrase(row.getAttribute(indexes.get("area"))
@@ -784,21 +815,21 @@ public class RtfCommunityReport {
 			}
 			if (!hasRows) {
 				darkColor = !darkColor;
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				setCellColor(cell);
 				table.addCell(cell);
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				setCellColor(cell);
 				table.addCell(cell);
 			}
 		} else {
 			darkColor = !darkColor;
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
 			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
 			setCellColor(cell);
 			table.addCell(cell);
 		}

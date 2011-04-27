@@ -70,23 +70,23 @@ public class RtfPlotReport {
 	private final Document document;
 
 	// FONT STYLES
-	private final RtfFont titleFont = new RtfFont("Century Gothic", 28,
+	private final RtfFont titleFont = new RtfFont("Century Gothic", 24,
 			RtfFont.STYLE_BOLD);
 	private final RtfFont subtitleFont = new RtfFont("Century Gothic", 16,
 			RtfFont.STYLE_NONE);
 	private final RtfFont subtitleBoldFont = new RtfFont("Century Gothic", 16,
 			RtfFont.STYLE_BOLD);
-	private final RtfFont normalTextFont = new RtfFont("Century Gothic", 12,
+	private final RtfFont normalTextFont = new RtfFont("Century Gothic", 10,
 			RtfFont.STYLE_NONE);
 	private final RtfFont normalBoldTextFont = new RtfFont("Century Gothic",
-			12, RtfFont.STYLE_BOLD);
+			10, RtfFont.STYLE_BOLD);
 	private final RtfFont normalItalicTextFont = new RtfFont("Century Gothic",
-			12, RtfFont.STYLE_ITALIC);
-	private final RtfFont tableTitleTextFont = new RtfFont("Century Gothic",
-			11, RtfFont.STYLE_BOLD);
+			10, RtfFont.STYLE_ITALIC);
+	private final RtfFont tableTitleTextFont = new RtfFont("Century Gothic", 9,
+			RtfFont.STYLE_BOLD);
 	private final RtfFont sectionFont = new RtfFont("Century Gothic", 14,
 			RtfFont.STYLE_BOLD);
-	private final RtfFont subsectionFont = new RtfFont("Century Gothic", 12,
+	private final RtfFont subsectionFont = new RtfFont("Century Gothic", 11,
 			RtfFont.STYLE_BOLD);
 
 	private void setCultAn() {
@@ -225,7 +225,8 @@ public class RtfPlotReport {
 		RtfDocumentSettings settings = writer.getDocumentSettings();
 		settings.setOutputTableRowDefinitionAfter(true);
 
-		HeaderFooter footer = new HeaderFooter(new Phrase(""), true);
+		HeaderFooter footer = new HeaderFooter(new Phrase("", normalTextFont),
+				true);
 		footer.setAlignment(HeaderFooter.ALIGN_RIGHT);
 		document.setFooter(footer);
 
@@ -241,7 +242,7 @@ public class RtfPlotReport {
 		reportSubtitle.add(new Chunk(source.getFieldValue(nRow,
 				source.getFieldIndexByName("nom_produ")).toString(),
 				subtitleFont));
-		reportSubtitle.add(new Chunk("\n\t\t\t\t"));
+		reportSubtitle.add(new Chunk("\n\t\t\t\t", normalTextFont));
 		reportSubtitle.add(new Chunk(source.getFieldValue(nRow,
 				source.getFieldIndexByName("direccion")).toString(),
 				subtitleFont));
@@ -381,7 +382,7 @@ public class RtfPlotReport {
 		sectionBody.add(new Chunk(source.getFieldValue(nRow,
 				source.getFieldIndexByName("nid_produ")).toString(),
 				normalBoldTextFont));
-		sectionBody.add(new Chunk(" y dirección en "));
+		sectionBody.add(new Chunk(" y dirección en ", normalTextFont));
 		sectionBody.add(new Chunk(source.getFieldValue(nRow,
 				source.getFieldIndexByName("direccion")).toString(),
 				normalBoldTextFont));
@@ -867,7 +868,7 @@ public class RtfPlotReport {
 						.toString(), normalTextFont)));
 			}
 		} else {
-			cell = new RtfCell(new Chunk("[----]"));
+			cell = new RtfCell(new Chunk("[----]", normalTextFont));
 		}
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
@@ -888,7 +889,7 @@ public class RtfPlotReport {
 						.toString(), normalTextFont)));
 			}
 		} else {
-			cell = new RtfCell(new Chunk("[----]"));
+			cell = new RtfCell(new Chunk("[----]", normalTextFont));
 		}
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
@@ -908,7 +909,7 @@ public class RtfPlotReport {
 						.toString(), normalTextFont)));
 			}
 		} else {
-			cell = new RtfCell(new Chunk("[----]"));
+			cell = new RtfCell(new Chunk("[----]", normalTextFont));
 		}
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
@@ -1220,19 +1221,20 @@ public class RtfPlotReport {
 				"\tLa finca de la familia productora tiene una ",
 				normalTextFont));
 		sectionBody.add(new Chunk("superficie total ", normalBoldTextFont));
-		sectionBody.add(new Chunk("de "));
+		sectionBody.add(new Chunk("de ", normalTextFont));
 		sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
 				plotSource.getFieldIndexByName("area_tot")).toString(),
 				normalBoldTextFont));
 		sectionBody.add(new Chunk(" manzanas, siendo la ", normalTextFont));
 		sectionBody
 				.add(new Chunk("superficie cultivable ", normalBoldTextFont));
-		sectionBody.add(new Chunk("de "));
+		sectionBody.add(new Chunk("de ", normalTextFont));
 		sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
 				plotSource.getFieldIndexByName("area_cul")).toString(),
 				normalBoldTextFont));
 		sectionBody.add(new Chunk(
-				" manzanas. La finca pertenece a la familia por "));
+				" manzanas. La finca pertenece a la familia por ",
+				normalTextFont));
 		if (plotSource.getFieldValue(nPlotRow,
 				plotSource.getFieldIndexByName("legal_par")).toString()
 				.toLowerCase().equals("otro")) {
@@ -1244,7 +1246,7 @@ public class RtfPlotReport {
 					plotSource.getFieldIndexByName("legal_par")).toString()
 					.toLowerCase(), normalTextFont));
 		}
-		sectionBody.add(new Chunk("."));
+		sectionBody.add(new Chunk(".", normalTextFont));
 		sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 
 		document.add(sectionBody);
@@ -1258,24 +1260,27 @@ public class RtfPlotReport {
 		sectionBody.add(new Chunk("\tLa finca tiene una pendiente media del ",
 				normalTextFont));
 		sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("pendiente")).toString()));
-		sectionBody.add(new Chunk(", el suelo es principalmente "));
+				plotSource.getFieldIndexByName("pendiente")).toString(),
+				normalTextFont));
+		sectionBody.add(new Chunk(", el suelo es principalmente ",
+				normalTextFont));
 		if (plotSource.getFieldValue(nPlotRow,
 				plotSource.getFieldIndexByName("tip_suelo")).toString()
 				.toLowerCase().equals("otro")) {
 			sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
 					plotSource.getFieldIndexByName("ot_tip_su")).toString()
-					.toLowerCase()));
+					.toLowerCase(), normalTextFont));
 		} else {
 			sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
 					plotSource.getFieldIndexByName("tip_suelo")).toString()
-					.toLowerCase()));
+					.toLowerCase(), normalTextFont));
 		}
-		sectionBody.add(new Chunk(" y se encuentra en un nivel "));
+		sectionBody.add(new Chunk(" y se encuentra en un nivel ",
+				normalTextFont));
 		sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
 				plotSource.getFieldIndexByName("deg_suelo")).toString()
-				.toLowerCase()));
-		sectionBody.add(new Chunk(" de degradación.\n\t"));
+				.toLowerCase(), normalTextFont));
+		sectionBody.add(new Chunk(" de degradación.\n\t", normalTextFont));
 
 		if (plotSource.getFieldValue(nPlotRow,
 				plotSource.getFieldIndexByName("cerca")).toString().equals(
@@ -1847,21 +1852,22 @@ public class RtfPlotReport {
 
 		// Farming table
 		table = new Table(4);
+		darkColor = true;
 		cell = new RtfCell(new Phrase("Cultivo", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setBackgroundColor(Color.LIGHT_GRAY);
+		setCellColor(cell);
 		table.addCell(cell);
 		cell = new RtfCell(new Phrase("Tipo", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setBackgroundColor(Color.LIGHT_GRAY);
+		setCellColor(cell);
 		table.addCell(cell);
 		cell = new RtfCell(new Phrase("Área cultivada", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setBackgroundColor(Color.LIGHT_GRAY);
+		setCellColor(cell);
 		table.addCell(cell);
 		cell = new RtfCell(new Phrase("Volumen producido", tableTitleTextFont));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setBackgroundColor(Color.LIGHT_GRAY);
+		setCellColor(cell);
 		table.addCell(cell);
 		String dbfName = "cultivos";
 		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
@@ -1896,10 +1902,12 @@ public class RtfPlotReport {
 								plotSource.getFieldIndexByName("cod_com"))
 								.toString())) {
 					hasRows = true;
+					darkColor = !darkColor;
 					cell = new RtfCell(new Phrase(row.getAttribute(
 							indexes.get("tipo_cul")).toString(),
 							normalBoldTextFont));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					setCellColor(cell);
 					table.addCell(cell);
 					if (cul_an.contains(row.getAttribute(
 							indexes.get("tipo_cul")).toString().toLowerCase())) {
@@ -1915,37 +1923,50 @@ public class RtfPlotReport {
 					}
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
+					setCellColor(cell);
 					cell = new RtfCell(
 							new Phrase(row.getAttribute(indexes.get("area"))
 									.toString(), normalBoldTextFont));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
+					setCellColor(cell);
 					cell = new RtfCell(new Phrase(row.getAttribute(
 							indexes.get("vol_proc")).toString(),
 							normalBoldTextFont));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
+					setCellColor(cell);
 				}
 
 			}
 			if (!hasRows) {
-				cell = new RtfCell(new Phrase(""));
+				darkColor = !darkColor;
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				setCellColor(cell);
 				table.addCell(cell);
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				setCellColor(cell);
 				table.addCell(cell);
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				setCellColor(cell);
 				table.addCell(cell);
-				cell = new RtfCell(new Phrase(""));
+				cell = new RtfCell(new Phrase("", normalTextFont));
+				setCellColor(cell);
 				table.addCell(cell);
 			}
 		} else {
-			cell = new RtfCell(new Phrase(""));
+			darkColor = !darkColor;
+			cell = new RtfCell(new Phrase("", normalTextFont));
+			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
+			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
+			setCellColor(cell);
 			table.addCell(cell);
-			cell = new RtfCell(new Phrase(""));
+			cell = new RtfCell(new Phrase("", normalTextFont));
+			setCellColor(cell);
 			table.addCell(cell);
 		}
 		document.add(table);
@@ -2019,6 +2040,14 @@ public class RtfPlotReport {
 
 		document.add(table);
 
+	}
+
+	private void setCellColor(RtfCell cell) {
+		if (darkColor) {
+			cell.setBackgroundColor(Color.LIGHT_GRAY);
+		} else {
+			cell.setBackgroundColor(new Color(242, 242, 242));
+		}
 	}
 
 }// Class
