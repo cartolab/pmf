@@ -9,6 +9,7 @@ public abstract class ColumnNamesTranslator {
 	private static void fillTranslations() {
 		translations = new HashMap<String, String>();
 		translations.put("cod_com", "Comunidad");
+		translations.put("cod_viv", "Parcela");
 		translations.put("tipo_cul", "Cultivo");
 		translations.put("area", "Área cultivada (Mz.)");
 		translations.put("vol_proc", "Vol. producido (Qt.)");

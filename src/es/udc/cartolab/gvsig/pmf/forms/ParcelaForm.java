@@ -26,6 +26,7 @@ import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.instruction.EvaluationException;
 import com.hardcode.gdbms.engine.instruction.SemanticException;
 import com.hardcode.gdbms.engine.strategies.FilteredDataSource;
+import com.hardcode.gdbms.engine.values.StringValue;
 import com.hardcode.gdbms.parser.ParseException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
@@ -53,6 +54,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 		InternalFrameListener {
 	private final JTable volumenesTable;
 	private final String COD_COM = "cod_com";
+	private final String COD_VIV = "cod_viv";
 
 	public ParcelaForm(FLyrVect layer) {
 		super(layer);
@@ -60,14 +62,11 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 		viewInfo.setWidth(650);
 		viewInfo.setTitle(PluginServices.getText(this, "_parcelas"));
 		volumenesTable = (JTable) formBody.getComponentByName("volumenes");
-
 	}
 
 	@Override
 	public boolean init() {
 		boolean success = super.init();
-
-		fillJTable(volumenesTable, "cultivos");
 
 		return success;
 	}
@@ -135,6 +134,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 		IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
 		FieldDescription[] columns = {};
 		String codCom = formModel.getWidgetValues().get(COD_COM);
+		String codPar = formModel.getWidgetValues().get(COD_VIV);
 		for (int i = 0; i < windows.length; i++) {
 			if (windows[i] instanceof Table) {
 				String name = ((Table) windows[i]).getModel().getName();
@@ -148,12 +148,15 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 						ArrayList<String> columnNames = new ArrayList<String>();
 
 						int codComPos = -1;
+						int codParPos = -1;
 
 						for (int j = 0; j < columns.length; j++) {
 							columnNames.add(ColumnNamesTranslator
 									.getLongName(columns[j].getFieldName()));
 							if (columns[j].getFieldName().equals(COD_COM))
 								codComPos = j;
+							if (columns[j].getFieldName().equals(COD_VIV))
+								codParPos = j;
 						}
 
 						ArrayList<Object[]> rows = new ArrayList<Object[]>();
@@ -163,13 +166,14 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 							for (int j = 0; j < source.getRowCount(); j++) {
 								IRowEdited sourceRow = source.getRow(j);
 								row = sourceRow.getAttributes();
-								if (codComPos >= 0) {
-									if (((com.hardcode.gdbms.engine.values.StringValue) row[codComPos])
-											.getValue().equals(codCom)) {
+								if (codComPos >= 0 && codParPos >= 0) {
+									if (((StringValue) row[codComPos])
+											.getValue().equals(codCom)
+											&& ((StringValue) row[codParPos])
+													.getValue().equals(codPar)) {
 										rows.add(row);
 									}
-								} else {
-									rows.add(row);
+
 								}
 							}
 						} catch (ReadDriverException e) {
@@ -200,9 +204,10 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
 	protected boolean primaryKeyHasErrors() {
 		if (isPKAlreadyInUse()) {
-			JOptionPane.showMessageDialog(this, PluginServices.getText(this,
-					"choose_other_pk"), PluginServices.getText(this,
-					"pk_already_used"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this,
+					PluginServices.getText(this, "choose_other_pk"),
+					PluginServices.getText(this, "pk_already_used"),
+					JOptionPane.ERROR_MESSAGE);
 			return true;
 		} else {
 			return false;
@@ -315,6 +320,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
 	@Override
 	protected void fillSpecificValues() {
+		fillJTable(volumenesTable, "cultivos");
 		setCodigo_fcEnabledIfNeeded();
 		comboBoxEnablesTextField("legal_par.CB", "Otro", "ot_legal_p.TF");
 		comboBoxEnablesTextField("tip_suelo.CB", "Otro", "ot_tip_su.TF");
@@ -555,8 +561,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 												.toString());
 								}
 								try {
-									navTable
-											.setPosition(doFilter(source, where));
+									navTable.setPosition(doFilter(source, where));
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
