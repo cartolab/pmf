@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -547,8 +548,14 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 				.getModel().getModelo();
 			found = true;
 			AlphanumericNavTable navTable;
+			HashMap<String, String> defaultValues = new HashMap<String, String>();
+			defaultValues.put(COD_COM, ((ParcelaModel) formModel)
+				.getCod_com());
+			defaultValues.put(COD_VIV, ((ParcelaModel) formModel)
+				.getCod_viv());
 			try {
-			    navTable = new AlphanumericNavTable(source, dbfName);
+			    navTable = new AlphanumericNavTable(source,
+				    dbfName, defaultValues);
 
 			    if (navTable.init()) {
 				int selected = refTable.getSelectedRow();
