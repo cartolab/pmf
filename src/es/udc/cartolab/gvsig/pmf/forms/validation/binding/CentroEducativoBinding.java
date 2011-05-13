@@ -7,23 +7,22 @@ import es.udc.cartolab.gvsig.navtableforms.validation.FormBinding;
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroEducativoModel;
 import es.udc.cartolab.gvsig.pmf.forms.validation.validator.CentroEducativoValidator;
 
-
 /**
- * Provides all models to bind the view to its domain model,
- * an instance of {@linkCentroEducativoModel}.
- *
+ * Provides all models to bind the view to its domain model, an instance of
+ * {@linkCentroEducativoModel}.
+ * 
  */
-public class  CentroEducativoBinding extends FormBinding<CentroEducativoModel> {
+public class CentroEducativoBinding extends FormBinding<CentroEducativoModel> {
 
-	// Instance Creation ******************************************************
+    // Instance Creation ******************************************************
 
-	public CentroEducativoBinding(Model model) {
-		super(model);
-	}
+    public CentroEducativoBinding(Model model) {
+	super(model);
+    }
 
-	@Override
-	protected Validator getValidator() {
-		return new CentroEducativoValidator();
-	}
+    @Override
+    protected Validator getValidator() {
+	return new CentroEducativoValidator();
+    }
 
 }

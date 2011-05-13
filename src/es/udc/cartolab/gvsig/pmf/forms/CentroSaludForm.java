@@ -18,110 +18,103 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.binding.CentroSaludBinding;
 import es.udc.cartolab.gvsig.pmf.forms.validation.model.CentroSaludModel;
 import es.udc.cartolab.gvsig.pmf.preferences.Preferences;
 
-public class CentroSaludForm extends AbstractForm
-{
+public class CentroSaludForm extends AbstractForm {
 
-	public CentroSaludForm(FLyrVect layer) {
-		super(layer);
-		viewInfo.setHeight(550);
-		viewInfo.setWidth(500);
-		viewInfo.setTitle(PluginServices.getText(this, "_centro_salud"));
-	}
+    public CentroSaludForm(FLyrVect layer) {
+	super(layer);
+	viewInfo.setHeight(550);
+	viewInfo.setWidth(500);
+	viewInfo.setTitle(PluginServices.getText(this, "_centro_salud"));
+    }
 
-	@Override
-	public FormPanel getFormBody() {
-		return new FormPanel("centro_salud.xml");
-	}
+    @Override
+    public FormPanel getFormBody() {
+	return new FormPanel("centro_salud.xml");
+    }
 
-	@Override
-	public FormModel getFormModel(Container c) {
-		return new CentroSaludModel(c);
-	}
+    @Override
+    public FormModel getFormModel(Container c) {
+	return new CentroSaludModel(c);
+    }
 
-	@Override
-	public FormBinding getFormBinding(FormModel model) {
-		return new CentroSaludBinding(model);
-	}
+    @Override
+    public FormBinding getFormBinding(FormModel model) {
+	return new CentroSaludBinding(model);
+    }
 
-	@Override
-	public Logger getLoggerName() {
-		return Logger.getLogger("PMF");
-	}
+    @Override
+    public Logger getLoggerName() {
+	return Logger.getLogger("PMF");
+    }
 
+    protected String getXmlFileName() {
+	return Preferences.getXMLFileName();
+    }
 
-	protected String getXmlFileName() {
-		return Preferences.getXMLFileName();
-	}
+    protected String getAliasInXML() {
+	return "centros_salud";
+    }
 
-
-	protected String getAliasInXML() {
-		return "centros_salud";
-	}
-
-
-	protected boolean isPKAlreadyInUse() {
-		try {
-			if (recordset.getRowCount() == 0) {
-				return false;
+    protected boolean isPKAlreadyInUse() {
+	try {
+	    if (recordset.getRowCount() == 0) {
+		return false;
+	    } else {
+		String nameOfKeyInModel = "cod_csalud";
+		String nameOfKeyInRecordSet = "cod_csalud";
+		String valueFromModel = formModel.getWidgetValues().get(
+			nameOfKeyInModel);
+		for (int index = 0; index < recordset.getRowCount(); index++) {
+		    int indiceCampo = recordset
+			    .getFieldIndexByName(nameOfKeyInRecordSet);
+		    String valueFromRecordSet = recordset.getFieldValue(index,
+			    indiceCampo).toString();
+		    if (valueFromRecordSet.equals(valueFromModel)) {
+			if (isUpdatingTheSameRegister(index, currentPosition)) {
+			    return false;
 			} else {
-				String nameOfKeyInModel = "cod_csalud";
-				String nameOfKeyInRecordSet = "cod_csalud";
-				String valueFromModel = formModel.getWidgetValues().get(
-						nameOfKeyInModel);
-				for (int index = 0; index < recordset.getRowCount(); index++) {
-					int indiceCampo = recordset
-					.getFieldIndexByName(nameOfKeyInRecordSet);
-					String valueFromRecordSet = recordset.getFieldValue(index,
-							indiceCampo).toString();
-					if (valueFromRecordSet.equals(valueFromModel)) {
-						if (isUpdatingTheSameRegister(index, currentPosition)) {
-							return false;
-						} else {
-							return true;
-						}
-					}
-				}
-				return false;
+			    return true;
 			}
-		} catch (ReadDriverException e) {
-			logger.error(e.getMessage(), e);
-			return false;
+		    }
 		}
+		return false;
+	    }
+	} catch (ReadDriverException e) {
+	    logger.error(e.getMessage(), e);
+	    return false;
 	}
+    }
 
-	private boolean isUpdatingTheSameRegister(int index, long currentPosition) {
-		if (index == (int) currentPosition) {
-			return true;
-		} else {
-			return false;
-		}
+    private boolean isUpdatingTheSameRegister(int index, long currentPosition) {
+	if (index == (int) currentPosition) {
+	    return true;
+	} else {
+	    return false;
 	}
+    }
 
-	protected boolean primaryKeyHasErrors() {
-		if (isPKAlreadyInUse()) {
-			JOptionPane
-			.showMessageDialog(
-					this,
-					PluginServices.getText(this, "choose_other_pk"),
-					PluginServices.getText(this, "pk_already_used"),
-					JOptionPane.ERROR_MESSAGE);
-			return true;
-		} else {
-			return false;
-		}
+    protected boolean primaryKeyHasErrors() {
+	if (isPKAlreadyInUse()) {
+	    JOptionPane.showMessageDialog(this, PluginServices.getText(this,
+		    "choose_other_pk"), PluginServices.getText(this,
+		    "pk_already_used"), JOptionPane.ERROR_MESSAGE);
+	    return true;
+	} else {
+	    return false;
 	}
+    }
 
-	@Override
-	protected boolean isSaveable() {
-		if (validationHasErrors()) {
-			return false;
-		} else if (primaryKeyHasErrors()) {
-			return false;
-		}
-		return true;
+    @Override
+    protected boolean isSaveable() {
+	if (validationHasErrors()) {
+	    return false;
+	} else if (primaryKeyHasErrors()) {
+	    return false;
 	}
+	return true;
+    }
 
-	@Override
-	protected void fillSpecificValues() {
-	}
+    @Override
+    protected void fillSpecificValues() {
+    }
 }

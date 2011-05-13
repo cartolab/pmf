@@ -36,214 +36,251 @@ import com.iver.utiles.GenericFileFilter;
 
 public abstract class ReportsGenerator {
 
-	/*private static SelectableDataSource getDataSource(String layerName) throws ReadDriverException {
+    /*
+     * private static SelectableDataSource getDataSource(String layerName)
+     * throws ReadDriverException {
+     * 
+     * BaseView view = (BaseView)
+     * PluginServices.getMDIManager().getActiveWindow(); MapControl mapControl =
+     * view.getMapControl(); FLayers flayers =
+     * mapControl.getMapContext().getLayers();
+     * 
+     * FLayer layer = flayers.getLayer(layerName);
+     * 
+     * return ((FLyrVect) layer).getRecordset();
+     * 
+     * }
+     */
 
-		BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-		MapControl mapControl = view.getMapControl();
-		FLayers flayers = mapControl.getMapContext().getLayers();
+    private static FLayers getDataSources() throws ReadDriverException {
 
-		FLayer layer = flayers.getLayer(layerName);
+	BaseView view = (BaseView) PluginServices.getMDIManager()
+		.getActiveWindow();
+	MapControl mapControl = view.getMapControl();
+	FLayers flayers = mapControl.getMapContext().getLayers();
 
-		return ((FLyrVect) layer).getRecordset();
+	return flayers;
 
-	}*/
+    }
 
-	private static FLayers getDataSources() throws ReadDriverException {
+    private static ArrayList<HashMap<String, Object>> retrieveRecords(
+	    SelectableDataSource data) throws ReadDriverException {
 
-		BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-		MapControl mapControl = view.getMapControl();
-		FLayers flayers = mapControl.getMapContext().getLayers();
+	ArrayList<HashMap<String, Object>> records = new ArrayList<HashMap<String, Object>>();
+	HashMap<String, Object> record;
+	int i, j;
 
-		return flayers;
+	Value row[];
+
+	for (i = 0; i < data.getRowCount(); i++) {
+
+	    row = data.getRow(i);
+
+	    record = new HashMap<String, Object>();
+
+	    for (j = 0; j < data.getFieldsDescription().length; j++) {
+		record.put(data.getFieldsDescription()[j].getFieldName(),
+			row[j].toString());
+	    }
+
+	    records.add(record);
 
 	}
 
-	private static ArrayList<HashMap<String,Object>> retrieveRecords(SelectableDataSource data) throws ReadDriverException {
+	return records;
 
-		ArrayList<HashMap<String,Object>> records = new ArrayList<HashMap<String,Object>>();
-		HashMap<String,Object> record;
-		int i, j;
+    }
 
-		Value row[];
+    private static void groupingsSort(
+	    ArrayList<HashMap<String, Object>> records,
+	    HashMap<String, Boolean> orderings) {
+	Set<String> keys = orderings.keySet();
+	Iterator<String> iterator = keys.iterator();
+	String key;
 
-		for (i=0;i<data.getRowCount();i++) {
+	while (iterator.hasNext()) {
+	    key = iterator.next();
+	    Collections.sort(records, new RecordsComparator(key, orderings
+		    .get(key)));
+	}
+    }
 
-			row = data.getRow(i);
+    public static boolean generateReport(String layerName,
+	    HashMap<String, Boolean> orderings, String reportTemplate) {
 
-			record = new HashMap<String,Object>();
+	ArrayList<HashMap<String, Object>> records = new ArrayList<HashMap<String, Object>>();
 
-			for (j=0;j<data.getFieldsDescription().length;j++) {
-				record.put(data.getFieldsDescription()[j].getFieldName(), row[j].toString());
-			}
-
-			records.add(record);
-
+	SelectableDataSource data = null;
+	FLayers layers;
+	try {
+	    layers = getDataSources();
+	    int i;
+	    for (i = 0; i < layers.getLayersCount(); i++) {
+		System.out.println(layers.getLayer(i).getName());
+		if (layers.getLayer(i).getName().equals(layerName)) {
+		    data = ((FLyrVect) layers.getLayer(i)).getRecordset();
 		}
-
-		return records;
-
+	    }
+	    // data = getDataSource(layerName);
+	} catch (ReadDriverException e1) {
+	    e1.printStackTrace();
+	    return false;
 	}
 
-	private static void groupingsSort(ArrayList<HashMap<String,Object>> records, HashMap<String,Boolean> orderings) {
-		Set<String> keys = orderings.keySet();
-		Iterator<String> iterator = keys.iterator();
-		String key;
+	if (data != null) {
 
-		while (iterator.hasNext()) {
-			key = iterator.next();
-			Collections.sort(records, new RecordsComparator(key, orderings.get(key)));
-		}
-	}
-
-	public static boolean generateReport(String layerName, HashMap<String,Boolean> orderings, String reportTemplate) {
-
-		ArrayList<HashMap<String,Object>> records = new ArrayList<HashMap<String,Object>>();
-
-		SelectableDataSource data = null;
-		FLayers layers;
-		try {
-			layers = getDataSources();
-			int i;
-			for (i=0; i<layers.getLayersCount(); i++) {
-				System.out.println(layers.getLayer(i).getName());
-				if (layers.getLayer(i).getName().equals(layerName)) {
-					data = ((FLyrVect) layers.getLayer(i)).getRecordset();
-				}
-			}
-			//data = getDataSource(layerName);
-		} catch (ReadDriverException e1) {
-			e1.printStackTrace();
-			return false;
-		}
-
-		if (data != null) {
-
-			try {
-				records = retrieveRecords(data);
-			} catch (ReadDriverException e1) {
-				e1.printStackTrace();
-				return false;
-			}
-
-			groupingsSort(records, orderings);
-
-			Map parameters = new HashMap();
-			parameters.put("ReportTitle", "Address Report");
-
-			try {
-				JasperReport report = JasperCompileManager.compileReport(reportTemplate);
-
-				JFileChooser jfc = new JFileChooser("PROJECT_FILE_CHOOSER_ID", "/home/jlopez/");
-
-				jfc.setDialogTitle("Test");
-				jfc.addChoosableFileFilter(new GenericFileFilter("doc",
-				"Documento de Microsoft Word (*.doc)"));
-				jfc.addChoosableFileFilter(new GenericFileFilter("odt",
-				"Documento de Open Office (*.odt)"));
-				jfc.addChoosableFileFilter(new GenericFileFilter("pdf",
-				"Documento PDF (*.pdf)"));
-				jfc.addChoosableFileFilter(new GenericFileFilter("html",
-				"Documento HTML (*.html)"));
-
-				if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-					File file=jfc.getSelectedFile();
-					if (jfc.getFileFilter().getDescription().endsWith(" (*.odt)")) {
-						if (!(file.getPath().toLowerCase().endsWith(".odt"))){
-							file=new File(file.getPath()+".odt");
-						}
-
-						String filePath = file.getAbsolutePath();
-
-						JROdtExporter exporter = new JROdtExporter();
-
-						JasperPrint print = JasperFillManager.fillReport(report , parameters, new CustomDataSource(records));
-						exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, filePath);
-						exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-						exporter.exportReport();
-					}
-
-
-					if (jfc.getFileFilter().getDescription().endsWith(" (*.html)")) {
-						if (!(file.getPath().toLowerCase().endsWith(".html"))){
-							file=new File(file.getPath()+".html");
-						}
-
-						String filePath = file.getAbsolutePath();
-
-						JRHtmlExporter exporter = new JRHtmlExporter();
-
-						JasperPrint print = JasperFillManager.fillReport(report , parameters, new CustomDataSource(records));
-						exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, filePath);
-						exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-						exporter.exportReport();
-					}
-
-
-					if (jfc.getFileFilter().getDescription().endsWith(" (*.pdf)")) {
-						if (!(file.getPath().toLowerCase().endsWith(".pdf"))){
-							file=new File(file.getPath()+".pdf");
-						}
-
-						String filePath = file.getAbsolutePath();
-
-						JRPdfExporter exporter = new JRPdfExporter();
-
-						JasperPrint print = JasperFillManager.fillReport(report , parameters, new CustomDataSource(records));
-						exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, filePath);
-						exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-						exporter.exportReport();
-					}
-
-
-					if (jfc.getFileFilter().getDescription().endsWith(" (*.doc)")) {
-						File odtFile;
-						if (!(file.getPath().toLowerCase().endsWith(".doc"))){
-							odtFile = new File(file.getPath()+".tmp.odt");
-							file =  new File(file.getPath()+".doc");
-						} else {
-							odtFile = new File(file.getPath().replaceAll(".doc", ".tmp.odt"));
-						}
-
-						Runtime.getRuntime().exec("/home/jlopez/script");
-
-						Thread.currentThread().sleep(1500);
-
-						JROdtExporter exporter = new JROdtExporter();
-
-						JasperPrint print = JasperFillManager.fillReport(report , parameters, new CustomDataSource(records));
-						exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, odtFile.getAbsolutePath());
-						exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-						exporter.exportReport();
-
-						//System.out.println("Before connection...");
-
-						// connect to an OpenOffice.org instance running on port 8100
-						OpenOfficeConnection connection = new SocketOpenOfficeConnection(8100);
-						connection.connect();
-
-						// convert
-						DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
-						converter.convert(odtFile, file);
-
-						// close the connection
-						connection.disconnect();
-
-						Runtime.getRuntime().exec("pkill soffice.bin");
-						Runtime.getRuntime().exec("rm " + odtFile.getAbsolutePath());
-					}
-
-				}
-
-			} catch (Exception e) {
-				return false;
-			}
-
-			return true;
-
-		}
-
+	    try {
+		records = retrieveRecords(data);
+	    } catch (ReadDriverException e1) {
+		e1.printStackTrace();
 		return false;
+	    }
+
+	    groupingsSort(records, orderings);
+
+	    Map parameters = new HashMap();
+	    parameters.put("ReportTitle", "Address Report");
+
+	    try {
+		JasperReport report = JasperCompileManager
+			.compileReport(reportTemplate);
+
+		JFileChooser jfc = new JFileChooser("PROJECT_FILE_CHOOSER_ID",
+			"/home/jlopez/");
+
+		jfc.setDialogTitle("Test");
+		jfc.addChoosableFileFilter(new GenericFileFilter("doc",
+			"Documento de Microsoft Word (*.doc)"));
+		jfc.addChoosableFileFilter(new GenericFileFilter("odt",
+			"Documento de Open Office (*.odt)"));
+		jfc.addChoosableFileFilter(new GenericFileFilter("pdf",
+			"Documento PDF (*.pdf)"));
+		jfc.addChoosableFileFilter(new GenericFileFilter("html",
+			"Documento HTML (*.html)"));
+
+		if (jfc.showSaveDialog((Component) PluginServices
+			.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+		    File file = jfc.getSelectedFile();
+		    if (jfc.getFileFilter().getDescription().endsWith(
+			    " (*.odt)")) {
+			if (!(file.getPath().toLowerCase().endsWith(".odt"))) {
+			    file = new File(file.getPath() + ".odt");
+			}
+
+			String filePath = file.getAbsolutePath();
+
+			JROdtExporter exporter = new JROdtExporter();
+
+			JasperPrint print = JasperFillManager.fillReport(
+				report, parameters, new CustomDataSource(
+					records));
+			exporter.setParameter(
+				JRExporterParameter.OUTPUT_FILE_NAME, filePath);
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+				print);
+			exporter.exportReport();
+		    }
+
+		    if (jfc.getFileFilter().getDescription().endsWith(
+			    " (*.html)")) {
+			if (!(file.getPath().toLowerCase().endsWith(".html"))) {
+			    file = new File(file.getPath() + ".html");
+			}
+
+			String filePath = file.getAbsolutePath();
+
+			JRHtmlExporter exporter = new JRHtmlExporter();
+
+			JasperPrint print = JasperFillManager.fillReport(
+				report, parameters, new CustomDataSource(
+					records));
+			exporter.setParameter(
+				JRExporterParameter.OUTPUT_FILE_NAME, filePath);
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+				print);
+			exporter.exportReport();
+		    }
+
+		    if (jfc.getFileFilter().getDescription().endsWith(
+			    " (*.pdf)")) {
+			if (!(file.getPath().toLowerCase().endsWith(".pdf"))) {
+			    file = new File(file.getPath() + ".pdf");
+			}
+
+			String filePath = file.getAbsolutePath();
+
+			JRPdfExporter exporter = new JRPdfExporter();
+
+			JasperPrint print = JasperFillManager.fillReport(
+				report, parameters, new CustomDataSource(
+					records));
+			exporter.setParameter(
+				JRExporterParameter.OUTPUT_FILE_NAME, filePath);
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+				print);
+			exporter.exportReport();
+		    }
+
+		    if (jfc.getFileFilter().getDescription().endsWith(
+			    " (*.doc)")) {
+			File odtFile;
+			if (!(file.getPath().toLowerCase().endsWith(".doc"))) {
+			    odtFile = new File(file.getPath() + ".tmp.odt");
+			    file = new File(file.getPath() + ".doc");
+			} else {
+			    odtFile = new File(file.getPath().replaceAll(
+				    ".doc", ".tmp.odt"));
+			}
+
+			Runtime.getRuntime().exec("/home/jlopez/script");
+
+			Thread.currentThread().sleep(1500);
+
+			JROdtExporter exporter = new JROdtExporter();
+
+			JasperPrint print = JasperFillManager.fillReport(
+				report, parameters, new CustomDataSource(
+					records));
+			exporter.setParameter(
+				JRExporterParameter.OUTPUT_FILE_NAME, odtFile
+					.getAbsolutePath());
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+				print);
+			exporter.exportReport();
+
+			// System.out.println("Before connection...");
+
+			// connect to an OpenOffice.org instance running on port
+			// 8100
+			OpenOfficeConnection connection = new SocketOpenOfficeConnection(
+				8100);
+			connection.connect();
+
+			// convert
+			DocumentConverter converter = new OpenOfficeDocumentConverter(
+				connection);
+			converter.convert(odtFile, file);
+
+			// close the connection
+			connection.disconnect();
+
+			Runtime.getRuntime().exec("pkill soffice.bin");
+			Runtime.getRuntime().exec(
+				"rm " + odtFile.getAbsolutePath());
+		    }
+
+		}
+
+	    } catch (Exception e) {
+		return false;
+	    }
+
+	    return true;
 
 	}
+
+	return false;
+
+    }
 
 }

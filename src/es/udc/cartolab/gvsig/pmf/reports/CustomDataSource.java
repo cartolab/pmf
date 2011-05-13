@@ -1,4 +1,5 @@
 package es.udc.cartolab.gvsig.pmf.reports;
+
 /*
  * JasperReports - Free Java Reporting Library.
  * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
@@ -23,7 +24,6 @@ package es.udc.cartolab.gvsig.pmf.reports;
  * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,90 +33,76 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRRuntimeException;
 
-
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: CustomDataSource.java 3030 2009-08-27 11:12:48Z teodord $
  */
-public class CustomDataSource implements JRDataSource
-{
+public class CustomDataSource implements JRDataSource {
 
-
-
-	/**
+    /**
 	 *
 	 */
-	private List<HashMap<String,Object>> records = new ArrayList<HashMap<String,Object>>();
-	private Iterator<HashMap<String, Object>> iterator;
-	private HashMap<String,Object> currentRecord;
+    private List<HashMap<String, Object>> records = new ArrayList<HashMap<String, Object>>();
+    private Iterator<HashMap<String, Object>> iterator;
+    private HashMap<String, Object> currentRecord;
 
-
-	/**
+    /**
 	 *
 	 */
-	public CustomDataSource(List<HashMap<String, Object>> records)
-	{
-		this.records = records;
+    public CustomDataSource(List<HashMap<String, Object>> records) {
+	this.records = records;
 
-		/*HashMap<String,Object> map = new HashMap<String,Object>();
+	/*
+	 * HashMap<String,Object> map = new HashMap<String,Object>();
+	 * 
+	 * map.put("name", "John McClane"); map.put("street",
+	 * "La jungla de cristal"); map.put("the_city","New York");
+	 * map.put("id", new Integer(1));
+	 * 
+	 * records = new ArrayList<HashMap<String,Object>>(); records.add(map);
+	 */
 
-		map.put("name", "John McClane");
-		map.put("street", "La jungla de cristal");
-		map.put("the_city","New York");
-		map.put("id", new Integer(1));
+	iterator = records.iterator();
+    }
 
-		records = new ArrayList<HashMap<String,Object>>();
-		records.add(map);*/
+    /**
+	 *
+	 */
+    public boolean next() {
+	boolean hasNext = false;
 
-		iterator = records.iterator();
+	if (iterator != null) {
+	    hasNext = iterator.hasNext();
+
+	    if (hasNext) {
+		currentRecord = iterator.next();
+	    }
 	}
 
+	return hasNext;
+    }
 
-	/**
+    /**
 	 *
 	 */
-	public boolean next()
-	{
-		boolean hasNext = false;
-
-		if (iterator != null)
-		{
-			hasNext = iterator.hasNext();
-
-			if (hasNext)
-			{
-				currentRecord = iterator.next();
-			}
-		}
-
-		return hasNext;
+    public Object getFieldValue(JRField jrField) {
+	System.out.println("Buscamos " + jrField.getName());
+	if (!currentRecord.containsKey(jrField.getName())) {
+	    throw new JRRuntimeException("Field \"" + jrField.getName()
+		    + "\" not found in data source.");
 	}
 
+	System.out.println("Y tiene el valor "
+		+ currentRecord.get(jrField.getName()));
 
-	/**
+	return currentRecord.get(jrField.getName());
+    }
+
+    /**
 	 *
 	 */
-	public Object getFieldValue(JRField jrField)
-	{
-		System.out.println("Buscamos " + jrField.getName());
-		if (!currentRecord.containsKey(jrField.getName()))
-		{
-			throw new JRRuntimeException("Field \"" + jrField.getName() + "\" not found in data source.");
-		}
-
-		System.out.println("Y tiene el valor " + currentRecord.get(jrField.getName()));
-
-		return currentRecord.get(jrField.getName());
-	}
-
-
-	/**
-	 *
-	 */
-	public void moveFirst()
-	{
-		iterator = records.iterator();
-	}
-
+    public void moveFirst() {
+	iterator = records.iterator();
+    }
 
 }

@@ -14,78 +14,78 @@ import es.udc.cartolab.gvsig.navtableforms.Utils;
 
 public class PlotReportsExtension extends Extension {
 
-	FLyrVect layer;
-	BaseView view = null;
-	private String layerName;
+    FLyrVect layer;
+    BaseView view = null;
+    private String layerName;
 
-	/**
-	 * String used for identifying the output directory parameter.
-	 */
-	private String DEFAULT_OUTPUT_DIR_KEY_NAME = "ReportOutput";
+    /**
+     * String used for identifying the output directory parameter.
+     */
+    private String DEFAULT_OUTPUT_DIR_KEY_NAME = "ReportOutput";
 
-	public final String getDefaultReportOutputDirKeyName() {
-		return DEFAULT_OUTPUT_DIR_KEY_NAME;
+    public final String getDefaultReportOutputDirKeyName() {
+	return DEFAULT_OUTPUT_DIR_KEY_NAME;
+    }
+
+    @Override
+    public void execute(String actionCommand) {
+
+	try {
+
+	    layer = getLayerNameFromXML();
+
+	    ReadableVectorial readable = layer.getSource();
+
+	    SelectableDataSource source;
+	    source = readable.getRecordset();
+
+	    SelectPlotDialog dialog = new SelectPlotDialog(source, view);
+	    PluginServices.getMDIManager().addWindow(dialog);
+
+	} catch (ReadDriverException e) {
+	    e.printStackTrace();
 	}
 
-	@Override
-	public void execute(String actionCommand) {
+    }
 
-		try {
+    protected void registerIcons() {
+	PluginServices.getIconTheme().registerDefault(
+		"plot-reports-launcher-icon",
+		this.getClass().getClassLoader().getResource(
+			"images/report-plot.png"));
+    }
 
-			layer = getLayerNameFromXML();
+    private FLyrVect getLayerNameFromXML() {
+	return Utils.getFlyrVect(view, layerName);
+    }
 
-			ReadableVectorial readable = layer.getSource();
+    @Override
+    public void initialize() {
+	registerIcons();
+    }
 
-			SelectableDataSource source;
-			source = readable.getRecordset();
-
-			SelectPlotDialog dialog = new SelectPlotDialog(source, view);
-			PluginServices.getMDIManager().addWindow(dialog);
-
-		} catch (ReadDriverException e) {
-			e.printStackTrace();
+    @Override
+    public boolean isEnabled() {
+	IWindow window = PluginServices.getMDIManager().getActiveWindow();
+	boolean isEnabled = false;
+	if (window instanceof BaseView) {
+	    view = (BaseView) window;
+	    FLayers layers = view.getMapControl().getMapContext().getLayers();
+	    for (int i = 0; i < layers.getLayersCount(); i++) {
+		layerName = layers.getLayer(i).getName();
+		if (layerName.toLowerCase().equals("vivienda")) {
+		    isEnabled = true;
+		    break;
 		}
-
+	    }
 	}
 
-	protected void registerIcons() {
-		PluginServices.getIconTheme().registerDefault(
-				"plot-reports-launcher-icon",
-				this.getClass().getClassLoader().getResource(
-						"images/report-plot.png"));
-	}
+	return isEnabled;
+    }
 
-	private FLyrVect getLayerNameFromXML() {
-		return Utils.getFlyrVect(view, layerName);
-	}
-
-	@Override
-	public void initialize() {
-		registerIcons();
-	}
-
-	@Override
-	public boolean isEnabled() {
-		IWindow window = PluginServices.getMDIManager().getActiveWindow();
-		boolean isEnabled = false;
-		if (window instanceof BaseView) {
-			view = (BaseView) window;
-			FLayers layers = view.getMapControl().getMapContext().getLayers();
-			for (int i = 0; i < layers.getLayersCount(); i++) {
-				layerName = layers.getLayer(i).getName();
-				if (layerName.toLowerCase().equals("vivienda")) {
-					isEnabled = true;
-					break;
-				}
-			}
-		}
-
-		return isEnabled;
-	}
-
-	@Override
-	public boolean isVisible() {
-		return true;
-	}
+    @Override
+    public boolean isVisible() {
+	return true;
+    }
 
 }

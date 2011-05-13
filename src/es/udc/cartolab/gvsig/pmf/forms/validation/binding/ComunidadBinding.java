@@ -8,21 +8,21 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.model.ComunidadModel;
 import es.udc.cartolab.gvsig.pmf.forms.validation.validator.ComunidadValidator;
 
 /**
- * Provides all models to bind the view to its domain model,
- * an instance of {@linkComunidadModel}.
- *
+ * Provides all models to bind the view to its domain model, an instance of
+ * {@linkComunidadModel}.
+ * 
  */
-public class  ComunidadBinding extends FormBinding<ComunidadModel> {
+public class ComunidadBinding extends FormBinding<ComunidadModel> {
 
-       // Instance Creation ******************************************************
+    // Instance Creation ******************************************************
 
-       public ComunidadBinding(Model model) {
-              super(model);
-              }
+    public ComunidadBinding(Model model) {
+	super(model);
+    }
 
-              @Override
-              protected Validator getValidator() {
-                        return new ComunidadValidator();
-                        }
+    @Override
+    protected Validator getValidator() {
+	return new ComunidadValidator();
+    }
 
 }

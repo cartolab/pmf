@@ -8,21 +8,21 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.model.ViviendaModel;
 import es.udc.cartolab.gvsig.pmf.forms.validation.validator.ViviendaValidator;
 
 /**
- * Provides all models to bind the view to its domain model,
- * an instance of {@linkViviendaModel}.
- *
+ * Provides all models to bind the view to its domain model, an instance of
+ * {@linkViviendaModel}.
+ * 
  */
-public class  ViviendaBinding extends FormBinding<ViviendaModel> {
+public class ViviendaBinding extends FormBinding<ViviendaModel> {
 
-	// Instance Creation ******************************************************
+    // Instance Creation ******************************************************
 
-	public ViviendaBinding(Model model) {
-		super(model);
-	}
+    public ViviendaBinding(Model model) {
+	super(model);
+    }
 
-	@Override
-	protected Validator getValidator() {
-		return new ViviendaValidator();
-	}
+    @Override
+    protected Validator getValidator() {
+	return new ViviendaValidator();
+    }
 
 }

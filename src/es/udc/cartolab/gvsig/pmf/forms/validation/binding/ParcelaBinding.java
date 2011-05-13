@@ -8,21 +8,21 @@ import es.udc.cartolab.gvsig.pmf.forms.validation.model.ParcelaModel;
 import es.udc.cartolab.gvsig.pmf.forms.validation.validator.ParcelaValidator;
 
 /**
- * Provides all models to bind the view to its domain model,
- * an instance of {@linkParcelaModel}.
- *
+ * Provides all models to bind the view to its domain model, an instance of
+ * {@linkParcelaModel}.
+ * 
  */
-public class  ParcelaBinding extends FormBinding<ParcelaModel> {
+public class ParcelaBinding extends FormBinding<ParcelaModel> {
 
-       // Instance Creation ******************************************************
+    // Instance Creation ******************************************************
 
-       public ParcelaBinding(Model model) {
-              super(model);
-              }
+    public ParcelaBinding(Model model) {
+	super(model);
+    }
 
-              @Override
-              protected Validator getValidator() {
-                        return new ParcelaValidator();
-                        }
+    @Override
+    protected Validator getValidator() {
+	return new ParcelaValidator();
+    }
 
 }
