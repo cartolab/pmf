@@ -28,14 +28,14 @@ public final class ParcelaValidator implements Validator<ParcelaModel> {
 	// ************************************
 	// fam_cant
 	if (!ValidationUtils.isNumeric(parcelaModel.getFam_cant())) {
-	    support.addError("fam_cant", "debe ser un numero");
+	    support.addError("fam_cant", "debe ser un numero entero");
 	} else if (ValidationUtils.isBlank(parcelaModel.getFam_cant())) {
 	    support.addError("fam_cant", "es obligatorio");
 	}
 
 	// con_cant
 	if (!ValidationUtils.isNumeric(parcelaModel.getCon_cant())) {
-	    support.addError("con_cant", "debe ser un numero");
+	    support.addError("con_cant", "debe ser un numero entero");
 	} else if (ValidationUtils.isBlank(parcelaModel.getCon_cant())) {
 	    support.addError("con_cant", "es obligatorio");
 	}
