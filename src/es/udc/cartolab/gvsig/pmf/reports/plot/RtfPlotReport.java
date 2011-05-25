@@ -479,7 +479,7 @@ public class RtfPlotReport {
 				"la agricultura, la ganadería, el comercio y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk(
@@ -495,7 +495,7 @@ public class RtfPlotReport {
 				"la agricultura, la ganadería y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 
 		    } else {
@@ -517,7 +517,7 @@ public class RtfPlotReport {
 				"la agricultura, el comercio y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk(
@@ -532,7 +532,7 @@ public class RtfPlotReport {
 			sectionBody.add(new Chunk("la agricultura y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("la agricultura",
@@ -557,7 +557,7 @@ public class RtfPlotReport {
 				"la ganadería, el comercio y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("la ganadería y el comercio",
@@ -571,7 +571,7 @@ public class RtfPlotReport {
 			sectionBody.add(new Chunk("la ganadería y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("la ganadería",
@@ -590,7 +590,7 @@ public class RtfPlotReport {
 			sectionBody.add(new Chunk("el comercio y ",
 				normalBoldTextFont));
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("el comercio",
@@ -601,7 +601,7 @@ public class RtfPlotReport {
 			    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otras_ac"))
+				source.getFieldIndexByName("otras_act"))
 				.toString(), normalBoldTextFont));
 		    } else {
 			sectionBody
@@ -766,18 +766,6 @@ public class RtfPlotReport {
 	    }
 
 	}
-	cell = new RtfCell(new Phrase("¿Vivienda propiedad de la familia?",
-		normalBoldTextFont));
-	table.addCell(cell);
-	if (source
-		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
-		.toString().toLowerCase().equals("propia")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
-	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
-	}
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
 	sectionBody.add(new Chunk(".\n\n\tLa vivienda de la familia es ",
 		normalTextFont));
 	if (!source.getFieldValue(nRow,
@@ -844,6 +832,18 @@ public class RtfPlotReport {
 
 	// Materials table
 	table = new Table(2);
+	cell = new RtfCell(new Phrase("¿Vivienda propiedad de la familia?",
+		normalBoldTextFont));
+	table.addCell(cell);
+	if (source
+		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
+		.toString().toLowerCase().equals("propia")) {
+	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
+	} else {
+	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
+	}
+	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	table.addCell(cell);
 	cell = new RtfCell(new Phrase("MATERIALES DE LA VIVIENDA",
 		tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1897,9 +1897,9 @@ public class RtfPlotReport {
 	    }
 	    for (int i = 0; i < dbfSource.getRowCount(); i++) {
 		IRowEdited row = dbfSource.getRow(i);
-		if (row.getAttribute(indexes.get("cod_com")).toString().equals(
+		if (row.getAttribute(indexes.get("cod_viv")).toString().equals(
 			plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("cod_com"))
+				plotSource.getFieldIndexByName("cod_viv"))
 				.toString())) {
 		    hasRows = true;
 		    darkColor = !darkColor;
