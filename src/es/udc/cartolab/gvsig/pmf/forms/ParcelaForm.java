@@ -71,7 +71,8 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
     @Override
     public boolean init() {
 	boolean success = super.init();
-
+	fillFcComboBox();
+	setChangedValues(false);
 	return success;
     }
 
@@ -336,15 +337,28 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 		if (field_pos > -1) {
 		    JComboBox codigo_fc = (JComboBox) formBody
 			    .getComponentByName("codigo_fc.CB");
+		    ArrayList<String> items = new ArrayList<String>();
 
-		    ComboBoxModel model = new DefaultComboBoxModel();
-		    codigo_fc.setModel(model);
-		    codigo_fc.addItem("Seleccione una opción...");
+		    items.add("Seleccione una opción...");
+		    String j = "Seleccione una opción...";
+		    String codigo = recordset.getFieldValue(currentPosition,
+			    recordset.getFieldIndexByName("codigo_fc"))
+			    .toString();
 
 		    for (int i = 0; i < fcSource.getRowCount(); i++) {
-			codigo_fc.addItem(fcSource.getFieldValue(i, field_pos)
-				.toString());
+			String item = fcSource.getFieldValue(i, field_pos)
+				.toString();
+			if (item.equals(codigo))
+			    j = item;
+			items.add(item);
 		    }
+
+		    ComboBoxModel model = new DefaultComboBoxModel(items
+			    .toArray());
+		    model.setSelectedItem(j);
+		    codigo_fc.setModel(model);
+
+		    updateFc();
 
 		}
 	    } catch (ReadDriverException e) {
@@ -357,7 +371,6 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
     @Override
     protected void fillSpecificValues() {
 	fillJTable(volumenesTable, "cultivos");
-	fillFcComboBox();
 	setCodigo_fcEnabledIfNeeded();
 	comboBoxEnablesTextField("legal_par.CB", "Otro", "ot_legal_p.TF");
 	comboBoxEnablesTextField("tip_suelo.CB", "Otro", "ot_tip_su.TF");
@@ -380,7 +393,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 	fuente_co.addActionListener(this);
 	JComboBox codigo_fc = (JComboBox) formBody
 		.getComponentByName("codigo_fc.CB");
-	codigo_fc.setActionCommand("codigo_fc");
+	codigo_fc.setActionCommand("codigo_fc_cb");
 	codigo_fc.addActionListener(this);
 	JComboBox legal_par = (JComboBox) formBody
 		.getComponentByName("legal_par.CB");
@@ -468,11 +481,23 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 	super.removeListeners();
     }
 
+    private void updateFc() {
+	JComboBox codigo_fc = (JComboBox) formBody
+		.getComponentByName("codigo_fc.CB");
+	((ParcelaModel) this.formModel).setCodigo_fc(codigo_fc
+		.getSelectedItem().toString());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 	super.actionPerformed(e);
 	String action = e.getActionCommand();
 	if (action.equals("codigo_fc")) {
+	    setCodigo_fcEnabledIfNeeded();
+	    return;
+	}
+	if (action.equals("codigo_fc_cb")) {
+	    updateFc();
 	    setCodigo_fcEnabledIfNeeded();
 	    return;
 	}
