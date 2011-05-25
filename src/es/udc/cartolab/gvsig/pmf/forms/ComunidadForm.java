@@ -31,6 +31,7 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
+import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
@@ -417,6 +418,15 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 	return chbChanged;
     }
 
+    private void selectRecord(SelectableDataSource recordset, int pos) {
+	FBitSet bitset = null;
+	bitset = recordset.getSelection();
+	if (!bitset.get(pos)) {
+	    bitset.set(pos);
+	}
+	recordset.setSelection(bitset);
+    }
+
     private void displayNavTable(JTable refTable, String dbfName) {
 	IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
 	boolean found = false;
@@ -452,7 +462,7 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 				} catch (Exception e) {
 				    e.printStackTrace();
 				}
-				navTable.clearSelectedFeatures();
+				source.getRecordset().clearSelection();
 				for (int k = 0; k < model.getRowCount(); k++) {
 				    where = new ArrayList<String>();
 				    for (int j = 0; j < model.getColumnCount(); j++) {
@@ -461,13 +471,18 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 						    .toString());
 				    }
 				    try {
-					long pos = doFilter(source, where);
-					navTable.selectFeature(pos - 1);
+					if (where.size() > 0) {
+					    long pos = doFilter(source, where);
+					    selectRecord(source.getRecordset(),
+						    (int) pos - 1);
+					}
 				    } catch (Exception e) {
 					e.printStackTrace();
 				    }
 				}
-				navTable.setOnlySelected(true);
+				if (!source.getRecordset().getSelection()
+					.isEmpty())
+				    navTable.setOnlySelected(true);
 				PluginServices.getMDIManager()
 					.addCentredWindow(navTable);
 				JInternalFrame parent = (JInternalFrame) navTable
