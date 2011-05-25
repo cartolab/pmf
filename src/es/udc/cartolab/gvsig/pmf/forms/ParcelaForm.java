@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -279,17 +281,20 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
     private void setCodigo_fcEnabledIfNeeded() {
 	JCheckBox fuente_co = (JCheckBox) formBody
 		.getComponentByName("fuente_co.CHB");
-	JTextField codigo_fc = (JTextField) formBody
-		.getComponentByName("codigo_fc.TF");
+	JComboBox codigo_fc = (JComboBox) formBody
+		.getComponentByName("codigo_fc.CB");
 	JButton codigo_fc_bt = (JButton) formBody
 		.getComponentByName("codigo_fc.BT");
 
 	if (fuente_co.isSelected()) {
 	    codigo_fc.setEnabled(true);
-	    codigo_fc_bt.setEnabled(true);
+	    if (!codigo_fc.getSelectedItem().toString().toLowerCase().equals(
+		    "seleccione una opción..."))
+		codigo_fc_bt.setEnabled(true);
+	    else
+		codigo_fc_bt.setEnabled(false);
 	} else {
 	    codigo_fc.setEnabled(false);
-	    codigo_fc.setText("");
 	    codigo_fc_bt.setEnabled(false);
 	}
     }
@@ -319,9 +324,40 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 	}
     }
 
+    private void fillFcComboBox() {
+
+	FLyrVect layer = Utils.getFlyrVect(view, "fuentes_comunitarias");
+
+	if (layer != null) {
+	    try {
+		SelectableDataSource fcSource = layer.getSource()
+			.getRecordset();
+		int field_pos = fcSource.getFieldIndexByName("codigo_fc");
+		if (field_pos > -1) {
+		    JComboBox codigo_fc = (JComboBox) formBody
+			    .getComponentByName("codigo_fc.CB");
+
+		    ComboBoxModel model = new DefaultComboBoxModel();
+		    codigo_fc.setModel(model);
+		    codigo_fc.addItem("Seleccione una opción...");
+
+		    for (int i = 0; i < fcSource.getRowCount(); i++) {
+			codigo_fc.addItem(fcSource.getFieldValue(i, field_pos)
+				.toString());
+		    }
+
+		}
+	    } catch (ReadDriverException e) {
+		e.printStackTrace();
+	    }
+	}
+
+    }
+
     @Override
     protected void fillSpecificValues() {
 	fillJTable(volumenesTable, "cultivos");
+	fillFcComboBox();
 	setCodigo_fcEnabledIfNeeded();
 	comboBoxEnablesTextField("legal_par.CB", "Otro", "ot_legal_p.TF");
 	comboBoxEnablesTextField("tip_suelo.CB", "Otro", "ot_tip_su.TF");
@@ -342,6 +378,10 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 		.getComponentByName("fuente_co.CHB");
 	fuente_co.setActionCommand("codigo_fc");
 	fuente_co.addActionListener(this);
+	JComboBox codigo_fc = (JComboBox) formBody
+		.getComponentByName("codigo_fc.CB");
+	codigo_fc.setActionCommand("codigo_fc");
+	codigo_fc.addActionListener(this);
 	JComboBox legal_par = (JComboBox) formBody
 		.getComponentByName("legal_par.CB");
 	legal_par.setActionCommand("ot_legal_p");
@@ -391,6 +431,9 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 	JCheckBox fuente_co = (JCheckBox) formBody
 		.getComponentByName("fuente_co.CHB");
 	fuente_co.removeActionListener(this);
+	JComboBox codigo_fc = (JComboBox) formBody
+		.getComponentByName("codigo_fc.CB");
+	codigo_fc.removeActionListener(this);
 	JComboBox legal_par = (JComboBox) formBody
 		.getComponentByName("legal_par.CB");
 	legal_par.removeActionListener(this);
@@ -479,15 +522,16 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
     }
 
     private void openComunityFountainForm() {
-	String codigoFC = ((JTextField) formBody
-		.getComponentByName("codigo_fc.TF")).getText().trim();
+	String codigoFC = ((JComboBox) formBody
+		.getComponentByName("codigo_fc.CB")).getSelectedItem()
+		.toString().trim();
 	String where = "where codigo_fc='" + codigoFC + "'";
 	try {
 	    long position = doFilter("fuentes_comunitarias", where);
 	    NavTable n = new NavTable(Utils.getFlyrVect(view,
 		    "fuentes_comunitarias"));
 	    if (n.init()) {
-		n.setPosition(position);
+		n.setPosition(position + 1);
 		PluginServices.getMDIManager().addWindow(n);
 	    }
 
