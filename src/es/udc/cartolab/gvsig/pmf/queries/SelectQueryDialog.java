@@ -35,16 +35,14 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 
     private final String QUERY1 = "Listado de comunidades";
     private final String QUERY2 = "Listado de productores";
-    private final String QUERY3 = "Listado de áreas protegidas";
-    private final String QUERY4 = "Listado de fincas";
-    private final String QUERY5 = "Listado de fincas y cultivos";
-    private final String QUERY6 = "Listado de planificación";
+    private final String QUERY3 = "Listado de fincas";
+    private final String QUERY4 = "Listado de fincas y cultivos";
+    private final String QUERY5 = "Listado de planificación";
     private final String OUTPUT1 = "listadoComunidades";
     private final String OUTPUT2 = "listadoProductores";
-    private final String OUTPUT3 = "listadoÁreasProtegidas";
-    private final String OUTPUT4 = "listadoFincas";
-    private final String OUTPUT5 = "listadoFincasCultivos";
-    private final String OUTPUT6 = "listadoPlanificación";
+    private final String OUTPUT3 = "listadoFincas";
+    private final String OUTPUT4 = "listadoFincasCultivos";
+    private final String OUTPUT5 = "listadoPlanificación";
 
     private final String SELECTQUERY = "_selectQuery";
     private BaseView view;
@@ -100,7 +98,7 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		"20[fill][fill]30%[fill, bottom]"));
 	this.setLayout(new MigLayout());
 
-	String[] items = { QUERY1, QUERY2, QUERY3, QUERY4, QUERY5, QUERY6 };
+	String[] items = { QUERY1, QUERY2, QUERY3, QUERY4, QUERY5 };
 
 	this.add(new JLabel(PluginServices.getText(this, SELECTQUERY)));
 
@@ -190,17 +188,14 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		result = query2();
 		fileName += "/" + OUTPUT2 + ".csv";
 	    } else if (query.equals(QUERY3)) {
-		result = query3();
+		result = query4();
 		fileName += "/" + OUTPUT3 + ".csv";
 	    } else if (query.equals(QUERY4)) {
-		result = query4();
+		result = query5();
 		fileName += "/" + OUTPUT4 + ".csv";
 	    } else if (query.equals(QUERY5)) {
-		result = query5();
-		fileName += "/" + OUTPUT5 + ".csv";
-	    } else if (query.equals(QUERY6)) {
 		result = query6();
-		fileName += "/" + OUTPUT6 + ".csv";
+		fileName += "/" + OUTPUT5 + ".csv";
 	    }
 
 	    for (int i = 0; i < 10; i++) {
@@ -305,12 +300,6 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	}
 
 	return str.toString();
-    }
-
-    // private final String QUERY3 = "Listado de áreas protegidas";
-    private String query3() {
-	// TODO Auto-generated method stub
-	return null;
     }
 
     // private final String QUERY2 = "Listado de productores";
