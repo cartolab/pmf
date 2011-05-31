@@ -776,15 +776,15 @@ public class RtfPlotReport {
 		    .toLowerCase().equals("otro")) {
 		sectionBody.add(new Chunk(source.getFieldValue(nRow,
 			source.getFieldIndexByName("ot_stat_vi")).toString()
-			.toLowerCase()));
+			.toLowerCase(), normalTextFont));
 	    } else {
 		sectionBody.add(new Chunk(source.getFieldValue(nRow,
 			source.getFieldIndexByName("estatus_vi")).toString()
-			.toLowerCase()));
+			.toLowerCase(), normalTextFont));
 	    }
 	} else {
-	    sectionBody
-		    .add(new Chunk(" [no se ha seleccionado ninguna opción]"));
+	    sectionBody.add(new Chunk(
+		    " [no se ha seleccionado ninguna opción]", normalTextFont));
 	}
 	if (source
 		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
@@ -832,18 +832,6 @@ public class RtfPlotReport {
 
 	// Materials table
 	table = new Table(2);
-	cell = new RtfCell(new Phrase("¿Vivienda propiedad de la familia?",
-		normalBoldTextFont));
-	table.addCell(cell);
-	if (source
-		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
-		.toString().toLowerCase().equals("propia")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
-	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
-	}
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
 	cell = new RtfCell(new Phrase("MATERIALES DE LA VIVIENDA",
 		tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
