@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -167,12 +168,12 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	}
     }
 
-    public void actionPerformed(ActionEvent e) {
-
-	if (e.getSource() == dotsButton) {
-	    displayFileChooser();
-	} else if (e.getSource() == okButton) {
-
+    private void processQuery(String outputPath) {
+	if (!outputPath.endsWith(File.separator)) {
+	    outputPath = outputPath + File.separator;
+	}
+	File dir = new File(outputPath);
+	if (dir.isDirectory() && dir.canWrite()) {
 	    String query = this.queryCombo.getSelectedItem().toString();
 	    String fileName = directoryField.getText();
 	    if (fileName.length() < 1) {
@@ -204,7 +205,19 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	    }
 
 	    SaveFileDialog.writeFileToDisk(result, new File(fileName));
+	} else {
+	    JOptionPane.showMessageDialog(this,
+		    "El directorio seleccionado no es válido.", "Error",
+		    JOptionPane.ERROR_MESSAGE);
+	}
+    }
 
+    public void actionPerformed(ActionEvent e) {
+
+	if (e.getSource() == dotsButton) {
+	    displayFileChooser();
+	} else if (e.getSource() == okButton) {
+	    processQuery(directoryField.getText());
 	    PluginServices.getMDIManager().closeWindow(this);
 	} else if (e.getSource() == cancelButton) {
 	    PluginServices.getMDIManager().closeWindow(this);
