@@ -5,5 +5,5 @@
 		</SplashImages>
 		<Icon path="theme/icon.png"/>
 	</ApplicationImages>
-	<ApplicationName value="gvSIG-PMF 1.0"/>
+	<ApplicationName value="gvSIG-PMF"/>
 </AndamiProperties>
