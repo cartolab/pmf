@@ -14,21 +14,18 @@ public class QueryExtension extends Extension {
 
     private BaseView view;
 
-    @Override
     public void initialize() {
 	PluginServices.getIconTheme().registerDefault(
 		"query-launcher-icon",
-		this.getClass().getClassLoader().getResource(
-			"images/queries.png"));
+		this.getClass().getClassLoader()
+			.getResource("images/queries.png"));
     }
 
-    @Override
     public void execute(String actionCommand) {
 	SelectQueryDialog d = new SelectQueryDialog(view);
 	PluginServices.getMDIManager().addWindow(d);
     }
 
-    @Override
     public boolean isEnabled() {
 	IWindow window = PluginServices.getMDIManager().getActiveWindow();
 	boolean isView = false;
@@ -47,7 +44,6 @@ public class QueryExtension extends Extension {
 	return isView && neededLayersArePresent;
     }
 
-    @Override
     public boolean isVisible() {
 	return true;
     }

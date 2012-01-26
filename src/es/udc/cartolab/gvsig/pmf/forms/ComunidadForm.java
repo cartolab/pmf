@@ -207,9 +207,10 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 
     protected boolean primaryKeyHasErrors() {
 	if (isPKAlreadyInUse()) {
-	    JOptionPane.showMessageDialog(this, PluginServices.getText(this,
-		    "choose_other_pk"), PluginServices.getText(this,
-		    "pk_already_used"), JOptionPane.ERROR_MESSAGE);
+	    JOptionPane.showMessageDialog(this,
+		    PluginServices.getText(this, "choose_other_pk"),
+		    PluginServices.getText(this, "pk_already_used"),
+		    JOptionPane.ERROR_MESSAGE);
 	    return true;
 	} else {
 	    return false;
@@ -441,8 +442,8 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 			found = true;
 			AlphanumericNavTable navTable;
 			HashMap<String, String> defaultValues = new HashMap<String, String>();
-			defaultValues.put(COD_COM, ((ComunidadModel) formModel)
-				.getCod_com());
+			defaultValues.put(COD_COM,
+				((ComunidadModel) formModel).getCod_com());
 			try {
 			    navTable = new AlphanumericNavTable(source,
 				    dbfName, defaultValues);
@@ -457,8 +458,7 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 						.toString());
 				}
 				try {
-				    navTable
-					    .setPosition(doFilter(source, where));
+				    navTable.setPosition(doFilter(source, where));
 				} catch (Exception e) {
 				    e.printStackTrace();
 				}
@@ -503,7 +503,6 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 	}
     }
 
-    @Override
     public void mouseClicked(MouseEvent event) {
 
 	if ((event.getSource() == orgBaseTable) && (event.getClickCount() == 2)) {
@@ -515,42 +514,34 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 
     }
 
-    @Override
     public void mouseEntered(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseExited(MouseEvent e) {
 
     }
 
-    @Override
     public void mousePressed(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
-    @Override
     public void internalFrameActivated(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameClosed(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameClosing(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
 
 	fillJTable(orgBaseTable, "organizacion_base");
@@ -558,17 +549,14 @@ public class ComunidadForm extends AbstractForm implements MouseListener,
 
     }
 
-    @Override
     public void internalFrameDeiconified(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameIconified(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameOpened(InternalFrameEvent e) {
 
     }

@@ -54,7 +54,6 @@ public class SelectQueryDialog extends JPanel implements IWindow,
     private JButton cancelButton = null;
     private JButton okButton = null;
 
-    @Override
     public WindowInfo getWindowInfo() {
 	if (windowInfo == null) {
 	    windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
@@ -78,10 +77,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	return windowInfo;
     }
 
-    @Override
     public Object getWindowProfile() {
-	// TODO Auto-generated method stub
-	return null;
+	return WindowInfo.DIALOG_PROFILE;
     }
 
     public SelectQueryDialog(BaseView view) {

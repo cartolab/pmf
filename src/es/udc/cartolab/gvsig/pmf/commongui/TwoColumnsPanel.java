@@ -234,7 +234,6 @@ public class TwoColumnsPanel extends JPanel implements IWindow, IWindowListener 
 	JButton bt = new JButton(PluginServices.getText(this, "_examinar"));
 	bt.addActionListener(new ActionListener() {
 
-	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		SaveFileDialog sfd = new SaveFileDialog(description, extensions);
 		String filePath = sfd.showDialog().getAbsolutePath();

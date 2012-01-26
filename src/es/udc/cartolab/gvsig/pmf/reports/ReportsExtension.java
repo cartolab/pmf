@@ -30,7 +30,6 @@ public class ReportsExtension extends Extension {
 	return DEFAULT_OUTPUT_DIR_KEY_NAME;
     }
 
-    @Override
     public void execute(String actionCommand) {
 
 	if (actionCommand.equals("comunidad")) {
@@ -74,24 +73,22 @@ public class ReportsExtension extends Extension {
     protected void registerIcons() {
 	PluginServices.getIconTheme().registerDefault(
 		"plot-reports-launcher-icon",
-		this.getClass().getClassLoader().getResource(
-			"images/report-plot.png"));
+		this.getClass().getClassLoader()
+			.getResource("images/report-plot.png"));
 	PluginServices.getIconTheme().registerDefault(
 		"community-reports-launcher-icon",
-		this.getClass().getClassLoader().getResource(
-			"images/report-community.png"));
+		this.getClass().getClassLoader()
+			.getResource("images/report-community.png"));
     }
 
     private FLyrVect getLayerNameFromXML(String layerName) {
 	return Utils.getFlyrVect(view, layerName);
     }
 
-    @Override
     public void initialize() {
 	registerIcons();
     }
 
-    @Override
     public boolean isEnabled() {
 	IWindow window = PluginServices.getMDIManager().getActiveWindow();
 	boolean hasCommunity = false;
@@ -100,13 +97,13 @@ public class ReportsExtension extends Extension {
 	    view = (BaseView) window;
 	    FLayers layers = view.getMapControl().getMapContext().getLayers();
 	    for (int i = 0; i < layers.getLayersCount(); i++) {
-		if (layers.getLayer(i).getName().toLowerCase().equals(
-			"comunidad")) {
+		if (layers.getLayer(i).getName().toLowerCase()
+			.equals("comunidad")) {
 		    communityLayerName = layers.getLayer(i).getName();
 		    hasCommunity = true;
 		}
-		if (layers.getLayer(i).getName().toLowerCase().equals(
-			"vivienda")) {
+		if (layers.getLayer(i).getName().toLowerCase()
+			.equals("vivienda")) {
 		    plotLayerName = layers.getLayer(i).getName();
 		    hasPlot = true;
 		}
@@ -116,7 +113,6 @@ public class ReportsExtension extends Extension {
 	return (hasCommunity & hasPlot);
     }
 
-    @Override
     public boolean isVisible() {
 	return true;
     }

@@ -209,9 +209,10 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
     protected boolean primaryKeyHasErrors() {
 	if (isPKAlreadyInUse()) {
-	    JOptionPane.showMessageDialog(this, PluginServices.getText(this,
-		    "choose_other_pk"), PluginServices.getText(this,
-		    "pk_already_used"), JOptionPane.ERROR_MESSAGE);
+	    JOptionPane.showMessageDialog(this,
+		    PluginServices.getText(this, "choose_other_pk"),
+		    PluginServices.getText(this, "pk_already_used"),
+		    JOptionPane.ERROR_MESSAGE);
 	    return true;
 	} else {
 	    return false;
@@ -289,8 +290,8 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
 	if (fuente_co.isSelected()) {
 	    codigo_fc.setEnabled(true);
-	    if (!codigo_fc.getSelectedItem().toString().toLowerCase().equals(
-		    "seleccione una opción..."))
+	    if (!codigo_fc.getSelectedItem().toString().toLowerCase()
+		    .equals("seleccione una opción..."))
 		codigo_fc_bt.setEnabled(true);
 	    else
 		codigo_fc_bt.setEnabled(false);
@@ -353,8 +354,8 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 			items.add(item);
 		    }
 
-		    ComboBoxModel model = new DefaultComboBoxModel(items
-			    .toArray());
+		    ComboBoxModel model = new DefaultComboBoxModel(
+			    items.toArray());
 		    model.setSelectedItem(j);
 		    codigo_fc.setModel(model);
 
@@ -628,10 +629,10 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 			found = true;
 			AlphanumericNavTable navTable;
 			HashMap<String, String> defaultValues = new HashMap<String, String>();
-			defaultValues.put(COD_COM, ((ParcelaModel) formModel)
-				.getCod_com());
-			defaultValues.put(COD_VIV, ((ParcelaModel) formModel)
-				.getCod_viv());
+			defaultValues.put(COD_COM,
+				((ParcelaModel) formModel).getCod_com());
+			defaultValues.put(COD_VIV,
+				((ParcelaModel) formModel).getCod_viv());
 			try {
 			    navTable = new AlphanumericNavTable(source,
 				    dbfName, defaultValues);
@@ -646,8 +647,7 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 						.toString());
 				}
 				try {
-				    navTable
-					    .setPosition(doFilter(source, where));
+				    navTable.setPosition(doFilter(source, where));
 				} catch (Exception e) {
 				    e.printStackTrace();
 				}
@@ -692,7 +692,6 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 	}
     }
 
-    @Override
     public void mouseClicked(MouseEvent event) {
 
 	if ((event.getSource() == volumenesTable)
@@ -703,57 +702,46 @@ public class ParcelaForm extends AbstractForm implements MouseListener,
 
     }
 
-    @Override
     public void mouseEntered(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseExited(MouseEvent e) {
 
     }
 
-    @Override
     public void mousePressed(MouseEvent e) {
 
     }
 
-    @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
-    @Override
     public void internalFrameActivated(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameClosed(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameClosing(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
 	fillJTable(volumenesTable, "cultivos");
     }
 
-    @Override
     public void internalFrameDeiconified(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameIconified(InternalFrameEvent e) {
 
     }
 
-    @Override
     public void internalFrameOpened(InternalFrameEvent e) {
 
     }
