@@ -8,41 +8,63 @@
 	<resourceBundle name="text"/>
 	<extensions>
 		<extension class-name="es.udc.cartolab.gvsig.pmf.forms.FormsLauncherExtension" description="FORMS_PANEL" active="true">
-			<tool-bar name="_tool-bar-name">
+			<tool-bar name="_pmf_tool-bar-name">
 				<action-tool icon="forms-launcher-icon" tooltip="_forms-launcher-tooltip"
 					action-command="FormsLauncher" position="10" />
 			</tool-bar>
-			<menu text="_menu_name/_forms-launcher"
+			<menu text="_pmf_menu_name/_forms-launcher"
 				action-command="FormsLauncher" position="10"
 				 /> 
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.pmf.reports.ReportsExtension" description="REPORTS_PANEL" active="true">
-			<tool-bar name="_tool-bar-name">
+			<tool-bar name="_pmf_tool-bar-name">
 				<action-tool icon="community-reports-launcher-icon" tooltip="_community-report-launcher-tooltip"
 					action-command="comunidad" position="12" />
 			</tool-bar>
-			<menu text="_menu_name/_reports_menu/_community-report-launcher"
+			<menu text="_pmf_menu_name/_reports_menu/_community-report-launcher"
 				action-command="comunidad" position="12"
 				 /> 
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.pmf.reports.ReportsExtension" description="REPORTS_PANEL" active="true">
-			<tool-bar name="_tool-bar-name">
+			<tool-bar name="_pmf_tool-bar-name">
 				<action-tool icon="plot-reports-launcher-icon" tooltip="_plot-report-launcher-tooltip"
 					action-command="parcela" position="14" />
 			</tool-bar>
-			<menu text="_menu_name/_reports_menu/_plot-report-launcher"
+			<menu text="_pmf_menu_name/_reports_menu/_plot-report-launcher"
 				action-command="parcela" position="14"
 				 /> 
 		</extension>
 		
 		<extension class-name="es.udc.cartolab.gvsig.pmf.queries.QueryExtension" description="QUERIES_PANEL" active="true">
-			<tool-bar name="_tool-bar-name">
+			<tool-bar name="_pmf_tool-bar-name">
 				<action-tool icon="query-launcher-icon" tooltip="_query-launcher-tooltip"
 					action-command="Queries" position="16" />
 			</tool-bar>
-			<menu text="_menu_name/_query-report-launcher"
+			<menu text="_pmf_menu_name/_query-report-launcher"
 				action-command="Queries" position="16"
 				 /> 
+		</extension>
+		
+		
+		<extension class-name="es.udc.cartolab.gvsig.loadData.LoadDataExtension" description="_load_data_description" active="true">
+			<tool-bar name="_tool-bar-name">
+				<action-tool icon="load-data-icon" tooltip="_load_data_tooltip"
+					action-command="LoadData" position="2"/>
+			</tool-bar>
+			<menu text="_menu_name/_load_data_menu_entry"
+				action-command="LoadData"
+				icon="images/load_data.png" position="2"/>
+		</extension>
+
+		<extension class-name="es.udc.cartolab.gvsig.loadData.preferences.LoadDataPreferencesExtension" description="_preferences_description" active="true">
+			<tool-bar name="_tool-bar-name">
+				<action-tool icon="preferences-icon" tooltip="_preferences_tooltip"
+					action-command="LoadDataPreferences" position="60"/>
+			</tool-bar>
+		
+			<menu text="_menu_name/_preferences_menu_entry"
+				action-command="LoadDataPreferences"
+				icon="images/preferences.png" position="60"/>
 		</extension>
 	</extensions>
 </plugin-config>
