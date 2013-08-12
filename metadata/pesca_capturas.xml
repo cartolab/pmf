@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LAYER alias="pesca_capturas">
+       <TABLENAME>pesca_capturas</TABLENAME>
+       <PRIMARYKEY>
+	<PKELEMENT>gid</PKELEMENT>
+       </PRIMARYKEY>
+
+       <RECORDSET>
+       	    <FIELD>
+		<FIELDNAME>cod_viv</FIELDNAME>
+		<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>especie</FIELDNAME>
+		<DOMAINREADER>
+			<DRTYPE>db</DRTYPE>
+			<DRDBSCHEMA>dominios</DRDBSCHEMA>
+			<DRDBTABLE>especie</DRDBTABLE>
+			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+		</DOMAINREADER>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>especia_otra</FIELDNAME>
+		<ENABLEIF>
+			<CONDITION>
+				<COMPONENT>especie</COMPONENT>
+				<VALUE>Otros</VALUE>
+			</CONDITION>
+		</ENABLEIF>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>cantidad</FIELDNAME>
+		<VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>precio</FIELDNAME>
+		<VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+	    </FIELD>
+       </RECORDSET>
+
+</LAYER>

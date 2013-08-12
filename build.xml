@@ -36,7 +36,7 @@
 	  	    	<fileset dir="lib" includes="*"/>
 	  	</copy>
 
-	  	<jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}" includes="es/udc/cartolab/**"
+	  	<jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}" includes="es/**"
 	    />
 
 	  	<!--
@@ -76,8 +76,12 @@
 			</copy>
 			-->
 			
-			<copy todir="${dist}" overwrite="true">
-				<fileset dir="forms" includes="*" />
+			<copy todir="${dist}/ui" overwrite="true">
+				<fileset dir="ui"/>
+			</copy>
+			
+			<copy todir="${dist}/metadata" overwrite="true">
+				<fileset dir="metadata"/>
 			</copy>
 		</target>
 

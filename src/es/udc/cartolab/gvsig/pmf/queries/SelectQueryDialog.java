@@ -22,12 +22,16 @@ import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
-import es.udc.cartolab.gvsig.navtableforms.Utils;
 import es.udc.cartolab.gvsig.pmf.commongui.SaveFileDialog;
+import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
+import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
+import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
+import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
+@SuppressWarnings("serial")
 public class SelectQueryDialog extends JPanel implements IWindow,
 	ActionListener {
 
@@ -46,14 +50,15 @@ public class SelectQueryDialog extends JPanel implements IWindow,
     private final String OUTPUT5 = "listadoPlanificación";
 
     private final String SELECTQUERY = "_selectQuery";
-    private BaseView view;
 
     private JTextField directoryField = null;
     private JButton dotsButton = null;
     private JComboBox queryCombo = null;
     private JButton cancelButton = null;
     private JButton okButton = null;
+    private final DBSession session = DBSession.getCurrentSession();
 
+    @Override
     public WindowInfo getWindowInfo() {
 	if (windowInfo == null) {
 	    windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
@@ -64,12 +69,12 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	    if (dim.getHeight() > 550) {
 		height = 550;
 	    } else {
-		height = 60;
+		height = 65;
 	    }
 	    if (dim.getWidth() > 650) {
 		width = 650;
 	    } else {
-		width = new Double(dim.getWidth()).intValue() + 15;
+		width = new Double(dim.getWidth()).intValue() + 20;
 	    }
 	    windowInfo.setWidth(width);
 	    windowInfo.setHeight(height);
@@ -77,13 +82,14 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	return windowInfo;
     }
 
+    @Override
     public Object getWindowProfile() {
-	return WindowInfo.DIALOG_PROFILE;
+	// TODO Auto-generated method stub
+	return null;
     }
 
-    public SelectQueryDialog(BaseView view) {
+    public SelectQueryDialog() {
 	super();
-	this.view = view;
 	try {
 	    initialize();
 	} catch (Exception e) {
@@ -186,13 +192,13 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		result = query2();
 		fileName += "/" + OUTPUT2 + ".csv";
 	    } else if (query.equals(QUERY3)) {
-		result = query4();
+		result = query3();
 		fileName += "/" + OUTPUT3 + ".csv";
 	    } else if (query.equals(QUERY4)) {
-		result = query5();
+		result = query4();
 		fileName += "/" + OUTPUT4 + ".csv";
 	    } else if (query.equals(QUERY5)) {
-		result = query6();
+		result = query5();
 		fileName += "/" + OUTPUT5 + ".csv";
 	    }
 
@@ -222,57 +228,59 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 
     }
 
-    // private final String QUERY6 = "Listado de planificación";
-    private String query6() {
-	StringBuffer str = new StringBuffer(
-		"Nombre del productor/a;Área total de la finca en Mz;Área para cultivos en Mz;Período a establecer sistema de riego;Período a establecer huerto familiar;Período a establecer cocina mejorada;Período a establecer filtro para aguas grises;Período a establecer construcción de gallineros;Disponibilidad de la mano de obra familiar (cantidad);Disponibilidad de la mano de obra familiar (período);Disponibilidad de la mano de obra contratada (cantidad);Disponibilidad de la mano de obra contratada (período);\n");
-	try {
-	    SelectableDataSource viviendaSDS = Utils.getFlyrVect(view,
-		    "vivienda").getRecordset();
-	    String vivienda = viviendaSDS.getName();
-	    String parcela = Utils.getFlyrVect(view, "parcela").getRecordset()
-		    .getName();
-
-	    String sql = "select " + vivienda + ".nom_produ," + parcela
-		    + ".area_tot," + parcela + ".area_cul," + parcela
-		    + ".p_riego," + parcela + ".p_huerto," + parcela
-		    + ".p_coc_mejo," + parcela + ".p_filtroag," + parcela
-		    + ".p_galline," + parcela + ".fam_cant," + parcela
-		    + ".fam_per," + parcela + ".con_cant," + parcela
-		    + ".con_per" + " from " + vivienda + "," + parcela
-		    + " where " + vivienda + ".cod_viv=" + parcela + ".cod_viv"
-		    + ";";
-
-	    str.append(doFilter(viviendaSDS.getDataSourceFactory(), sql));
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-
-	return str.toString();
-
-    }
-
-    // private final String QUERY5 = "Listado de fincas y cultivos";
+    // private final String QUERY5 = "Listado de planificación";
     private String query5() {
 	StringBuffer str = new StringBuffer(
-		"Nombre del productor/a;Nombre de la comunidad;Nombre del municipio;Área total de la finca en Mz;Área para cultivos en Mz;Tipo de cultivo;Área de cultivo;\n");
+		"Nombre del productor/a;Área total de la finca en Mz;Área para cultivos en Mz;"
+			+ "Período a establecer sistema de riego;Período a establecer huerto familiar;"
+			+ "Período a establecer cocina mejorada;Período a establecer filtro para aguas grises;"
+			+ "Período a establecer construcción de gallineros;"
+			+ "Disponibilidad de la mano de obra familiar (cantidad);"
+			+ "Disponibilidad de la mano de obra familiar (período);"
+			+ "Disponibilidad de la mano de obra contratada (cantidad);"
+			+ "Disponibilidad de la mano de obra contratada (período);\n");
 	try {
-	    SelectableDataSource viviendaSDS = Utils.getFlyrVect(view,
-		    "vivienda").getRecordset();
-	    String vivienda = viviendaSDS.getName();
-	    String parcela = Utils.getFlyrVect(view, "parcela").getRecordset()
-		    .getName();
-	    String comunidad = Utils.getFlyrVect(view, "comunidad")
-		    .getRecordset().getName();
+	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME };
+	    String[] schemas = { PmfConstants.dataSchema,
+		    PmfConstants.dataSchema };
+	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
+		    "b." + ViviendasForm.PKFIELD };
+	    String[] fields = { "a.nom_produ", "b.area_tot", "b.area_cul",
+		    "b.p_riego", "b.p_huerto", "b.p_coc_mejo", "b.p_filtroag",
+		    "b.p_galline", "b.fam_cant", "b.fam_per", "b.con_cant",
+		    "b.con_per" };
+	    String[][] values = session.getTableWithJoin(tableNames, schemas,
+		    joinFields, fields, "", new String[0], false);
+	    str.append(matrixToString(values));
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
 
-	    String sql = "select " + vivienda + ".nom_produ," + comunidad
-		    + ".nombre," + comunidad + ".municip," + parcela
-		    + ".area_tot," + parcela + ".area_cul" + " from "
-		    + vivienda + "," + parcela + ", " + comunidad + " where "
-		    + vivienda + ".cod_viv=" + parcela + ".cod_viv" + " and "
-		    + parcela + ".cod_com=" + comunidad + ".cod_com" + ";";
+	return str.toString();
 
-	    str.append(doFilter(viviendaSDS.getDataSourceFactory(), sql));
+    }
+
+    // private final String QUERY4 = "Listado de fincas y cultivos";
+    private String query4() {
+	StringBuffer str = new StringBuffer(
+		"Nombre del productor/a;Nombre de la comunidad;Nombre del municipio;Área total de la finca en Mz;"
+			+ "Área para cultivos en Mz;Tipo de cultivo;Área de cultivo;\n");
+	try {
+	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME,
+		    ComunidadesForm.NAME, CultivosForm.NAME };
+	    String[] schemas = { PmfConstants.dataSchema,
+		    PmfConstants.dataSchema, PmfConstants.dataSchema,
+		    PmfConstants.dataSchema };
+	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
+		    "b." + ViviendasForm.PKFIELD,
+		    "a." + ComunidadesForm.PKFIELD,
+		    "c." + ComunidadesForm.PKFIELD,
+		    "a." + ViviendasForm.PKFIELD, "d." + ViviendasForm.PKFIELD };
+	    String[] fields = { "a.nom_produ", "c.nombre", "c.municip",
+		    "b.area_tot", "b.area_cul", "d.tipo", "d.area" };
+	    String[][] values = session.getTableWithJoin(tableNames, schemas,
+		    joinFields, fields, "", new String[0], false);
+	    str.append(matrixToString(values));
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
@@ -280,31 +288,29 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	return str.toString();
     }
 
-    // private final String QUERY4 = "Listado de fincas";
-    private String query4() {
+    // private final String QUERY3 = "Listado de fincas";
+    private String query3() {
 	StringBuffer str = new StringBuffer(
-		"Nombre productor/a;Nombre de la comunidad;Nombre del municipio;Área total de la finca en Mz;Área para cultivos en Mz;Tipo de suelo;Nivel de degradación del suelo;Pendiente de la finca;Tiene sistema de riego;Tipo de prácticas conservacionistas;Tipo de abono orgánico;Tipo de insecticidas orgánicos;Tipo de plaguicidas químicas;\n");
+		"Nombre productor/a;Nombre de la comunidad;Nombre del municipio;Área total de la finca en Mz;"
+			+ "Área para cultivos en Mz;Tipo de suelo;Nivel de degradación del suelo;Pendiente de la finca;"
+			+ "Tiene sistema de riego;Tipo de prácticas conservacionistas;Tipo de abono orgánico;"
+			+ "Tipo de insecticidas orgánicos;Tipo de plaguicidas químicas;\n");
 	try {
-	    SelectableDataSource viviendaSDS = Utils.getFlyrVect(view,
-		    "vivienda").getRecordset();
-	    String vivienda = viviendaSDS.getName();
-	    String parcela = Utils.getFlyrVect(view, "parcela").getRecordset()
-		    .getName();
-	    String comunidad = Utils.getFlyrVect(view, "comunidad")
-		    .getRecordset().getName();
-
-	    String sql = "select " + vivienda + ".nom_produ," + comunidad
-		    + ".nombre," + comunidad + ".municip," + parcela
-		    + ".area_tot," + parcela + ".area_cul," + parcela
-		    + ".tip_suelo," + parcela + ".deg_suelo," + parcela
-		    + ".pendiente," + vivienda + ".sist_rieg," + parcela
-		    + ".c_conse," + parcela + ".c_aborg," + parcela
-		    + ".c_insect," + parcela + ".c_quim" + " from " + vivienda
-		    + "," + parcela + "," + comunidad + " where " + vivienda
-		    + ".cod_viv=" + parcela + ".cod_viv" + " and " + vivienda
-		    + ".cod_com=" + comunidad + ".cod_com;";
-
-	    str.append(doFilter(viviendaSDS.getDataSourceFactory(), sql));
+	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME,
+		    ComunidadesForm.NAME };
+	    String[] schemas = { PmfConstants.dataSchema,
+		    PmfConstants.dataSchema, PmfConstants.dataSchema };
+	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
+		    "b." + ViviendasForm.PKFIELD,
+		    "a." + ComunidadesForm.PKFIELD,
+		    "c." + ComunidadesForm.PKFIELD };
+	    String[] fields = { "a.nom_produ", "c.nombre", "c.municip",
+		    "b.area_tot", "b.area_cul", "b.tip_suelo", "b.deg_suelo",
+		    "b.pendiente", "a.sist_rieg", "b.c_conse", "b.c_aborg",
+		    "b.c_insect", "b.c_quim" };
+	    String[][] values = session.getTableWithJoin(tableNames, schemas,
+		    joinFields, fields, "", new String[0], false);
+	    str.append(matrixToString(values));
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
@@ -317,17 +323,15 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	StringBuffer str = new StringBuffer(
 		"Nombre productor;Nombre comunidad;Area Cultivos;\n");
 	try {
-	    SelectableDataSource vivienda = Utils.getFlyrVect(view, "vivienda")
-		    .getRecordset();
-	    String viviendaName = vivienda.getName();
-	    String parcelaName = Utils.getFlyrVect(view, "parcela")
-		    .getRecordset().getName();
-
-	    String sql = "select nom_produ, " + viviendaName
-		    + ".nom_com, area_cul from " + viviendaName + ","
-		    + parcelaName + " where " + viviendaName + ".cod_viv="
-		    + parcelaName + ".cod_viv;";
-	    str.append(doFilter(vivienda.getDataSourceFactory(), sql));
+	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME };
+	    String[] schemas = { PmfConstants.dataSchema,
+		    PmfConstants.dataSchema };
+	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
+		    "b." + ViviendasForm.PKFIELD };
+	    String[] fields = { "a.nom_produ", "a.nom_com", "b.area_cul" };
+	    String[][] values = session.getTableWithJoin(tableNames, schemas,
+		    joinFields, fields, "", new String[0], false);
+	    str.append(matrixToString(values));
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
@@ -340,16 +344,26 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	StringBuffer str = new StringBuffer("nombre;municipio;departamento;\n");
 
 	try {
-	    SelectableDataSource comunidad = Utils.getFlyrVect(view,
-		    "comunidad").getRecordset();
-	    String sql = "select nombre, municip, departa from "
-		    + comunidad.getName() + ";";
-	    str.append(doFilter(comunidad.getDataSourceFactory(), sql));
+	    String[] fields = { "nombre", "municip", "departa" };
+	    String[][] values = session.getTable(ComunidadesForm.NAME,
+		    PmfConstants.dataSchema, fields, "", new String[0], false);
+	    str.append(matrixToString(values));
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 
 	return str.toString();
+    }
+
+    private String matrixToString(String[][] values) {
+	String result = "";
+	for (String[] row : values) {
+	    for (String value : row) {
+		result += value + ";";
+	    }
+	    result += "\n";
+	}
+	return result;
     }
 
 }

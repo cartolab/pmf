@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LAYER alias="fuentes_comunitarias">
+       <TABLENAME>fuentes_comunitarias</TABLENAME>
+       <PRIMARYKEY>
+	<PKELEMENT>gid</PKELEMENT>
+       </PRIMARYKEY>
+
+       <RECORDSET>
+       	    <FIELD>
+		<FIELDNAME>codigo_fc</FIELDNAME>
+		<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>x</FIELDNAME>
+		<VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>y</FIELDNAME>
+		<VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>z</FIELDNAME>
+		<VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+	    </FIELD>
+       </RECORDSET>
+
+</LAYER>

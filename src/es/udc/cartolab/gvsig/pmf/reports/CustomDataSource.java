@@ -33,41 +33,24 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRRuntimeException;
 
+import org.apache.log4j.Logger;
+
 /**
+ * @author Jorge López (lopez.fernandez.jorge@gmail.com)
  * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: CustomDataSource.java 3030 2009-08-27 11:12:48Z teodord $
  */
 public class CustomDataSource implements JRDataSource {
 
-    /**
-	 *
-	 */
+    private static Logger logger = Logger.getLogger("QueriesExtension");
     private List<HashMap<String, Object>> records = new ArrayList<HashMap<String, Object>>();
     private Iterator<HashMap<String, Object>> iterator;
     private HashMap<String, Object> currentRecord;
 
-    /**
-	 *
-	 */
     public CustomDataSource(List<HashMap<String, Object>> records) {
 	this.records = records;
-
-	/*
-	 * HashMap<String,Object> map = new HashMap<String,Object>();
-	 * 
-	 * map.put("name", "John McClane"); map.put("street",
-	 * "La jungla de cristal"); map.put("the_city","New York");
-	 * map.put("id", new Integer(1));
-	 * 
-	 * records = new ArrayList<HashMap<String,Object>>(); records.add(map);
-	 */
-
 	iterator = records.iterator();
     }
 
-    /**
-	 *
-	 */
     public boolean next() {
 	boolean hasNext = false;
 
@@ -82,25 +65,18 @@ public class CustomDataSource implements JRDataSource {
 	return hasNext;
     }
 
-    /**
-	 *
-	 */
     public Object getFieldValue(JRField jrField) {
-	System.out.println("Buscamos " + jrField.getName());
+	logger.info("Buscamos " + jrField.getName());
 	if (!currentRecord.containsKey(jrField.getName())) {
 	    throw new JRRuntimeException("Field \"" + jrField.getName()
 		    + "\" not found in data source.");
 	}
 
-	System.out.println("Y tiene el valor "
-		+ currentRecord.get(jrField.getName()));
+	logger.info("Y tiene el valor " + currentRecord.get(jrField.getName()));
 
 	return currentRecord.get(jrField.getName());
     }
 
-    /**
-	 *
-	 */
     public void moveFirst() {
 	iterator = records.iterator();
     }

@@ -22,21 +22,14 @@ package es.udc.cartolab.gvsig.pmf.reports.plot;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.HashMap;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.iver.andami.PluginServices;
-import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
-import com.iver.cit.gvsig.fmap.edition.IEditableSource;
-import com.iver.cit.gvsig.fmap.edition.IRowEdited;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.HeaderFooter;
@@ -48,26 +41,20 @@ import com.lowagie.text.rtf.document.RtfDocumentSettings;
 import com.lowagie.text.rtf.style.RtfFont;
 import com.lowagie.text.rtf.table.RtfCell;
 
-import es.udc.cartolab.gvsig.navtableforms.Utils;
+import es.udc.cartolab.gvsig.pmf.forms.CentrosSaludForm;
+import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
+import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
+import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.reports.RtfBaseReport;
+import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
-public class RtfPlotReport {
+public class RtfPlotReport extends RtfBaseReport {
 
     private Set<String> cul_an;
     private Set<String> cul_sp;
     private Set<String> cul_per;
-
-    private FLyrVect layer;
-    private BaseView view = null;
-    private int nRow;
-    private String fileName;
-    private boolean darkColor = true;
-    private SelectableDataSource source;
-    private SelectableDataSource comSource;
-    private SelectableDataSource plotSource;
-    private int nComRow;
-    private int nPlotRow;
-
-    private final Document document;
+    private String codCom;
+    private String codViv;
 
     // FONT STYLES
     private final RtfFont titleFont = new RtfFont("Century Gothic", 24,
@@ -88,6 +75,11 @@ public class RtfPlotReport {
 	    RtfFont.STYLE_BOLD);
     private final RtfFont subsectionFont = new RtfFont("Century Gothic", 11,
 	    RtfFont.STYLE_BOLD);
+    private final String[] comunidadesFieldNames = {};
+    private final String[] comunidadesBoolFieldNames = { "luz_elec",
+	    "agua_pot", "alcantar", "tfn_fijo" };
+    private final String[] comunidadesFieldHeaders = { "Luz eléctrica",
+	    "Agua potable", "Alcantarillado", "Telefonía fija" };
 
     private void setCultAn() {
 
@@ -99,18 +91,18 @@ public class RtfPlotReport {
 	}
 
 	try {
-	    if (plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("hay_ot_cul")).toString()
-		    .equals("true")) {
-		String[] ot_cul_an = plotSource.getFieldValue(nPlotRow,
-			plotSource.getFieldIndexByName("otrocan")).toString()
-			.split(" *[,y] *");
+	    String[] fields = { "hay_ot_cul", "otrocan" };
+	    String[][] values = session.getTable(ParcelasForm.NAME,
+		    PmfConstants.dataSchema, fields, "WHERE "
+			    + ViviendasForm.PKFIELD + " = '" + codViv + "'",
+		    new String[0], false);
+	    if (values[0][0].equalsIgnoreCase("t")) {
+		String[] ot_cul_an = values[0][1].split(" *[,y] *");
 		for (int i = 0; i < ot_cul_an.length; i++) {
 		    cul_an.add(ot_cul_an[i].toLowerCase());
 		}
 	    }
-	} catch (ReadDriverException e) {
-	    // TODO Auto-generated catch block
+	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 
@@ -125,18 +117,18 @@ public class RtfPlotReport {
 	}
 
 	try {
-	    if (plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("hay_ot_sp")).toString()
-		    .equals("true")) {
-		String[] ot_cul_sp = plotSource.getFieldValue(nPlotRow,
-			plotSource.getFieldIndexByName("otrocspe")).toString()
-			.split(" *[,y] *");
+	    String[] fields = { "hay_ot_sp", "otrocspe" };
+	    String[][] values = session.getTable(ParcelasForm.NAME,
+		    PmfConstants.dataSchema, fields, "WHERE "
+			    + ViviendasForm.PKFIELD + " = '" + codViv + "'",
+		    new String[0], false);
+	    if (values[0][0].equalsIgnoreCase("t")) {
+		String[] ot_cul_sp = values[0][1].split(" *[,y] *");
 		for (int i = 0; i < ot_cul_sp.length; i++) {
-		    cul_sp.add(ot_cul_sp[i].toLowerCase());
+		    cul_sp.add(ot_cul_sp[i].trim().toLowerCase());
 		}
 	    }
-	} catch (ReadDriverException e) {
-	    // TODO Auto-generated catch block
+	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 
@@ -153,43 +145,17 @@ public class RtfPlotReport {
 
     }
 
-    public RtfPlotReport(int nRow, SelectableDataSource source,
-	    String fileName, BaseView view) {
+    public RtfPlotReport(int nRow, SelectableDataSource source, String fileName) {
 
-	this.view = view;
 	this.source = source;
 	this.nRow = nRow;
 	this.fileName = fileName;
-	document = new Document();
 	try {
-	    layer = Utils.getFlyrVect(view, "comunidad");
-	    comSource = this.layer.getSource().getRecordset();
-	    layer = Utils.getFlyrVect(view, "parcela");
-	    plotSource = this.layer.getSource().getRecordset();
-
-	    String codCom = source.getFieldValue(nRow,
+	    codCom = source.getFieldValue(nRow,
 		    source.getFieldIndexByName("cod_com")).toString();
 
-	    String codViv = source.getFieldValue(nRow,
+	    codViv = source.getFieldValue(nRow,
 		    source.getFieldIndexByName("cod_viv")).toString();
-
-	    for (int i = 0; i < comSource.getRowCount(); i++) {
-		if (comSource.getFieldValue(i,
-			comSource.getFieldIndexByName("cod_com")).toString()
-			.equals(codCom)) {
-		    nComRow = i;
-		    break;
-		}
-	    }
-
-	    for (int i = 0; i < plotSource.getRowCount(); i++) {
-		if (plotSource.getFieldValue(i,
-			plotSource.getFieldIndexByName("cod_viv")).toString()
-			.equals(codViv)) {
-		    nPlotRow = i;
-		    break;
-		}
-	    }
 
 	    setCultAn();
 	    setCultSemi();
@@ -202,14 +168,7 @@ public class RtfPlotReport {
 	    // close document
 	    document.close();
 
-	} catch (FileNotFoundException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (DocumentException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
 	} catch (Exception e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }
@@ -247,13 +206,21 @@ public class RtfPlotReport {
 		source.getFieldIndexByName("direccion")).toString(),
 		subtitleFont));
 	reportSubtitle.add(new Chunk("\n\t\tAño: ", subtitleBoldFont));
-	reportSubtitle.add(new Chunk(" 2011", subtitleFont));
+	reportSubtitle.add(new Chunk(" "
+		+ Calendar.getInstance().get(Calendar.YEAR), subtitleFont));
 	document.add(reportSubtitle);
 
 	document.newPage();
     }
 
-    private void createSection1() throws DocumentException, ReadDriverException {
+    private void createSection1() throws DocumentException,
+	    ReadDriverException, SQLException {
+
+	String[] fields = { "nombre", "municip", "departa", "n_habit", "n_fam" };
+	String[][] comValues = session.getTable(ComunidadesForm.NAME,
+		PmfConstants.dataSchema, fields, "WHERE "
+			+ ComunidadesForm.PKFIELD + " = '" + codCom + "'",
+		new String[0], false);
 
 	// Section 1
 	Paragraph sectionTitle = new Paragraph(
@@ -262,28 +229,18 @@ public class RtfPlotReport {
 	Paragraph sectionBody = new Paragraph();
 	sectionBody.add(new Chunk("\tLa finca se ubica en la comunidad de ",
 		normalTextFont));
-	sectionBody.add(new Chunk(comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("nombre")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(comValues[0][0], normalBoldTextFont));
 	sectionBody.add(new Chunk(" en el municipio de ", normalTextFont));
-	sectionBody.add(new Chunk(comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("municip")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(comValues[0][1], normalBoldTextFont));
 	sectionBody.add(new Chunk(" en el departamento de ", normalTextFont));
-	sectionBody.add(new Chunk(comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("departa")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(comValues[0][2], normalBoldTextFont));
 	sectionBody.add(new Chunk(", en Honduras.", normalTextFont));
 	sectionBody.add(new Chunk("\n\n\tEn la comunidad viven ",
 		normalTextFont));
-	sectionBody.add(new Chunk(comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("n_habit")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(comValues[0][3], normalBoldTextFont));
 	sectionBody
 		.add(new Chunk(" personas distribuidas en ", normalTextFont));
-	sectionBody.add(new Chunk(comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("n_fam")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(comValues[0][4], normalBoldTextFont));
 	sectionBody
 		.add(new Chunk(
 			" familias. La comunidad se caracteriza por contar con los siguientes servicios: ",
@@ -292,76 +249,40 @@ public class RtfPlotReport {
 	document.add(sectionBody);
 
 	// Community public services table
-	Table table = new Table(2);
-	RtfCell cell = new RtfCell(new Phrase("SERVICIO", tableTitleTextFont));
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
-	table.addCell(cell);
-	cell = new RtfCell(new Phrase("PRESENTE EN LA COMUNIDAD",
-		tableTitleTextFont));
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
-	table.addCell(cell);
-	cell = new RtfCell(new Phrase("Luz eléctrica", normalBoldTextFont));
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	if (comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("luz_elec")).toString().equals(
-		"true")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
-	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
-	}
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	cell = new RtfCell(new Phrase("Agua potable", normalBoldTextFont));
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	if (comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("agua_pot")).toString().equals(
-		"true")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
-	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
-	}
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	cell = new RtfCell(new Phrase("Alcantarillado", normalBoldTextFont));
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	if (comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("alcantar")).toString().equals(
-		"true")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
-	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
-	}
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	cell = new RtfCell(new Phrase("Telefonía fija", normalBoldTextFont));
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	if (comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("tfn_fijo")).toString().equals(
-		"true")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
-	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
-	}
-	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
+	Table table = getFieldsTable(
+		ComunidadesForm.NAME,
+		ComunidadesForm.PKFIELD,
+		source.getFieldValue(nRow,
+			source.getFieldIndexByName(ComunidadesForm.PKFIELD))
+			.toString(), comunidadesFieldNames,
+		comunidadesBoolFieldNames, comunidadesFieldHeaders);
+	table.addColumns(1);
+	float[] f = { 1f, 1f, 1f, 1f, 1f };
+	table.setWidths(f);
+	String[] csalud = null;
+	RtfCell cell;
 	cell = new RtfCell(new Phrase("Centro de salud", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
-	if (comSource.getFieldValue(nComRow,
-		comSource.getFieldIndexByName("csalud")).toString().equals(
-		"true")) {
-	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
+	darkColor = !darkColor;
+	setCellColor(cell);
+	table.addCell(cell, 0, 4);
+	try {
+	    csalud = session.getDistinctValues(CentrosSaludForm.NAME,
+		    PmfConstants.dataSchema, CentrosSaludForm.PKFIELD, false,
+		    false, "WHERE " + ComunidadesForm.PKFIELD + " = '" + codCom
+			    + "'");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	if ((csalud != null) && (csalud.length > 0)) {
+	    cell = new RtfCell(new Phrase("Sí", normalBoldTextFont));
 	} else {
-	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
+	    cell = new RtfCell(new Phrase("No", normalBoldTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	table.addCell(cell);
+	darkColor = !darkColor;
+	setCellColor(cell);
+	table.addCell(cell, 1, 4);
 
 	document.add(table);
 
@@ -398,48 +319,59 @@ public class RtfPlotReport {
 	sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 	document.add(sectionBody);
 
+	darkColor = false;
 	// Inhabitants table
 	table = new Table(2);
 	cell = new RtfCell(new Phrase("Hombres mayores de 5 años",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(nRow,
 		source.getFieldIndexByName("n_hombr")).toString(),
 		normalTextFont)));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Mujeres mayores de 5 años",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(nRow,
 		source.getFieldIndexByName("n_mujer")).toString(),
 		normalTextFont)));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Niños menores de 5 años",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(nRow,
 		source.getFieldIndexByName("n_ninhos")).toString(),
 		normalTextFont)));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Niñas menores de 5 años",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(nRow,
 		source.getFieldIndexByName("n_ninhas")).toString(),
 		normalTextFont)));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
+	darkColor = !darkColor;
 	cell = new RtfCell(new Phrase("Total", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	table.addCell(cell);
+	darkColor = !darkColor;
 	cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(nRow,
 		source.getFieldIndexByName("n_personas")).toString(),
 		normalBoldTextFont)));
@@ -449,11 +381,13 @@ public class RtfPlotReport {
 	cell = new RtfCell(
 		new Phrase("Mujeres embarazadas", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(nRow,
 		source.getFieldIndexByName("n_embaraz")).toString(),
 		normalTextFont)));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 
 	document.add(table);
@@ -466,14 +400,17 @@ public class RtfPlotReport {
 		normalTextFont));
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("agricult"))
 		.toString().equals("true")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("ganaderia")).toString().equals(
-		    "true")) {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("comercio")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("ganaderia")).toString()
+		    .equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("comercio"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"la agricultura, la ganadería, el comercio y ",
@@ -488,8 +425,9 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"la agricultura, la ganadería y ",
@@ -507,11 +445,13 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("comercio")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("comercio"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"la agricultura, el comercio y ",
@@ -526,8 +466,9 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk("la agricultura y ",
 				normalBoldTextFont));
@@ -544,14 +485,17 @@ public class RtfPlotReport {
 	    }
 
 	} else {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("ganaderia")).toString().equals(
-		    "true")) {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("comercio")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("ganaderia")).toString()
+		    .equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("comercio"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"la ganadería, el comercio y ",
@@ -565,8 +509,9 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk("la ganadería y ",
 				normalBoldTextFont));
@@ -581,11 +526,13 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("comercio")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("comercio"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk("el comercio y ",
 				normalBoldTextFont));
@@ -597,8 +544,9 @@ public class RtfPlotReport {
 				normalBoldTextFont));
 		    }
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_act"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_act"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(source.getFieldValue(nRow,
 				source.getFieldIndexByName("otras_act"))
@@ -618,22 +566,29 @@ public class RtfPlotReport {
 	sectionBody.add(new Chunk(" principalmente de ", normalTextFont));
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("remesas"))
 		.toString().equals("true")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("e_temporal")).toString()
-		    .equals("true")) {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("e_perman")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("e_temporal"))
+		    .toString().equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("e_perman"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody
 				.add(new Chunk(
 					"remesas, empleo temporal, empleo permanente y ",
 					normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk(
 				"remesas, empleo temporal y empleo permanente",
@@ -641,15 +596,20 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"remesas, empleo temporal y ",
 				normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 
 		    } else {
 			sectionBody.add(new Chunk("remesas y empleo temporal",
@@ -659,18 +619,24 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("e_perman")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("e_perman"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"remesas, empleo permanente y ",
 				normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk(
 				"remesas y empleo permanente",
@@ -678,14 +644,19 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk("remesas y ",
 				normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody
 				.add(new Chunk("remesas", normalBoldTextFont));
@@ -696,21 +667,28 @@ public class RtfPlotReport {
 	    }
 
 	} else {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("e_temporal")).toString()
-		    .equals("true")) {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("e_perman")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("e_temporal"))
+		    .toString().equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("e_perman"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk(
 				"empleo temporal, empleo permanente y ",
 				normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk(
 				"empleo temporal y empleo permanente",
@@ -718,14 +696,19 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk("empleo temporal y ",
 				normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("empleo temporal",
 				normalBoldTextFont));
@@ -734,28 +717,39 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("e_perman")).toString()
-			.equals("true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("e_perman"))
+			.toString().equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
 			sectionBody.add(new Chunk("empleo permanente y ",
 				normalBoldTextFont));
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("empleo permanente",
 				normalBoldTextFont));
 		    }
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("hay_ot_ing"))
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("hay_ot_ing"))
 			    .toString().equals("true")) {
-			sectionBody.add(new Chunk(source.getFieldValue(nRow,
-				source.getFieldIndexByName("otros_ing"))
-				.toString().toLowerCase(), normalBoldTextFont));
+			sectionBody
+				.add(new Chunk(
+					source.getFieldValue(
+						nRow,
+						source.getFieldIndexByName("otros_ing"))
+						.toString().toLowerCase(),
+					normalBoldTextFont));
 		    } else {
 			sectionBody.add(new Chunk("ningún sitio",
 				normalBoldTextFont));
@@ -768,19 +762,22 @@ public class RtfPlotReport {
 	}
 	sectionBody.add(new Chunk(".\n\n\tLa vivienda de la familia es ",
 		normalTextFont));
-	if (!source.getFieldValue(nRow,
-		source.getFieldIndexByName("estatus_vi")).toString()
-		.toLowerCase().contains("selecciona una opción")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("estatus_vi")).toString()
-		    .toLowerCase().equals("otro")) {
-		sectionBody.add(new Chunk(source.getFieldValue(nRow,
-			source.getFieldIndexByName("ot_stat_vi")).toString()
-			.toLowerCase(), normalTextFont));
+	if (!source
+		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
+		.toString().toLowerCase().contains("selecciona una opción")) {
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("estatus_vi"))
+		    .toString().toLowerCase().equals("otro")) {
+		sectionBody.add(new Chunk(source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("ot_stat_vi"))
+			.toString().toLowerCase(), normalTextFont));
 	    } else {
-		sectionBody.add(new Chunk(source.getFieldValue(nRow,
-			source.getFieldIndexByName("estatus_vi")).toString()
-			.toLowerCase(), normalTextFont));
+		sectionBody.add(new Chunk(source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("estatus_vi"))
+			.toString().toLowerCase(), normalTextFont));
 	    }
 	} else {
 	    sectionBody.add(new Chunk(
@@ -789,9 +786,9 @@ public class RtfPlotReport {
 	if (source
 		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
 		.toString().toLowerCase().equals("propia")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("pro_viv")).toString()
-		    .toLowerCase().equals("true")) {
+	    if (source
+		    .getFieldValue(nRow, source.getFieldIndexByName("pro_viv"))
+		    .toString().toLowerCase().equals("true")) {
 		sectionBody.add(new Chunk(
 			", y es propiedad legal de la familia. ",
 			normalTextFont));
@@ -809,10 +806,12 @@ public class RtfPlotReport {
 	document.add(sectionBody);
 
 	// Coordinates table
+	darkColor = false;
 	table = new Table(2);
 	cell = new RtfCell(new Phrase("Ubicación (coordenadas)",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	Phrase phrase = new Phrase();
 	phrase.add(new Chunk("X = ", normalTextFont));
@@ -827,25 +826,30 @@ public class RtfPlotReport {
 	cell = new RtfCell(phrase);
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	table.addCell(cell);
+	setCellColor(cell);
 
 	document.add(table);
 
 	// Materials table
+	darkColor = true;
 	table = new Table(2);
 	cell = new RtfCell(new Phrase("MATERIALES DE LA VIVIENDA",
 		tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	cell.setColspan(2);
 	table.addCell(cell);
+	darkColor = !darkColor;
 	cell = new RtfCell(new Phrase("Material de las paredes",
 		normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 	if (!source
 		.getFieldValue(nRow, source.getFieldIndexByName("mat_pared"))
 		.toString().toLowerCase().contains("selecciona una opción")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("mat_pared")).toString()
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("mat_pared")).toString()
 		    .toLowerCase().equals("otro")) {
 		cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(
 			nRow, source.getFieldIndexByName("ot_mat_pa"))
@@ -859,14 +863,17 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Chunk("[----]", normalTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Material del techo", normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 	if (!source
 		.getFieldValue(nRow, source.getFieldIndexByName("mat_techo"))
 		.toString().toLowerCase().contains("selecciona una opción")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("mat_techo")).toString()
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("mat_techo")).toString()
 		    .toLowerCase().equals("otro")) {
 		cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(
 			nRow, source.getFieldIndexByName("ot_mat_te"))
@@ -880,14 +887,16 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Chunk("[----]", normalTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Material del piso", normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 	if (!source.getFieldValue(nRow, source.getFieldIndexByName("mat_piso"))
 		.toString().toLowerCase().contains("selecciona una opción")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("mat_piso")).toString()
-		    .toLowerCase().equals("otro")) {
+	    if (source
+		    .getFieldValue(nRow, source.getFieldIndexByName("mat_piso"))
+		    .toString().toLowerCase().equals("otro")) {
 		cell = new RtfCell(new Phrase(new Chunk(source.getFieldValue(
 			nRow, source.getFieldIndexByName("ot_mat_pi"))
 			.toString(), normalTextFont)));
@@ -900,23 +909,27 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Chunk("[----]", normalTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 
 	document.add(table);
 
 	// Public services table
+	darkColor = true;
 	table = new Table(2);
 	cell = new RtfCell(new Phrase("SERVICIO", tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("PRESENTE EN LA VIVIENDA",
 		tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	table.addCell(cell);
+	darkColor = !darkColor;
 	cell = new RtfCell(new Phrase("Luz eléctrica", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("luz_elec"))
 		.toString().equals("true")) {
@@ -925,9 +938,11 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Agua potable", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("agua_pot"))
 		.toString().equals("true")) {
@@ -936,9 +951,11 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Alcantarillado", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("alcantar"))
 		.toString().equals("true")) {
@@ -947,9 +964,11 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Telefonía fija", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("telefono"))
 		.toString().equals("true")) {
@@ -958,9 +977,11 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Alumbrado público", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("alum_publ"))
 		.toString().equals("true")) {
@@ -969,19 +990,23 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 
 	document.add(table);
 
 	// Materials table
+	darkColor = true;
 	table = new Table(2);
 	cell = new RtfCell(new Phrase(
 		"INFRAESTRUCTURAS BÁSICAS DE LA VIVIENDA", tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	cell.setColspan(2);
 	table.addCell(cell);
+	darkColor = !darkColor;
 	cell = new RtfCell(new Phrase("Letrina", normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("letrina"))
 		.toString().toLowerCase().equals("true")) {
@@ -990,8 +1015,10 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Cocina mejorada", normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("coc_mejor"))
 		.toString().toLowerCase().equals("true")) {
@@ -1000,9 +1027,11 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Filtro de aguas grises",
 		normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("filtro_ag"))
 		.toString().toLowerCase().equals("true")) {
@@ -1011,23 +1040,28 @@ public class RtfPlotReport {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase(
 		"Sistemas de almacenamiento de grano básicos",
 		normalBoldTextFont));
+	setCellColor(cell);
 	table.addCell(cell);
 
 	if (source.getFieldValue(nRow, source.getFieldIndexByName("silos"))
 		.toString().equals("true")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("trojas_mej")).toString()
-		    .equals("true")) {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("sacos")).toString().equals(
-			"true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("trojas_mej"))
+		    .toString().equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("sacos")).toString()
+			.equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(
 				new Chunk(
 					"Silos metálicos, trojas mejoradas, sacos y ramadas",
@@ -1039,9 +1073,10 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk(
 				"Silos metálicos, trojas mejoradas y ramadas",
 				normalTextFont));
@@ -1055,12 +1090,14 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("sacos")).toString().equals(
-			"true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("sacos")).toString()
+			.equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk(
 				"Silos metálicos, sacos y ramadas",
 				normalTextFont));
@@ -1070,9 +1107,10 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk(
 				"Silos metálicos y ramadas", normalTextFont));
 		    } else {
@@ -1085,15 +1123,18 @@ public class RtfPlotReport {
 	    }
 
 	} else {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("trojas_mej")).toString()
-		    .equals("true")) {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("sacos")).toString().equals(
-			"true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("trojas_mej"))
+		    .toString().equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("sacos")).toString()
+			.equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk(
 				"Trojas mejoradas, sacos y ramadas",
 				normalTextFont));
@@ -1103,9 +1144,10 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk(
 				"Trojas mejoradas y ramadas", normalTextFont));
 		    } else {
@@ -1116,21 +1158,24 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (source.getFieldValue(nRow,
-			source.getFieldIndexByName("sacos")).toString().equals(
-			"true")) {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+		if (source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("sacos")).toString()
+			.equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk("Sacos y ramadas",
 				normalTextFont));
 		    } else {
 			cell = new RtfCell(new Chunk("Sacos", normalTextFont));
 		    }
 		} else {
-		    if (source.getFieldValue(nRow,
-			    source.getFieldIndexByName("ramadas")).toString()
-			    .equals("true")) {
+		    if (source
+			    .getFieldValue(nRow,
+				    source.getFieldIndexByName("ramadas"))
+			    .toString().equals("true")) {
 			cell = new RtfCell(new Chunk("Ramadas", normalTextFont));
 		    } else {
 			cell = new RtfCell(new Chunk("Ninguno", normalTextFont));
@@ -1143,18 +1188,24 @@ public class RtfPlotReport {
 	}
 
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 
 	document.add(table);
 
+	String[] fields2 = { "hay_in_par" };
+	String[][] values = session.getTable(ParcelasForm.NAME,
+		PmfConstants.dataSchema, fields2, "WHERE "
+			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
+		new String[0], false);
+
 	sectionBody = new Paragraph();
 	sectionBody.add(new Chunk("\n"));
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("hay_in_par")).toString()
-		.toLowerCase().equals("true")) {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("hay_in_viv")).toString()
-		    .toLowerCase().equals("true")) {
+	if (values[0][0].toLowerCase().equals("t")) {
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("hay_in_viv"))
+		    .toString().toLowerCase().equals("true")) {
 		sectionBody
 			.add(new Chunk("\tExiste riesgo de ", normalTextFont));
 		sectionBody.add(new Chunk("inundación", normalBoldTextFont));
@@ -1173,9 +1224,10 @@ public class RtfPlotReport {
 			normalTextFont));
 	    }
 	} else {
-	    if (source.getFieldValue(nRow,
-		    source.getFieldIndexByName("hay_in_viv")).toString()
-		    .toLowerCase().equals("true")) {
+	    if (source
+		    .getFieldValue(nRow,
+			    source.getFieldIndexByName("hay_in_viv"))
+		    .toString().toLowerCase().equals("true")) {
 		sectionBody.add(new Chunk("\tNo existe riesgo de ",
 			normalTextFont));
 		sectionBody.add(new Chunk("inundación", normalBoldTextFont));
@@ -1197,7 +1249,21 @@ public class RtfPlotReport {
 
     }
 
-    private void createSection2() throws DocumentException, ReadDriverException {
+    private void createSection2() throws DocumentException,
+	    ReadDriverException, SQLException {
+
+	String[] fields = { "area_tot", "area_cul", "legal_par", "ot_legal_p",
+		"legal_par", "pendiente", "tip_suelo", "ot_tip_su",
+		"deg_suelo", "cerca", "b_vivas", "b_muertas", "hay_ot_cer",
+		"ot_cerca", "poz_pro", "rio", "nacimiento", "poz_com",
+		"reserv", "existe_fc", "d_fue_tan", "d_tan_hue", "prac_conse",
+		"c_conse", "uso_aborg", "c_aborg", "insect_org", "c_insect",
+		"uso_quim", "c_quim", "p_riego", "p_huerto", "p_coc_mejo",
+		"p_filtroag", "p_galline" };
+	String[][] values = session.getTable(ParcelasForm.NAME,
+		PmfConstants.dataSchema, fields, "WHERE "
+			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
+		new String[0], false);
 
 	// Section 2
 	Paragraph sectionTitle = new Paragraph(
@@ -1210,29 +1276,21 @@ public class RtfPlotReport {
 		normalTextFont));
 	sectionBody.add(new Chunk("superficie total ", normalBoldTextFont));
 	sectionBody.add(new Chunk("de ", normalTextFont));
-	sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("area_tot")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(values[0][0], normalBoldTextFont));
 	sectionBody.add(new Chunk(" manzanas, siendo la ", normalTextFont));
 	sectionBody
 		.add(new Chunk("superficie cultivable ", normalBoldTextFont));
 	sectionBody.add(new Chunk("de ", normalTextFont));
-	sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("area_cul")).toString(),
-		normalBoldTextFont));
+	sectionBody.add(new Chunk(values[0][1], normalBoldTextFont));
 	sectionBody.add(new Chunk(
 		" manzanas. La finca pertenece a la familia por ",
 		normalTextFont));
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("legal_par")).toString()
-		.toLowerCase().equals("otro")) {
-	    sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("ot_legal_p")).toString()
-		    .toLowerCase(), normalTextFont));
+	if (values[0][2].toLowerCase().equals("otro")) {
+	    sectionBody.add(new Chunk(values[0][3].toLowerCase(),
+		    normalTextFont));
 	} else {
-	    sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("legal_par")).toString()
-		    .toLowerCase(), normalTextFont));
+	    sectionBody.add(new Chunk(values[0][4].toLowerCase(),
+		    normalTextFont));
 	}
 	sectionBody.add(new Chunk(".", normalTextFont));
 	sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
@@ -1247,49 +1305,31 @@ public class RtfPlotReport {
 	sectionBody = new Paragraph();
 	sectionBody.add(new Chunk("\tLa finca tiene una pendiente media del ",
 		normalTextFont));
-	sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("pendiente")).toString(),
-		normalTextFont));
+	sectionBody.add(new Chunk(values[0][5], normalTextFont));
 	sectionBody.add(new Chunk(", el suelo es principalmente ",
 		normalTextFont));
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("tip_suelo")).toString()
-		.toLowerCase().equals("otro")) {
-	    sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("ot_tip_su")).toString()
-		    .toLowerCase(), normalTextFont));
+	if (values[0][6].toLowerCase().equals("otro")) {
+	    sectionBody.add(new Chunk(values[0][7].toLowerCase(),
+		    normalTextFont));
 	} else {
-	    sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("tip_suelo")).toString()
-		    .toLowerCase(), normalTextFont));
+	    sectionBody.add(new Chunk(values[0][6].toLowerCase(),
+		    normalTextFont));
 	}
 	sectionBody.add(new Chunk(" y se encuentra en un nivel ",
 		normalTextFont));
-	sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("deg_suelo")).toString()
-		.toLowerCase(), normalTextFont));
+	sectionBody.add(new Chunk(values[0][8].toLowerCase(), normalTextFont));
 	sectionBody.add(new Chunk(" de degradación.\n\t", normalTextFont));
 
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("cerca")).toString().equals(
-		"true")) {
-	    if (plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("b_vivas")).toString()
-		    .equals("true")) {
-		if (plotSource.getFieldValue(nPlotRow,
-			plotSource.getFieldIndexByName("b_muertas")).toString()
-			.equals("true")) {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("hay_ot_cer"))
-			    .toString().equals("true")) {
+	if (values[0][9].equals("t")) {
+	    if (values[0][10].equals("t")) {
+		if (values[0][11].equals("t")) {
+		    if (values[0][12].equals("t")) {
 			sectionBody
 				.add(new Chunk(
 					"La parcela cuenta además con barreras vivas, barreras muertas y ",
 					normalTextFont));
-			sectionBody.add(new Chunk(plotSource.getFieldValue(
-				nPlotRow,
-				plotSource.getFieldIndexByName("ot_cerca"))
-				.toString().toLowerCase(), normalTextFont));
+			sectionBody.add(new Chunk(values[0][13].toLowerCase(),
+				normalTextFont));
 			sectionBody.add(new Chunk(" como cercado.\n\n",
 				normalTextFont));
 		    } else {
@@ -1300,17 +1340,13 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("hay_ot_cer"))
-			    .toString().equals("true")) {
+		    if (values[0][12].equals("t")) {
 			sectionBody
 				.add(new Chunk(
 					"La parcela cuenta además con barreras vivas y ",
 					normalTextFont));
-			sectionBody.add(new Chunk(plotSource.getFieldValue(
-				nPlotRow,
-				plotSource.getFieldIndexByName("ot_cerca"))
-				.toString().toLowerCase(), normalTextFont));
+			sectionBody.add(new Chunk(values[0][13].toLowerCase(),
+				normalTextFont));
 			sectionBody.add(new Chunk(" como cercado.\n\n",
 				normalTextFont));
 
@@ -1324,20 +1360,14 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (plotSource.getFieldValue(nPlotRow,
-			plotSource.getFieldIndexByName("b_muertas")).toString()
-			.equals("true")) {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("hay_ot_cer"))
-			    .toString().equals("true")) {
+		if (values[0][11].equals("t")) {
+		    if (values[0][12].equals("t")) {
 			sectionBody
 				.add(new Chunk(
 					"La parcela cuenta además con barreras muertas y ",
 					normalTextFont));
-			sectionBody.add(new Chunk(plotSource.getFieldValue(
-				nPlotRow,
-				plotSource.getFieldIndexByName("ot_cerca"))
-				.toString().toLowerCase(), normalTextFont));
+			sectionBody.add(new Chunk(values[0][13].toLowerCase(),
+				normalTextFont));
 			sectionBody.add(new Chunk(" como cercado.\n\n",
 				normalTextFont));
 		    } else {
@@ -1348,16 +1378,12 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("hay_ot_cer"))
-			    .toString().equals("true")) {
+		    if (values[0][12].equals("t")) {
 			sectionBody
 				.add(new Chunk("La parcela cuenta además con ",
 					normalTextFont));
-			sectionBody.add(new Chunk(plotSource.getFieldValue(
-				nPlotRow,
-				plotSource.getFieldIndexByName("ot_cerca"))
-				.toString().toLowerCase(), normalTextFont));
+			sectionBody.add(new Chunk(values[0][13].toLowerCase(),
+				normalTextFont));
 			sectionBody.add(new Chunk(" como cercado.\n\n",
 				normalTextFont));
 		    } else {
@@ -1388,27 +1414,15 @@ public class RtfPlotReport {
 	sectionBody = new Paragraph();
 	sectionBody.add(new Chunk("\tLa finca", normalTextFont));
 
-	if (!plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("poz_pro")).toString().equals(
-		"true")) {
+	if (!values[0][14].equals("t")) {
 	    sectionBody.add(new Chunk(" no dispone de fuentes de riego, ",
 		    normalTextFont));
 	} else {
-	    if (plotSource.getFieldValue(nPlotRow,
-		    plotSource.getFieldIndexByName("rio")).toString().equals(
-		    "true")) {
-		if (plotSource.getFieldValue(nPlotRow,
-			plotSource.getFieldIndexByName("nacimiento"))
-			.toString().equals("true")) {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("poz_com"))
-			    .toString().equals("true")) {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+	    if (values[0][15].equals("t")) {
+		if (values[0][16].equals("t")) {
+		    if (values[0][17].equals("t")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, nacimiento, pozo comunitario, reservorio y pozo propio, ",
@@ -1420,9 +1434,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, nacimiento, pozo comunitario y pozo propio, ",
@@ -1436,12 +1448,8 @@ public class RtfPlotReport {
 			}
 
 		    } else {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, nacimiento, reservorio y pozo propio, ",
@@ -1453,9 +1461,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, nacimiento y pozo propio, ",
@@ -1471,15 +1477,9 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("poz_com"))
-			    .toString().equals("true")) {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+		    if (values[0][17].equals("t")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, pozo comunitario, reservorio y pozo propio, ",
@@ -1491,9 +1491,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, pozo comunitario y pozo propio, ",
@@ -1507,12 +1505,8 @@ public class RtfPlotReport {
 			}
 
 		    } else {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río, reservorio y pozo propio, ",
@@ -1524,9 +1518,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de río y pozo propio, ",
@@ -1544,18 +1536,10 @@ public class RtfPlotReport {
 		}
 
 	    } else {
-		if (plotSource.getFieldValue(nPlotRow,
-			plotSource.getFieldIndexByName("nacimiento"))
-			.toString().equals("true")) {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("poz_com"))
-			    .toString().equals("true")) {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+		if (values[0][16].equals("t")) {
+		    if (values[0][17].equals("t")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de nacimiento, pozo comunitario, reservorio y pozo propio, ",
@@ -1567,9 +1551,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de nacimiento, pozo comunitario y pozo propio, ",
@@ -1583,12 +1565,8 @@ public class RtfPlotReport {
 			}
 
 		    } else {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de nacimiento, reservorio y pozo propio, ",
@@ -1600,9 +1578,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de nacimiento y pozo propio, ",
@@ -1618,15 +1594,9 @@ public class RtfPlotReport {
 		    }
 
 		} else {
-		    if (plotSource.getFieldValue(nPlotRow,
-			    plotSource.getFieldIndexByName("poz_com"))
-			    .toString().equals("true")) {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+		    if (values[0][17].equals("t")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de pozo comunitario, reservorio y pozo propio, ",
@@ -1638,9 +1608,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de pozo comunitario y pozo propio, ",
@@ -1654,12 +1622,8 @@ public class RtfPlotReport {
 			}
 
 		    } else {
-			if (plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("reserv"))
-				.toString().equals("true")) {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			if (values[0][18].equals("t")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de reservorio y pozo propio, ",
@@ -1671,9 +1635,7 @@ public class RtfPlotReport {
 						normalTextFont));
 			    }
 			} else {
-			    if (plotSource.getFieldValue(nPlotRow,
-				    plotSource.getFieldIndexByName("poz_pro"))
-				    .toString().equals("true")) {
+			    if (values[0][14].equals("t")) {
 				sectionBody
 					.add(new Chunk(
 						" dispone como fuentes de riego de pozo propio, ",
@@ -1692,9 +1654,7 @@ public class RtfPlotReport {
 	    }
 	}
 
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("fuente_co")).toString().equals(
-		"true")) {
+	if (values[0][19].equals("t")) {
 	    sectionBody
 		    .add(new Chunk(
 			    "y sí dispone de fuente de agua común para varios productores. ",
@@ -1708,16 +1668,12 @@ public class RtfPlotReport {
 	sectionBody.add(new Chunk(
 		"La distancia registrada desde la fuente al tanque es de ",
 		normalTextFont));
-	sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("d_fue_tan")).toString(),
-		normalTextFont));
+	sectionBody.add(new Chunk(values[0][20], normalTextFont));
 	sectionBody
 		.add(new Chunk(
 			" m., mientras que la distancia desde el tanque al huerto es de ",
 			normalTextFont));
-	sectionBody.add(new Chunk(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("d_tan_hue")).toString(),
-		normalTextFont));
+	sectionBody.add(new Chunk(values[0][21], normalTextFont));
 	sectionBody.add(new Chunk(" m.\n\n", normalTextFont));
 	sectionBody.setAlignment(Element.ALIGN_JUSTIFIED);
 
@@ -1737,90 +1693,88 @@ public class RtfPlotReport {
 	document.add(sectionBody);
 
 	// Farming practices table
+	darkColor = true;
 	Table table = new Table(3);
 	RtfCell cell = new RtfCell(new Phrase("Tipo", tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Presente en la finca",
 		tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Descripción", tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	cell.setBackgroundColor(Color.LIGHT_GRAY);
+	setCellColor(cell);
 	table.addCell(cell);
+	darkColor = !darkColor;
 	cell = new RtfCell(new Phrase("Prácticas conservacionistas",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("prac_conse")).toString()
-		.equals("true")) {
+	if (values[0][22].equals("t")) {
 	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
 	} else {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("c_conse")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][23], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Abono orgánico", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("uso_aborg")).toString().equals(
-		"true")) {
+	if (values[0][24].equals("t")) {
 	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
 	} else {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("c_aborg")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][25], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Insecticidas orgánicos",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("insect_org")).toString()
-		.equals("true")) {
+	if (values[0][26].equals("t")) {
 	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
 	} else {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("c_insect")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][27], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Plaguicidas químicos",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	if (plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("uso_quim")).toString().equals(
-		"true")) {
+	if (values[0][28].equals("t")) {
 	    cell = new RtfCell(new Phrase("Sí", normalItalicTextFont));
 	} else {
 	    cell = new RtfCell(new Phrase("No", normalItalicTextFont));
 	}
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("c_quim")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][29], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 
 	document.add(table);
@@ -1857,95 +1811,40 @@ public class RtfPlotReport {
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	setCellColor(cell);
 	table.addCell(cell);
-	String dbfName = "cultivos";
-	IWindow[] windows = PluginServices.getMDIManager().getAllWindows();
-	IEditableSource dbfSource = null;
-	boolean found = false;
-	for (int i = 0; i < windows.length; i++) {
-	    if (windows[i] instanceof com.iver.cit.gvsig.project.documents.table.gui.Table) {
-		String name = ((com.iver.cit.gvsig.project.documents.table.gui.Table) windows[i])
-			.getModel().getName();
-		if (name.endsWith(".dbf")) {
-		    name = name.substring(0, name.lastIndexOf(".dbf"));
-		    if (name.equals(dbfName)) {
-			dbfSource = ((com.iver.cit.gvsig.project.documents.table.gui.Table) windows[i])
-				.getModel().getModelo();
-			found = true;
-			break;
-		    }
-		}
+	String tableName = "cultivos";
+	String[] fields2 = { "tipo", "area", "vol_prod" };
+	String[][] values2 = session.getTable(tableName,
+		PmfConstants.dataSchema, fields2, "WHERE "
+			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
+		new String[0], false);
+	for (String[] row : values2) {
+	    darkColor = !darkColor;
+	    if (cul_an.contains(row[0].toLowerCase())) {
+		cell = new RtfCell(new Phrase("Anual", normalTextFont));
+	    } else if (cul_sp.contains(row[0].toLowerCase())) {
+		cell = new RtfCell(new Phrase("Semi perenne", normalTextFont));
+	    } else if (cul_per.contains(row[0].toLowerCase())) {
+		cell = new RtfCell(new Phrase("Permanente", normalTextFont));
+	    } else {
+		cell = new RtfCell(new Phrase("Indeterminado", normalTextFont));
 	    }
+	    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	    setCellColor(cell);
+	    table.addCell(cell);
+	    cell = new RtfCell(new Phrase(row[0], normalBoldTextFont));
+	    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	    setCellColor(cell);
+	    table.addCell(cell);
+	    cell = new RtfCell(new Phrase(row[1], normalBoldTextFont));
+	    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	    setCellColor(cell);
+	    table.addCell(cell);
+	    cell = new RtfCell(new Phrase(row[2], normalBoldTextFont));
+	    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	    setCellColor(cell);
+	    table.addCell(cell);
 	}
-	if (found) {
-	    FieldDescription[] descriptions = dbfSource.getFieldsDescription();
-	    HashMap<String, Integer> indexes = new HashMap<String, Integer>();
-	    boolean hasRows = false;
-	    for (int i = 0; i < descriptions.length; i++) {
-		indexes.put(descriptions[i].getFieldName(), i);
-	    }
-	    for (int i = 0; i < dbfSource.getRowCount(); i++) {
-		IRowEdited row = dbfSource.getRow(i);
-		if (row.getAttribute(indexes.get("cod_viv")).toString().equals(
-			plotSource.getFieldValue(nPlotRow,
-				plotSource.getFieldIndexByName("cod_viv"))
-				.toString())) {
-		    hasRows = true;
-		    darkColor = !darkColor;
-		    if (cul_an.contains(row.getAttribute(
-			    indexes.get("tipo_cul")).toString().toLowerCase())) {
-			cell = new RtfCell(new Phrase("Anual", normalTextFont));
-		    } else if (cul_sp.contains(row.getAttribute(
-			    indexes.get("tipo_cul")).toString().toLowerCase())) {
-			cell = new RtfCell(new Phrase("Semi perenne",
-				normalTextFont));
-		    } else if (cul_per.contains(row.getAttribute(
-			    indexes.get("tipo_cul")).toString().toLowerCase())) {
-			cell = new RtfCell(new Phrase("Permanente",
-				normalTextFont));
-		    } else {
-			cell = new RtfCell(new Phrase("Indeterminado",
-				normalTextFont));
-		    }
-		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		    setCellColor(cell);
-		    table.addCell(cell);
-		    cell = new RtfCell(new Phrase(row.getAttribute(
-			    indexes.get("tipo_cul")).toString(),
-			    normalBoldTextFont));
-		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		    setCellColor(cell);
-		    table.addCell(cell);
-		    cell = new RtfCell(
-			    new Phrase(row.getAttribute(indexes.get("area"))
-				    .toString(), normalBoldTextFont));
-		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		    setCellColor(cell);
-		    table.addCell(cell);
-		    cell = new RtfCell(new Phrase(row.getAttribute(
-			    indexes.get("vol_proc")).toString(),
-			    normalBoldTextFont));
-		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		    setCellColor(cell);
-		    table.addCell(cell);
-		}
-
-	    }
-	    if (!hasRows) {
-		darkColor = !darkColor;
-		cell = new RtfCell(new Phrase("", normalTextFont));
-		setCellColor(cell);
-		table.addCell(cell);
-		cell = new RtfCell(new Phrase("", normalTextFont));
-		setCellColor(cell);
-		table.addCell(cell);
-		cell = new RtfCell(new Phrase("", normalTextFont));
-		setCellColor(cell);
-		table.addCell(cell);
-		cell = new RtfCell(new Phrase("", normalTextFont));
-		setCellColor(cell);
-		table.addCell(cell);
-	    }
-	} else {
+	if (values2.length == 0) {
 	    darkColor = !darkColor;
 	    cell = new RtfCell(new Phrase("", normalTextFont));
 	    setCellColor(cell);
@@ -1976,6 +1875,7 @@ public class RtfPlotReport {
 	document.add(sectionBody);
 
 	// Improvements table
+	darkColor = false;
 	table = new Table(2);
 	cell = new RtfCell(new Phrase("Tipo de mejora", tableTitleTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1988,57 +1888,50 @@ public class RtfPlotReport {
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Sistema de riego", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("p_riego")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][30], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Huerto familiar", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("p_huerto")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][31], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Cocina mejorada", normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("p_coc_mejo")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][32], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Filtro para aguas grises",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("p_filtroag")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][33], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 	cell = new RtfCell(new Phrase("Construcción de gallinero",
 		normalBoldTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
-	cell = new RtfCell(new Phrase(plotSource.getFieldValue(nPlotRow,
-		plotSource.getFieldIndexByName("p_galline")).toString(),
-		normalTextFont));
+	cell = new RtfCell(new Phrase(values[0][34], normalTextFont));
 	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	setCellColor(cell);
 	table.addCell(cell);
 
 	document.add(table);
 
-    }
-
-    private void setCellColor(RtfCell cell) {
-	if (darkColor) {
-	    cell.setBackgroundColor(Color.LIGHT_GRAY);
-	} else {
-	    cell.setBackgroundColor(new Color(242, 242, 242));
-	}
     }
 
 }// Class

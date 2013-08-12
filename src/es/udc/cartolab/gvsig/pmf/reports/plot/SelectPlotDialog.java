@@ -23,13 +23,12 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
+@SuppressWarnings("serial")
 public class SelectPlotDialog extends JPanel implements IWindow, ActionListener {
 
     private static Logger logger = Logger.getLogger("ReportsExtension");
     private SelectableDataSource source;
-    private BaseView view;
 
     /*
      * The next properties are the ones related to the interface itself, so they
@@ -55,12 +54,12 @@ public class SelectPlotDialog extends JPanel implements IWindow, ActionListener 
 	    if (dim.getHeight() > 550) {
 		height = 550;
 	    } else {
-		height = 60;
+		height = 65;
 	    }
 	    if (dim.getWidth() > 550) {
 		width = 550;
 	    } else {
-		width = new Double(dim.getWidth()).intValue() + 15;
+		width = new Double(dim.getWidth()).intValue() + 20;
 	    }
 	    windowInfo.setWidth(width);
 	    windowInfo.setHeight(height);
@@ -68,10 +67,9 @@ public class SelectPlotDialog extends JPanel implements IWindow, ActionListener 
 	return windowInfo;
     }
 
-    public SelectPlotDialog(SelectableDataSource source, BaseView view) {
+    public SelectPlotDialog(SelectableDataSource source) {
 	super();
 	this.source = source;
-	this.view = view;
 	try {
 	    initialize();
 	} catch (Exception e) {
@@ -93,8 +91,8 @@ public class SelectPlotDialog extends JPanel implements IWindow, ActionListener 
 		"20[fill][fill]30%[fill, bottom]"));
 	this.setLayout(new MigLayout());
 
-	JLabel housingLabel = new JLabel(PluginServices
-		.getText(this, "Housing"));
+	JLabel housingLabel = new JLabel(
+		PluginServices.getText(this, "Housing"));
 	this.add(housingLabel);
 
 	communityCombo = new JComboBox(items);
@@ -147,12 +145,12 @@ public class SelectPlotDialog extends JPanel implements IWindow, ActionListener 
 	if (dir.isDirectory() && dir.canWrite()) {
 	    try {
 		String outputReport = outputPath
-			+ source.getFieldValue(communityCombo
-				.getSelectedIndex(), source
-				.getFieldIndexByName("nom_produ"))
+			+ source.getFieldValue(
+				communityCombo.getSelectedIndex(),
+				source.getFieldIndexByName("nom_produ"))
 			+ "-report.rtf";
 		new RtfPlotReport(communityCombo.getSelectedIndex(), source,
-			outputReport, view);
+			outputReport);
 	    } catch (ReadDriverException e) {
 		e.printStackTrace();
 	    }

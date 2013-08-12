@@ -36,22 +36,6 @@ import com.iver.utiles.GenericFileFilter;
 
 public abstract class ReportsGenerator {
 
-    /*
-     * private static SelectableDataSource getDataSource(String layerName)
-     * throws ReadDriverException {
-     * 
-     * BaseView view = (BaseView)
-     * PluginServices.getMDIManager().getActiveWindow(); MapControl mapControl =
-     * view.getMapControl(); FLayers flayers =
-     * mapControl.getMapContext().getLayers();
-     * 
-     * FLayer layer = flayers.getLayer(layerName);
-     * 
-     * return ((FLyrVect) layer).getRecordset();
-     * 
-     * }
-     */
-
     private static FLayers getDataSources() throws ReadDriverException {
 
 	BaseView view = (BaseView) PluginServices.getMDIManager()
@@ -100,8 +84,8 @@ public abstract class ReportsGenerator {
 
 	while (iterator.hasNext()) {
 	    key = iterator.next();
-	    Collections.sort(records, new RecordsComparator(key, orderings
-		    .get(key)));
+	    Collections.sort(records,
+		    new RecordsComparator(key, orderings.get(key)));
 	}
     }
 
@@ -138,7 +122,7 @@ public abstract class ReportsGenerator {
 
 	    groupingsSort(records, orderings);
 
-	    Map parameters = new HashMap();
+	    Map<String, String> parameters = new HashMap<String, String>();
 	    parameters.put("ReportTitle", "Address Report");
 
 	    try {
@@ -161,8 +145,8 @@ public abstract class ReportsGenerator {
 		if (jfc.showSaveDialog((Component) PluginServices
 			.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
 		    File file = jfc.getSelectedFile();
-		    if (jfc.getFileFilter().getDescription().endsWith(
-			    " (*.odt)")) {
+		    if (jfc.getFileFilter().getDescription()
+			    .endsWith(" (*.odt)")) {
 			if (!(file.getPath().toLowerCase().endsWith(".odt"))) {
 			    file = new File(file.getPath() + ".odt");
 			}
@@ -181,8 +165,8 @@ public abstract class ReportsGenerator {
 			exporter.exportReport();
 		    }
 
-		    if (jfc.getFileFilter().getDescription().endsWith(
-			    " (*.html)")) {
+		    if (jfc.getFileFilter().getDescription()
+			    .endsWith(" (*.html)")) {
 			if (!(file.getPath().toLowerCase().endsWith(".html"))) {
 			    file = new File(file.getPath() + ".html");
 			}
@@ -201,8 +185,8 @@ public abstract class ReportsGenerator {
 			exporter.exportReport();
 		    }
 
-		    if (jfc.getFileFilter().getDescription().endsWith(
-			    " (*.pdf)")) {
+		    if (jfc.getFileFilter().getDescription()
+			    .endsWith(" (*.pdf)")) {
 			if (!(file.getPath().toLowerCase().endsWith(".pdf"))) {
 			    file = new File(file.getPath() + ".pdf");
 			}
@@ -221,8 +205,8 @@ public abstract class ReportsGenerator {
 			exporter.exportReport();
 		    }
 
-		    if (jfc.getFileFilter().getDescription().endsWith(
-			    " (*.doc)")) {
+		    if (jfc.getFileFilter().getDescription()
+			    .endsWith(" (*.doc)")) {
 			File odtFile;
 			if (!(file.getPath().toLowerCase().endsWith(".doc"))) {
 			    odtFile = new File(file.getPath() + ".tmp.odt");
@@ -234,7 +218,7 @@ public abstract class ReportsGenerator {
 
 			Runtime.getRuntime().exec("/home/jlopez/script");
 
-			Thread.currentThread().sleep(1500);
+			Thread.sleep(1500);
 
 			JROdtExporter exporter = new JROdtExporter();
 
@@ -242,16 +226,12 @@ public abstract class ReportsGenerator {
 				report, parameters, new CustomDataSource(
 					records));
 			exporter.setParameter(
-				JRExporterParameter.OUTPUT_FILE_NAME, odtFile
-					.getAbsolutePath());
+				JRExporterParameter.OUTPUT_FILE_NAME,
+				odtFile.getAbsolutePath());
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT,
 				print);
 			exporter.exportReport();
 
-			// System.out.println("Before connection...");
-
-			// connect to an OpenOffice.org instance running on port
-			// 8100
 			OpenOfficeConnection connection = new SocketOpenOfficeConnection(
 				8100);
 			connection.connect();

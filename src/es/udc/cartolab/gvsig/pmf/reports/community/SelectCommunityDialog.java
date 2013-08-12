@@ -23,14 +23,13 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
+@SuppressWarnings("serial")
 public class SelectCommunityDialog extends JPanel implements IWindow,
 	ActionListener {
 
     private static Logger logger = Logger.getLogger("ReportsExtension");
     private SelectableDataSource source;
-    private BaseView view;
 
     /*
      * The next properties are the ones related to the interface itself, so they
@@ -57,12 +56,12 @@ public class SelectCommunityDialog extends JPanel implements IWindow,
 	    if (dim.getHeight() > 550) {
 		height = 550;
 	    } else {
-		height = 60;
+		height = 65;
 	    }
 	    if (dim.getWidth() > 550) {
 		width = 550;
 	    } else {
-		width = new Double(dim.getWidth()).intValue() + 15;
+		width = new Double(dim.getWidth()).intValue() + 20;
 	    }
 	    windowInfo.setWidth(width);
 	    windowInfo.setHeight(height);
@@ -70,10 +69,9 @@ public class SelectCommunityDialog extends JPanel implements IWindow,
 	return windowInfo;
     }
 
-    public SelectCommunityDialog(SelectableDataSource source, BaseView view) {
+    public SelectCommunityDialog(SelectableDataSource source) {
 	super();
 	this.source = source;
-	this.view = view;
 	try {
 	    initialize();
 	} catch (Exception e) {
@@ -149,11 +147,12 @@ public class SelectCommunityDialog extends JPanel implements IWindow,
 	if (dir.isDirectory() && dir.canWrite()) {
 	    try {
 		String outputReport = outputPath
-			+ source.getFieldValue(communityCombo
-				.getSelectedIndex(), source
-				.getFieldIndexByName("nombre")) + "-report.rtf";
+			+ source.getFieldValue(
+				communityCombo.getSelectedIndex(),
+				source.getFieldIndexByName("nombre"))
+			+ "-report.rtf";
 		new RtfCommunityReport(communityCombo.getSelectedIndex(),
-			source, outputReport, view);
+			source, outputReport);
 	    } catch (ReadDriverException e) {
 		e.printStackTrace();
 	    }
