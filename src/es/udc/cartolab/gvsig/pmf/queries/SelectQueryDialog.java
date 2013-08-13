@@ -17,8 +17,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 
-import com.hardcode.gdbms.engine.data.DataSource;
-import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
@@ -134,26 +132,6 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 
 	this.add(okButton, "center, bottom, cell 1 3");
 	this.add(cancelButton, "center, bottom, cell 1 3");
-    }
-
-    private StringBuffer doFilter(DataSourceFactory dsf, String sql)
-	    throws Exception {
-
-	StringBuffer str = new StringBuffer();
-
-	DataSource result = dsf.executeSQL(sql,
-		DataSourceFactory.MANUAL_OPENING);
-
-	result.start();
-	for (int i = 0; i < result.getRowCount(); i++) {
-	    for (int j = 0; j < result.getFieldCount(); j++) {
-		str.append(result.getFieldValue(i, j).toString() + ";");
-	    }
-	    str.append("\n");
-	}
-	result.stop();
-
-	return str;
     }
 
     private void displayFileChooser() {
