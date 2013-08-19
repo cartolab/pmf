@@ -7,10 +7,13 @@ import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+import com.iver.utiles.extensionPoints.ExtensionPoints;
+import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.pmf.utils.PmfFormFactory;
+import es.udc.cartolab.gvsig.pmf.utils.PmfTocMenuEntry;
 
 public class FormsLauncherExtension extends Extension {
 
@@ -38,6 +41,10 @@ public class FormsLauncherExtension extends Extension {
 
     public void initialize() {
 	registerIcons();
+	// Entry at TOC contextual menu
+	ExtensionPoints extensionPoints = ExtensionPointsSingleton
+		.getInstance();
+	extensionPoints.add("View_TocActions", "PMF", new PmfTocMenuEntry());
 	// CopyFeaturesExtension cfe = ((CopyFeaturesExtension) PluginServices
 	// .getExtension(CopyFeaturesExtension.class));
 	// cfe.setDefaultPath(LoadDataConfigDialog.getConfigPath(false));
