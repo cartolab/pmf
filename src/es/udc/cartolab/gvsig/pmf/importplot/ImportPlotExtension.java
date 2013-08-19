@@ -18,15 +18,6 @@ import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
 
 public class ImportPlotExtension extends Extension {
 
-    /**
-     * String used for identifying the output directory parameter.
-     */
-    private String DEFAULT_OUTPUT_DIR_KEY_NAME = "ReportOutput";
-
-    public final String getDefaultReportOutputDirKeyName() {
-	return DEFAULT_OUTPUT_DIR_KEY_NAME;
-    }
-
     @Override
     public void execute(String actionCommand) {
 
