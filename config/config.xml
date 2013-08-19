@@ -47,5 +47,15 @@
 				action-command="Queries" position="16"
 				 /> 
 		</extension>
+
+		<extension class-name="es.udc.cartolab.gvsig.pmf.importplot.ImportPlotExtension" description="REPORTS_PANEL" active="true">
+			<tool-bar name="_tool-bar-name">
+				<action-tool icon="import-plot-launcher-icon" tooltip="_import-plot-launcher-tooltip"
+					action-command="parcela" position="17" />
+			</tool-bar>
+			<menu text="_menu_name/_reports_menu/_import-plot-launcher"
+				action-command="parcela" position="17"
+				 />
+		</extension>
 	</extensions>
 </plugin-config>
