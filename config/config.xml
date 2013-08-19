@@ -53,7 +53,7 @@
 				<action-tool icon="import-plot-launcher-icon" tooltip="_import-plot-launcher-tooltip"
 					action-command="parcela" position="17" />
 			</tool-bar>
-			<menu text="_menu_name/_reports_menu/_import-plot-launcher"
+			<menu text="_menu_name/_import-plot-launcher"
 				action-command="parcela" position="17"
 				 />
 		</extension>
