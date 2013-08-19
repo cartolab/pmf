@@ -18,10 +18,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-
-import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
 
 @SuppressWarnings("serial")
 public class ImportPlotDialog extends JPanel implements IWindow, ActionListener {
@@ -37,8 +33,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
     private JButton cancelButton = null;
     private JButton okButton = null;
     private FLyrVect[] validLayers;
-    private SelectableDataSource comSource;
-    private SelectableDataSource vivSource;
+    private String[] codComs;
+    private String[] codVivs;
 
     private JComboBox originCombo = null;
     private JComboBox codComCombo = null;
@@ -67,12 +63,12 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	return windowInfo;
     }
 
-    public ImportPlotDialog(FLyrVect[] validLayers,
-	    SelectableDataSource comSource, SelectableDataSource vivSource) {
+    public ImportPlotDialog(FLyrVect[] validLayers, String[] codComs,
+	    String[] codVivs) {
 	super();
 	this.validLayers = validLayers;
-	this.comSource = comSource;
-	this.vivSource = vivSource;
+	this.codComs = codComs;
+	this.codVivs = codVivs;
 	try {
 	    initialize();
 	} catch (Exception e) {
@@ -99,10 +95,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	this.add(label);
 
 	items = new Vector<String>();
-	for (int i = 0; i < comSource.getRowCount(); i++) {
-	    items.add(comSource.getFieldValue(i,
-		    comSource.getFieldIndexByName(ComunidadesForm.PKFIELD))
-		    .toString());
+	for (String codCom : codComs) {
+	    items.add(codCom);
 	}
 
 	codComCombo = new JComboBox(items);
@@ -112,10 +106,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	this.add(label);
 
 	items = new Vector<String>();
-	for (int i = 0; i < vivSource.getRowCount(); i++) {
-	    items.add(vivSource.getFieldValue(i,
-		    vivSource.getFieldIndexByName(ViviendasForm.PKFIELD))
-		    .toString());
+	for (String codViv : codVivs) {
+	    items.add(codViv);
 	}
 
 	codVivCombo = new JComboBox(items);

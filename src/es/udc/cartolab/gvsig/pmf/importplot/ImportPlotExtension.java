@@ -1,5 +1,6 @@
 package es.udc.cartolab.gvsig.pmf.importplot;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,13 +9,14 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ImportPlotExtension extends Extension {
 
@@ -36,17 +38,17 @@ public class ImportPlotExtension extends Extension {
 	}
 
 	try {
-	    FLyrVect layer = new TOCLayerManager()
-		    .getLayerByName(ComunidadesForm.NAME);
-	    SelectableDataSource comSource = layer.getSource().getRecordset();
-
-	    layer = new TOCLayerManager().getLayerByName(ViviendasForm.NAME);
-	    SelectableDataSource vivSource = layer.getSource().getRecordset();
+	    String[] codComs = DBSession.getCurrentSession().getDistinctValues(
+		    ComunidadesForm.NAME, PmfConstants.dataSchema,
+		    ComunidadesForm.PKFIELD, true, false);
+	    String[] codVivs = DBSession.getCurrentSession().getDistinctValues(
+		    ViviendasForm.NAME, PmfConstants.dataSchema,
+		    ViviendasForm.PKFIELD, true, false);
 
 	    ImportPlotDialog dialog = new ImportPlotDialog(
-		    validLayers.toArray(new FLyrVect[0]), comSource, vivSource);
+		    validLayers.toArray(new FLyrVect[0]), codComs, codVivs);
 	    PluginServices.getMDIManager().addWindow(dialog);
-	} catch (ReadDriverException e) {
+	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
 
