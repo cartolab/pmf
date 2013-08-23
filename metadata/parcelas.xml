@@ -72,7 +72,7 @@
 		<FIELDNAME>c_conse</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>prac_conserv</COMPONENT>
+				<COMPONENT>prac_conse</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>

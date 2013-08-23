@@ -9,6 +9,8 @@ public class CentrosEducativosForm extends BasicAbstractForm {
 
     public static final String NAME = "centros_educativos";
     public static final String PKFIELD = "cod_cedu";
+    public static String[] colNames = { "cod_cedu", "nom_cedu", "tipo" };
+    public static String[] colAlias = { "Código", "Nombre", "Tipo" };
 
     public CentrosEducativosForm(FLyrVect layer) {
 	super(layer);

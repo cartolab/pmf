@@ -210,7 +210,7 @@
 		<FIELDNAME>cons_mar_tipo</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>conservacion_mar_hay</COMPONENT>
+				<COMPONENT>cons_mar_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -219,7 +219,7 @@
 		<FIELDNAME>pesca_lugar</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -228,7 +228,7 @@
 		<FIELDNAME>pesca_capturas</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -244,7 +244,7 @@
 		</DOMAINREADER>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -262,7 +262,7 @@
 		<FIELDNAME>lancha</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -271,7 +271,7 @@
 		<FIELDNAME>cayuco</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -280,7 +280,7 @@
 		<FIELDNAME>neveras</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -289,7 +289,7 @@
 		<FIELDNAME>frizeres</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -298,7 +298,7 @@
 		<FIELDNAME>pailas</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -307,7 +307,7 @@
 		<FIELDNAME>redes</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -316,7 +316,7 @@
 		<FIELDNAME>otra_logistica</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -341,7 +341,7 @@
 		</DOMAINREADER>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>hay_pesca</COMPONENT>
+				<COMPONENT>pesca_hay</COMPONENT>
 				<VALUE>true</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -350,7 +350,7 @@
 		<FIELDNAME>disp_desec_cual</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>disp_desechos</COMPONENT>
+				<COMPONENT>disp_desec</COMPONENT>
 				<VALUE>Otros</VALUE>
 			</CONDITION>
 		</ENABLEIF>

@@ -8,8 +8,7 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 public class FuentesComunitariasForm extends BasicAbstractForm {
 
     public static final String NAME = "fuentes_comunitarias";
-    public static String[] colNames = { "" };
-    public static String[] colAlias = { "" };
+    public static final String PKFIELD = "codigo_fc";
 
     public FuentesComunitariasForm(FLyrVect layer) {
 	super(layer);

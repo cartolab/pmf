@@ -36,6 +36,8 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 	mainFormNames.add(CentrosSaludForm.NAME);
 	mainFormNames.add(ParcelasForm.NAME);
 	mainFormNames.add(ViviendasForm.NAME);
+	mainFormNames.add(LimitesParcelaForm.NAME);
+	mainFormNames.add(FuentesComunitariasForm.NAME);
 	instance = new PmfFormFactory();
     }
 
