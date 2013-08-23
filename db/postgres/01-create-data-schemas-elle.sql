@@ -71,6 +71,8 @@ INSERT INTO _map (mapa, nombre_capa, nombre_tabla, posicion, visible, max_escala
 INSERT INTO _map (mapa, nombre_capa, nombre_tabla, posicion, visible, max_escala, min_escala, grupo, schema, localizador) VALUES ('PMF', 'comunidades', 'comunidades', 4, true, NULL, NULL, '', 'pmf', NULL);
 INSERT INTO _map (mapa, nombre_capa, nombre_tabla, posicion, visible, max_escala, min_escala, grupo, schema, localizador) VALUES ('PMF', 'parcelas', 'parcelas', 5, true, NULL, NULL, '', 'pmf', NULL);
 INSERT INTO _map (mapa, nombre_capa, nombre_tabla, posicion, visible, max_escala, min_escala, grupo, schema, localizador) VALUES ('PMF', 'viviendas', 'viviendas', 6, true, NULL, NULL, '', 'pmf', NULL);
+INSERT INTO _map (mapa, nombre_capa, nombre_tabla, posicion, visible, max_escala, min_escala, grupo, schema, localizador) VALUES ('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 7, true, NULL, NULL, '', 'pmf', NULL);
+INSERT INTO _map (mapa, nombre_capa, nombre_tabla, posicion, visible, max_escala, min_escala, grupo, schema, localizador) VALUES ('PMF', 'limites_parcela', 'limites_parcela', 8, true, NULL, NULL, '', 'pmf', NULL);
 
 
 
