@@ -202,7 +202,7 @@ CREATE TABLE viviendas (
        pailas VARCHAR(5) DEFAULT 'false',
        redes VARCHAR(5) DEFAULT 'false',
        otra_logistica VARCHAR(5) DEFAULT 'false',
-       otro_logisticacual VARCHAR,
+       otra_logistica_cual VARCHAR,
        disp_desec VARCHAR
 	       REFERENCES disp_desec(item),
        disp_desec_cual VARCHAR
@@ -219,7 +219,7 @@ CREATE TABLE pesca_capturas (
 	       REFERENCES viviendas(cod_viv),
        especie VARCHAR
 	       REFERENCES especie(item),
-       especia_otra VARCHAR,
+       especie_otra VARCHAR,
        cantidad NUMERIC(5,2),
        precio NUMERIC(5,2)
 

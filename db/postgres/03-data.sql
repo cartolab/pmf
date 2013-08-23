@@ -216,7 +216,7 @@ CREATE TABLE pmf.viviendas (
        pailas BOOLEAN,
        redes BOOLEAN,
        otra_logistica BOOLEAN,
-       otro_logisticacual VARCHAR,
+       otra_logistica_cual VARCHAR,
        disp_desec VARCHAR
 	       REFERENCES dominios.disp_desec(item),
        disp_desec_cual VARCHAR
@@ -235,7 +235,7 @@ CREATE TABLE pmf.pesca_capturas (
 	       REFERENCES pmf.viviendas(cod_viv),
        especie VARCHAR
 	       REFERENCES dominios.especie(item),
-       especia_otra VARCHAR,
+       especie_otra VARCHAR,
        cantidad NUMERIC(5,2),
        precio NUMERIC(5,2)
 
