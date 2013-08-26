@@ -47,7 +47,7 @@ public class ParcelasForm extends BasicAbstractForm {
 
 	try {
 	    String[] values = DBSession.getCurrentSession().getDistinctValues(
-		    FuentesComunitariasForm.NAME, PmfConstants.dataSchema,
+		    FuentesComunitariasForm.NAME, PmfConstants.DATA_SCHEMA,
 		    FuentesComunitariasForm.PKFIELD, true, false);
 	    for (String value : values) {
 		model.addElement(new KeyValue(value, value));

@@ -219,8 +219,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 			+ "Disponibilidad de la mano de obra contratada (período);\n");
 	try {
 	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME };
-	    String[] schemas = { PmfConstants.dataSchema,
-		    PmfConstants.dataSchema };
+	    String[] schemas = { PmfConstants.DATA_SCHEMA,
+		    PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
 		    "b." + ViviendasForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "b.area_tot", "b.area_cul",
@@ -246,9 +246,9 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	try {
 	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME,
 		    ComunidadesForm.NAME, CultivosForm.NAME };
-	    String[] schemas = { PmfConstants.dataSchema,
-		    PmfConstants.dataSchema, PmfConstants.dataSchema,
-		    PmfConstants.dataSchema };
+	    String[] schemas = { PmfConstants.DATA_SCHEMA,
+		    PmfConstants.DATA_SCHEMA, PmfConstants.DATA_SCHEMA,
+		    PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
 		    "b." + ViviendasForm.PKFIELD,
 		    "a." + ComunidadesForm.PKFIELD,
@@ -276,8 +276,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	try {
 	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME,
 		    ComunidadesForm.NAME };
-	    String[] schemas = { PmfConstants.dataSchema,
-		    PmfConstants.dataSchema, PmfConstants.dataSchema };
+	    String[] schemas = { PmfConstants.DATA_SCHEMA,
+		    PmfConstants.DATA_SCHEMA, PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
 		    "b." + ViviendasForm.PKFIELD,
 		    "a." + ComunidadesForm.PKFIELD,
@@ -302,8 +302,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		"Nombre productor;Nombre comunidad;Area Cultivos;\n");
 	try {
 	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME };
-	    String[] schemas = { PmfConstants.dataSchema,
-		    PmfConstants.dataSchema };
+	    String[] schemas = { PmfConstants.DATA_SCHEMA,
+		    PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
 		    "b." + ViviendasForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "a.nom_com", "b.area_cul" };
@@ -324,7 +324,7 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	try {
 	    String[] fields = { "nombre", "municip", "departa" };
 	    String[][] values = session.getTable(ComunidadesForm.NAME,
-		    PmfConstants.dataSchema, fields, "", new String[0], false);
+		    PmfConstants.DATA_SCHEMA, fields, "", new String[0], false);
 	    str.append(matrixToString(values));
 	} catch (Exception e) {
 	    e.printStackTrace();

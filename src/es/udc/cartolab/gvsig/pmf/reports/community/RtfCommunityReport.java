@@ -415,7 +415,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 	    String[] vivCods = session
 		    .getDistinctValues(
 			    ViviendasForm.NAME,
-			    PmfConstants.dataSchema,
+			    PmfConstants.DATA_SCHEMA,
 			    ViviendasForm.PKFIELD,
 			    false,
 			    false,

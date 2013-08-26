@@ -85,7 +85,7 @@ public abstract class RtfBaseReport {
 
 	try {
 	    String[][] rows = session.getTable(tableName,
-		    PmfConstants.dataSchema,
+		    PmfConstants.DATA_SCHEMA,
 		    ArrayUtils.addAll(fieldNames, boolFieldNames), "WHERE "
 			    + foreignKeyName + " = '" + foreignKeyValue + "'",
 		    new String[0], false);
@@ -134,7 +134,7 @@ public abstract class RtfBaseReport {
 	RtfCell cell;
 	try {
 	    String[][] rows = session.getTable(tableName,
-		    PmfConstants.dataSchema,
+		    PmfConstants.DATA_SCHEMA,
 		    ArrayUtils.addAll(fieldNames, boolFieldNames), "WHERE "
 			    + foreignKeyName + " = '" + foreignKeyValue + "'",
 		    new String[0], false);
@@ -203,7 +203,7 @@ public abstract class RtfBaseReport {
 	    }
 	    whereClause += ")";
 	    String[][] rows = session.getTable(tableName,
-		    PmfConstants.dataSchema,
+		    PmfConstants.DATA_SCHEMA,
 		    ArrayUtils.addAll(fieldNames, boolFieldNames), whereClause,
 		    new String[0], false);
 	    hasRows = (rows.length > 0);

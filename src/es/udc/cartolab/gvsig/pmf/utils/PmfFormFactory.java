@@ -126,12 +126,12 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 
     @Override
     public void loadLayer(String layerName) {
-	loadLayer(layerName, PmfConstants.dataSchema);
+	loadLayer(layerName, PmfConstants.DATA_SCHEMA);
     }
 
     @Override
     public void loadTable(String tableName) {
-	loadTable(tableName, PmfConstants.dataSchema);
+	loadTable(tableName, PmfConstants.DATA_SCHEMA);
     }
 
 }

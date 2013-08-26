@@ -39,10 +39,10 @@ public class ImportPlotExtension extends Extension {
 
 	try {
 	    String[] codComs = DBSession.getCurrentSession().getDistinctValues(
-		    ComunidadesForm.NAME, PmfConstants.dataSchema,
+		    ComunidadesForm.NAME, PmfConstants.DATA_SCHEMA,
 		    ComunidadesForm.PKFIELD, true, false);
 	    String[] codVivs = DBSession.getCurrentSession().getDistinctValues(
-		    ViviendasForm.NAME, PmfConstants.dataSchema,
+		    ViviendasForm.NAME, PmfConstants.DATA_SCHEMA,
 		    ViviendasForm.PKFIELD, true, false);
 
 	    ImportPlotDialog dialog = new ImportPlotDialog(

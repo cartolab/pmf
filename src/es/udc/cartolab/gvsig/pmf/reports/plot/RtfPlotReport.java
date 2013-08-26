@@ -93,7 +93,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	try {
 	    String[] fields = { "hay_ot_cul", "otrocan" };
 	    String[][] values = session.getTable(ParcelasForm.NAME,
-		    PmfConstants.dataSchema, fields, "WHERE "
+		    PmfConstants.DATA_SCHEMA, fields, "WHERE "
 			    + ViviendasForm.PKFIELD + " = '" + codViv + "'",
 		    new String[0], false);
 	    if (values[0][0].equalsIgnoreCase("t")) {
@@ -119,7 +119,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	try {
 	    String[] fields = { "hay_ot_sp", "otrocspe" };
 	    String[][] values = session.getTable(ParcelasForm.NAME,
-		    PmfConstants.dataSchema, fields, "WHERE "
+		    PmfConstants.DATA_SCHEMA, fields, "WHERE "
 			    + ViviendasForm.PKFIELD + " = '" + codViv + "'",
 		    new String[0], false);
 	    if (values[0][0].equalsIgnoreCase("t")) {
@@ -218,7 +218,7 @@ public class RtfPlotReport extends RtfBaseReport {
 
 	String[] fields = { "nombre", "municip", "departa", "n_habit", "n_fam" };
 	String[][] comValues = session.getTable(ComunidadesForm.NAME,
-		PmfConstants.dataSchema, fields, "WHERE "
+		PmfConstants.DATA_SCHEMA, fields, "WHERE "
 			+ ComunidadesForm.PKFIELD + " = '" + codCom + "'",
 		new String[0], false);
 
@@ -268,7 +268,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	table.addCell(cell, 0, 4);
 	try {
 	    csalud = session.getDistinctValues(CentrosSaludForm.NAME,
-		    PmfConstants.dataSchema, CentrosSaludForm.PKFIELD, false,
+		    PmfConstants.DATA_SCHEMA, CentrosSaludForm.PKFIELD, false,
 		    false, "WHERE " + ComunidadesForm.PKFIELD + " = '" + codCom
 			    + "'");
 	} catch (SQLException e) {
@@ -1195,7 +1195,7 @@ public class RtfPlotReport extends RtfBaseReport {
 
 	String[] fields2 = { "hay_in_par" };
 	String[][] values = session.getTable(ParcelasForm.NAME,
-		PmfConstants.dataSchema, fields2, "WHERE "
+		PmfConstants.DATA_SCHEMA, fields2, "WHERE "
 			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
 		new String[0], false);
 
@@ -1261,7 +1261,7 @@ public class RtfPlotReport extends RtfBaseReport {
 		"uso_quim", "c_quim", "p_riego", "p_huerto", "p_coc_mejo",
 		"p_filtroag", "p_galline" };
 	String[][] values = session.getTable(ParcelasForm.NAME,
-		PmfConstants.dataSchema, fields, "WHERE "
+		PmfConstants.DATA_SCHEMA, fields, "WHERE "
 			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
 		new String[0], false);
 
@@ -1814,7 +1814,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	String tableName = "cultivos";
 	String[] fields2 = { "tipo", "area", "vol_prod" };
 	String[][] values2 = session.getTable(tableName,
-		PmfConstants.dataSchema, fields2, "WHERE "
+		PmfConstants.DATA_SCHEMA, fields2, "WHERE "
 			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
 		new String[0], false);
 	for (String[] row : values2) {
