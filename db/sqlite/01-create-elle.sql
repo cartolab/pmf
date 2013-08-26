@@ -48,6 +48,8 @@ INSERT INTO _map VALUES ('PMF', 'centros_salud', 'centros_salud', 3, 'true', NUL
 INSERT INTO _map VALUES ('PMF', 'comunidades', 'comunidades', 4, 'true', NULL, NULL, '', 'pmf', 'false');
 INSERT INTO _map VALUES ('PMF', 'parcelas', 'parcelas', 5, 'true', NULL, NULL, '', 'pmf', 'false');
 INSERT INTO _map VALUES ('PMF', 'viviendas', 'viviendas', 6, 'true', NULL, NULL, '', 'pmf', 'false');
+INSERT INTO _map VALUES ('PMF', 'limites_parcela', 'limites_parcela', 7, 'true', NULL, NULL, '', 'pmf', 'false');
+INSERT INTO _map VALUES ('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 8, 'true', NULL, NULL, '', 'pmf', 'false');
 
 
 INSERT INTO _map_style VALUES ('viviendas', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
