@@ -12,8 +12,10 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
+import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.pmf.utils.PmfFormFactory;
 import es.udc.cartolab.gvsig.pmf.utils.PmfTocMenuEntry;
+import es.udc.cartolab.gvsig.tools.CopyFeaturesExtension;
 
 public class FormsLauncherExtension extends Extension {
 
@@ -53,6 +55,12 @@ public class FormsLauncherExtension extends Extension {
 	java.net.URL aboutURL = this.getClass().getResource("/about.htm");
 	panelAbout.addAboutUrl("PMF", aboutURL);
 	PmfFormFactory.registerFormFactory();
+    }
+
+    @Override
+    public void postInitialize() {
+	// We configure the CopyFeatures dialog to open in a predefined folder
+	CopyFeaturesExtension.setDefaultPath(PmfConstants.GPS_MATCHING_FILES);
     }
 
     public boolean isEnabled() {
