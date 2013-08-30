@@ -57,5 +57,15 @@
 				action-command="parcela" position="17"
 				 />
 		</extension>
+
+		<extension class-name="es.udc.cartolab.gvsig.pmf.OpenGeneralExtension" description="FORMS_PANEL" active="true">
+			<tool-bar name="_pmf-tool-bar-name">
+				<action-tool icon="load-layers-launcher-icon" tooltip="_load-layers-launcher-tooltip"
+					action-command="open" position="1" />
+			</tool-bar>
+			<menu text="_pmf_menu_name/_load-layers-launcher"
+				action-command="open" position="1"
+				 />
+		</extension>
 	</extensions>
 </plugin-config>
