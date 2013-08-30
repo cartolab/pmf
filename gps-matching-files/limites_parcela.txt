@@ -1,0 +1,4 @@
+cod_lim_p=Identifica
+x:getX
+y:getY
+z=Altitud

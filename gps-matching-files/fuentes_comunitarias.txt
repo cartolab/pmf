@@ -1,0 +1,4 @@
+codigo_fc=Identifica
+x:getX
+y:getY
+z=Altitud

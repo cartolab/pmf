@@ -1,0 +1,4 @@
+cod_com=Identifica
+x:getX
+y:getY
+z=Altitud

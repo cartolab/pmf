@@ -1,0 +1,5 @@
+cod_csalud=Identifica
+cod_com:substring(Identifica,0,8)
+x:getX
+y:getY
+z=Altitud
