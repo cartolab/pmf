@@ -58,7 +58,7 @@ public class ImportPlotExtension extends Extension {
 	PluginServices.getIconTheme().registerDefault(
 		"import-plot-launcher-icon",
 		this.getClass().getClassLoader()
-			.getResource("images/queries.png"));
+			.getResource("images/import.png"));
     }
 
     @Override
