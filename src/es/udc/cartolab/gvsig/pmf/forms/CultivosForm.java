@@ -6,8 +6,7 @@ import es.icarto.gvsig.navtableforms.gui.tables.AbstractSubForm;
 public class CultivosForm extends AbstractSubForm {
 
     public static final String NAME = "cultivos";
-    public static String[] colNames = { "cultivo_tipo", "cultivo_area",
-	    "cultivo_vol_prod", "cultivo_vol_con" };
+    public static String[] colNames = { "tipo", "area", "vol_prod", "vol_con" };
     public static String[] colAlias = { "Tipo", "Area", "Producido",
 	    "Consumido" };
 
