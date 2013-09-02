@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.reports;
+package es.udc.cartolab.gvsig.pmf;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;

@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.forms;
+package es.udc.cartolab.gvsig.pmf;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;

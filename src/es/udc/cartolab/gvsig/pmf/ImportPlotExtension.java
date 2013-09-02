@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.importplot;
+package es.udc.cartolab.gvsig.pmf;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.importplot.ImportPlotDialog;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 

@@ -1,9 +1,10 @@
-package es.udc.cartolab.gvsig.pmf.queries;
+package es.udc.cartolab.gvsig.pmf;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
+import es.udc.cartolab.gvsig.pmf.queries.SelectQueryDialog;
 
 public class QueryExtension extends Extension {
 
