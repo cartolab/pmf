@@ -322,7 +322,7 @@
 		</ENABLEIF>
 	    </FIELD>
        	    <FIELD>
-		<FIELDNAME>otro_logisticacual</FIELDNAME>
+		<FIELDNAME>otra_logistica_cual</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>otra_logistica</COMPONENT>
