@@ -34,6 +34,12 @@ public class FormsLauncherExtension extends Extension {
     }
 
     protected void registerIcons() {
+	// Workaround to use another icon for CopyFeatures extension instead of
+	// the default
+	PluginServices.getIconTheme().registerDefault(
+		CopyFeaturesExtension.COPY_FEATURES_ICON,
+		this.getClass().getClassLoader()
+			.getResource("images/copy_features.png"));
 	PluginServices.getIconTheme()
 		.registerDefault(
 			"forms-launcher-icon",
