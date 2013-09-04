@@ -52,31 +52,71 @@ INSERT INTO _map VALUES ('PMF', 'limites_parcela', 'limites_parcela', 7, 'true',
 INSERT INTO _map VALUES ('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 8, 'true', NULL, NULL, '', 'pmf', 'false');
 
 
-INSERT INTO _map_style VALUES ('viviendas', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style VALUES ('fuentes_comunitarias', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="157,157,157,255"/>
+        <property key="color" value="0,0,255,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="4.0"/>
+        <property key="size" value="10.0"/>
         <property key="outline" value="false"/>
-        <property key="unit" value="2"/>
-        <property key="referenceSystem" value="1"/>
-        <property key="markerStyle" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="5"/>
     </xml-tag>
 </xml-tag>
 ');
-INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style VALUES ('limites_parcela', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="133,131,131,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="10.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="2"/>
+    </xml-tag>
+</xml-tag>
+');
+INSERT INTO _map_style VALUES ('viviendas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="187,171,182,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="11.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="3"/>
+    </xml-tag>
+</xml-tag>
+');
+INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
-        <property key="color" value="234,19,230,255"/>
+        <property key="color" value="102,102,255,128"/>
         <property key="hasFill" value="true"/>
-        <property key="desc"/>
+        <property key="desc" value=""/>
         <property key="isShapeVisible" value="true"/>
         <property key="referenceSystem" value="1"/>
         <property key="unit" value="2"/>
@@ -87,7 +127,7 @@ INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<xml-tag xmlns="http:/
             <property key="desc"/>
             <property key="unit" value="2"/>
             <property key="referenceSystem" value="1"/>
-            <property key="color" value="128,128,128,255"/>
+            <property key="color" value="102,102,255,255"/>
             <xml-tag>
                 <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
                 <property key="desc"/>
@@ -103,75 +143,81 @@ INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<xml-tag xmlns="http:/
     </xml-tag>
 </xml-tag>
 ');
-INSERT INTO _map_style VALUES ('comunidades', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style VALUES ('comunidades', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
-        <property key="desc"/>
+        <property key="desc" value="Default"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="0,242,22,255"/>
+        <property key="color" value="255,0,0,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="4.0"/>
-        <property key="outline" value="false"/>
-        <property key="unit" value="2"/>
+        <property key="size" value="8.0"/>
+        <property key="outline" value="true"/>
+        <property key="unit" value="-1"/>
         <property key="referenceSystem" value="1"/>
         <property key="markerStyle" value="0"/>
+        <property key="outlineColor" value="9,23,32,255"/>
+        <property key="outlineSize" value="0.0"/>
     </xml-tag>
 </xml-tag>
 ');
-INSERT INTO _map_style VALUES ('centros_salud', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style VALUES ('centros_salud', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="236,184,10,255"/>
+        <property key="color" value="0,153,0,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="4.0"/>
+        <property key="size" value="8.0"/>
         <property key="outline" value="false"/>
-        <property key="unit" value="2"/>
-        <property key="referenceSystem" value="1"/>
-        <property key="markerStyle" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="1"/>
     </xml-tag>
 </xml-tag>
 ');
-INSERT INTO _map_style VALUES ('centros_reuniones', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style VALUES ('centros_reuniones', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="122,172,182,255"/>
+        <property key="color" value="255,153,153,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="4.0"/>
+        <property key="size" value="8.0"/>
         <property key="outline" value="false"/>
-        <property key="unit" value="2"/>
-        <property key="referenceSystem" value="1"/>
-        <property key="markerStyle" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="1"/>
     </xml-tag>
 </xml-tag>
 ');
-INSERT INTO _map_style VALUES ('centros_educativos', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style VALUES ('centros_educativos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="123,141,120,255"/>
+        <property key="color" value="255,153,51,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="4.0"/>
+        <property key="size" value="8.0"/>
         <property key="outline" value="false"/>
-        <property key="unit" value="2"/>
-        <property key="referenceSystem" value="1"/>
-        <property key="markerStyle" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="1"/>
     </xml-tag>
 </xml-tag>
 ');

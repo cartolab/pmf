@@ -10,6 +10,8 @@ CREATE TRIGGER comunidades_compute_fields_update_trigger
 AFTER UPDATE ON comunidades
 FOR EACH ROW BEGIN
 	UPDATE comunidades SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
+	UPDATE viviendas SET nom_com = NEW.nombre WHERE cod_com = NEW.cod_com;
+	UPDATE parcelas SET nom_com = NEW.nombre WHERE cod_com = NEW.cod_com;
 END;
 
 
@@ -67,7 +69,7 @@ CREATE TRIGGER viviendas_compute_fields_insert_trigger
 AFTER INSERT ON viviendas
 FOR EACH ROW BEGIN
 	UPDATE viviendas SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
-	UPDATE viviendas SET nom_com = (SELECT nom_com FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
+	UPDATE viviendas SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
 END;
 
 DROP TRIGGER IF EXISTS viviendas_compute_fields_update_trigger;
@@ -75,7 +77,7 @@ CREATE TRIGGER viviendas_compute_fields_update_trigger
 AFTER UPDATE ON viviendas
 FOR EACH ROW BEGIN
 	UPDATE viviendas SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
-	UPDATE viviendas SET nom_com = (SELECT nom_com FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
+	UPDATE viviendas SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
 END;
 
 
@@ -84,14 +86,14 @@ DROP TRIGGER IF EXISTS parcelas_compute_fields_insert_trigger;
 CREATE TRIGGER parcelas_compute_fields_insert_trigger
 AFTER INSERT ON parcelas
 FOR EACH ROW BEGIN
-	UPDATE parcelas SET nom_com = (SELECT nom_com FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
+	UPDATE parcelas SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
 END;
 
 DROP TRIGGER IF EXISTS parcelas_compute_fields_update_trigger;
 CREATE TRIGGER parcelas_compute_fields_update_trigger
 AFTER UPDATE ON parcelas
 FOR EACH ROW BEGIN
-	UPDATE parcelas SET nom_com = (SELECT nom_com FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
+	UPDATE parcelas SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
 END;
 
 

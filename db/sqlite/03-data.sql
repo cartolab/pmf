@@ -25,7 +25,8 @@ CREATE TABLE centros_educativos (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
-	       REFERENCES comunidades(cod_com),
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        cod_cedu VARCHAR
 	       UNIQUE
 	       NOT NULL,
@@ -49,7 +50,8 @@ CREATE TABLE centros_salud (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
-	       REFERENCES comunidades(cod_com),
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        cod_csalud VARCHAR
 	       UNIQUE
 	       NOT NULL,
@@ -73,7 +75,8 @@ CREATE TABLE centros_reuniones (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
-	       REFERENCES comunidades(cod_com),
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        cod_creu VARCHAR
 	       UNIQUE
 	       NOT NULL,
@@ -93,7 +96,8 @@ CREATE TABLE organizaciones_base (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
-	       REFERENCES comunidades(cod_com),
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        org_exist VARCHAR
 	       UNIQUE
 	       NOT NULL,
@@ -107,7 +111,8 @@ CREATE TABLE presencia_institucional (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
-	       REFERENCES comunidades(cod_com),
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        org_exist VARCHAR
 	       UNIQUE
 	       NOT NULL,
@@ -120,7 +125,9 @@ CREATE TABLE presencia_institucional (
 CREATE TABLE viviendas (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
-	       NOT NULL,
+	       NOT NULL
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        nom_com VARCHAR,
        cod_viv VARCHAR
 	       UNIQUE
@@ -216,7 +223,8 @@ CREATE TABLE pesca_capturas (
        gid INTEGER PRIMARY KEY,
        cod_viv VARCHAR
 	       NOT NULL
-	       REFERENCES viviendas(cod_viv),
+	       REFERENCES viviendas(cod_viv)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        especie VARCHAR
 	       REFERENCES especie(item),
        especie_otra VARCHAR,
@@ -229,11 +237,15 @@ CREATE TABLE pesca_capturas (
 CREATE TABLE parcelas (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
-	       NOT NULL,
+	       NOT NULL
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        nom_com VARCHAR,
        cod_viv VARCHAR
 	       UNIQUE
-	       NOT NULL,
+	       NOT NULL
+	       REFERENCES viviendas(cod_viv)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        legal_par VARCHAR
 	       REFERENCES legal_par(item),
        ot_legal_p VARCHAR,
@@ -308,7 +320,8 @@ CREATE TABLE cultivos (
        gid INTEGER PRIMARY KEY,
        cod_viv VARCHAR
 	       NOT NULL
-	       REFERENCES parcelas(cod_viv),
+	       REFERENCES parcelas(cod_viv)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        tipo VARCHAR
 	       REFERENCES cultivo_tipo(item),
        area FLOAT,
@@ -334,7 +347,9 @@ SELECT addgeometrycolumn('fuentes_comunitarias', 'geom', 32616, 'POINT', 2);
 CREATE TABLE limites_parcela (
        gid INTEGER PRIMARY KEY,
        cod_viv VARCHAR
-	       NOT NULL,
+	       NOT NULL
+	       REFERENCES viviendas(cod_viv)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        cod_lim_p VARCHAR
 	       UNIQUE
 	       NOT NULL,
