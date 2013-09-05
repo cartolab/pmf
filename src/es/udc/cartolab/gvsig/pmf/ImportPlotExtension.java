@@ -1,13 +1,11 @@
 package es.udc.cartolab.gvsig.pmf;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
@@ -24,19 +22,8 @@ public class ImportPlotExtension extends Extension {
     @Override
     public void execute(String actionCommand) {
 
-	// We retrieve all layers and filter them so we keep
-	// only the point ones
-	List<FLyrVect> validLayers = new ArrayList<FLyrVect>();
-	FLyrVect[] layers = new TOCLayerManager().getAllLayers();
-	for (FLyrVect layer : layers) {
-	    try {
-		if (layer.getShapeType() == FShape.POINT) {
-		    validLayers.add(layer);
-		}
-	    } catch (ReadDriverException e) {
-		e.printStackTrace();
-	    }
-	}
+	List<FLyrVect> validLayers = Arrays.asList(new TOCLayerManager()
+		.getAllLayers());
 
 	try {
 	    String[] codComs = DBSession.getCurrentSession().getDistinctValues(
