@@ -167,6 +167,9 @@ CREATE TABLE pmf.viviendas (
        estatus_vi VARCHAR
 	       REFERENCES dominios.estatus_vi(item),
        ot_stat_vi VARCHAR,
+       legal_vi VARCHAR
+               REFERENCES dominios.legal_par(item),
+       ot_legal_vi VARCHAR,
        pro_viv BOOLEAN,
        pro_vivsex VARCHAR
 	       REFERENCES dominios.pro_vivsex(item),

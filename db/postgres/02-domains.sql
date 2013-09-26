@@ -8,10 +8,10 @@ CREATE TABLE dominios.tipo_cedu (
 
 INSERT INTO dominios.tipo_cedu (item) VALUES
        (' '),
-       ('Jardín de niños'),
-       ('Centro educativo escolar'),
-       ('Centro educativo de ciclo común'),
-       ('Centro educativo diversificado');
+       ('Kinder'),
+       ('Centro escolar'),
+       ('Centro de educación básica'),
+       ('Colegio');
 
 ALTER TABLE dominios.tipo_cedu OWNER TO pmf;
 
@@ -81,9 +81,9 @@ CREATE TABLE dominios.mat_techo (
 
 INSERT INTO dominios.mat_techo (item) VALUES
        (' '),
-       ('Bahareque'),
-       ('Adobe'),
-       ('Ladrillo'),
+       ('Teja'),
+       ('Alucin'),
+       ('Manaca'),
        ('Otros');
 
 ALTER TABLE dominios.mat_techo OWNER TO pmf;
@@ -97,9 +97,9 @@ CREATE TABLE dominios.mat_pared (
 
 INSERT INTO dominios.mat_pared (item) VALUES
        (' '),
-       ('Teja'),
-       ('Alucin'),
-       ('Manaca'),
+       ('Bahareque'),
+       ('Adobe'),
+       ('Ladrillo'),
        ('Otros');
 
 ALTER TABLE dominios.mat_pared OWNER TO pmf;
@@ -167,7 +167,7 @@ INSERT INTO dominios.especie (item) VALUES
        ('Camarón'),
        ('Cangrejos'),
        ('Rayas'),
-       ('Otros');
+       ('Otra');
 
 ALTER TABLE dominios.especie OWNER TO pmf;
 
@@ -182,8 +182,9 @@ INSERT INTO dominios.legal_par (item) VALUES
        (' '),
        ('Dominio pleno'),
        ('Dominio útil'),
+       ('En proceso de adquisición'),
        ('Herencia'),
-       ('Otros');
+       ('Otro');
 
 ALTER TABLE dominios.legal_par OWNER TO pmf;
 

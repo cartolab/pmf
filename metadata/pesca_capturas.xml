@@ -21,11 +21,11 @@
 		</DOMAINREADER>
 	    </FIELD>
        	    <FIELD>
-		<FIELDNAME>especia_otra</FIELDNAME>
+		<FIELDNAME>especie_otra</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>especie</COMPONENT>
-				<VALUE>Otros</VALUE>
+				<VALUE>otra</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>

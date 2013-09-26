@@ -29,7 +29,7 @@
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>legal_par</COMPONENT>
-				<VALUE>Otros</VALUE>
+				<VALUE>Otro</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>

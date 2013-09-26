@@ -6,10 +6,10 @@ CREATE TABLE tipo_cedu (
 
 INSERT INTO tipo_cedu (item) SELECT
        (' ') UNION SELECT
-       ('Jardín de niños') UNION SELECT
-       ('Centro educativo escolar') UNION SELECT
-       ('Centro educativo de ciclo común') UNION SELECT
-       ('Centro educativo diversificado');
+       ('Kinder') UNION SELECT
+       ('Centro escolar') UNION SELECT
+       ('Centro de educación básica') UNION SELECT
+       ('Colegio');
 
 
 
@@ -74,9 +74,9 @@ CREATE TABLE mat_techo (
 
 INSERT INTO mat_techo (item) SELECT
        (' ') UNION SELECT
-       ('Bahareque') UNION SELECT
-       ('Adobe') UNION SELECT
-       ('Ladrillo') UNION SELECT
+       ('Teja') UNION SELECT
+       ('Alucin') UNION SELECT
+       ('Manaca') UNION SELECT
        ('Otros');
 
 
@@ -89,9 +89,9 @@ CREATE TABLE mat_pared (
 
 INSERT INTO mat_pared (item) SELECT
        (' ') UNION SELECT
-       ('Teja') UNION SELECT
-       ('Alucin') UNION SELECT
-       ('Manaca') UNION SELECT
+       ('Bahareque') UNION SELECT
+       ('Adobe') UNION SELECT
+       ('Ladrillo') UNION SELECT
        ('Otros');
 
 
@@ -155,7 +155,7 @@ INSERT INTO especie (item) SELECT
        ('Camarón') UNION SELECT
        ('Cangrejos') UNION SELECT
        ('Rayas') UNION SELECT
-       ('Otros');
+       ('Otra');
 
 
 
@@ -170,7 +170,8 @@ INSERT INTO legal_par (item) SELECT
        ('Dominio pleno') UNION SELECT
        ('Dominio útil') UNION SELECT
        ('Herencia') UNION SELECT
-       ('Otros');
+       ('En proceso de adquisición') UNION SELECT
+       ('Otro');
 
 
 

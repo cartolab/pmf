@@ -102,8 +102,27 @@
 		<FIELDNAME>ot_stat_vi</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>estatus_viv</COMPONENT>
-				<VALUE>otras</VALUE>
+				<COMPONENT>estatus_vi</COMPONENT>
+				<VALUE>otro</VALUE>
+			</CONDITION>
+		</ENABLEIF>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>legal_vi</FIELDNAME>
+		<DOMAINREADER>
+			<DRTYPE>db</DRTYPE>
+			<DRDBSCHEMA>dominios</DRDBSCHEMA>
+			<DRDBTABLE>legal_par</DRDBTABLE>
+			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+		</DOMAINREADER>
+	    </FIELD>
+       	    <FIELD>
+		<FIELDNAME>ot_legal_vi</FIELDNAME>
+		<ENABLEIF>
+			<CONDITION>
+				<COMPONENT>legal_vi</COMPONENT>
+				<VALUE>otro</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>
@@ -355,7 +374,7 @@
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>disp_desec</COMPONENT>
-				<VALUE>Otros</VALUE>
+				<VALUE>Otro</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>

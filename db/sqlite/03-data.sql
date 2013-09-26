@@ -160,6 +160,9 @@ CREATE TABLE viviendas (
        estatus_vi VARCHAR
 	       REFERENCES estatus_vi(item),
        ot_stat_vi VARCHAR,
+       legal_vi VARCHAR
+               REFERENCES legal_par(item),
+       ot_legal_vi VARCHAR,
        pro_viv VARCHAR(5) DEFAULT 'false',
        pro_vivsex VARCHAR
 	       REFERENCES pro_vivsex(item),
