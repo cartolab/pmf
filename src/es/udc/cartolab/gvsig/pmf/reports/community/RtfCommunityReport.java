@@ -157,7 +157,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 
 	// Title
 	Paragraph reportTitle = new Paragraph(
-		"\n\n\n\n\n\nINFORME DE LA COMUNIDAD", titleFont);
+		"\n\n\n\n\n\nREPORTE DE LA COMUNIDAD", titleFont);
 	reportTitle.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(reportTitle);
 
