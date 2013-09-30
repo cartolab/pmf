@@ -42,7 +42,7 @@
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>tipo_cedu</COMPONENT>
-				<VALUE>Jardín de niños</VALUE>
+				<VALUE>Kinder</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>
