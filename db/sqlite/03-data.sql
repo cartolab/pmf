@@ -35,6 +35,7 @@ CREATE TABLE centros_educativos (
 	       REFERENCES tipo_cedu(item),
        n_ninhos INTEGER,
        n_ninhas INTEGER,
+       n_docentes INTEGER,
        i_deserc FLOAT,
        mer_escol VARCHAR(5) DEFAULT 'false',
        x FLOAT,

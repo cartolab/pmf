@@ -43,9 +43,9 @@ import es.udc.cartolab.gvsig.pmf.forms.CentrosReunionesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosSaludForm;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.forms.OrganizacionesBaseForm;
 import es.udc.cartolab.gvsig.pmf.forms.PresenciaInstitucionalForm;
-import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.reports.RtfBaseReport;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
@@ -60,12 +60,13 @@ public class RtfCommunityReport extends RtfBaseReport {
     private final String[] creuFieldHeaders = {
 	    "Nombre del centro de reuniones: ", "Dirección: ", "Responsable: " };
     private final String[] ceduFieldNames = { "nom_cedu", "tipo_cedu",
-	    "n_ninhos", "n_ninhas", "i_deserc" };
+	    "n_ninhos", "n_ninhas", "i_deserc", "n_docentes" };
     private final String[] ceduBoolFieldNames = { "mer_escol" };
     private final String[] ceduFieldHeaders = {
 	    "Nombre del centro educativo: ", "Tipo de centro educativo: ",
 	    "Número de niños: ", "Número de niñas: ",
-	    "Índice de deserción (%): ", "Merienda escolar: " };
+	    "Índice de deserción (%): ", "Número de docentes: ",
+	    "Merienda escolar: " };
     private final String[] csaludFieldNames = { "nom_csalud" };
     private final String[] csaludBoolFieldNames = { "inf_resp", "inf_piel",
 	    "inf_inst", "inf_vec" };

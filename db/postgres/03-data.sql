@@ -38,6 +38,7 @@ CREATE TABLE pmf.centros_educativos (
 	       REFERENCES dominios.tipo_cedu(item),
        n_ninhos INTEGER,
        n_ninhas INTEGER,
+       n_docentes INTEGER,
        i_deserc FLOAT,
        mer_escol BOOLEAN,
        x FLOAT,
