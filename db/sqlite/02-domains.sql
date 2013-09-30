@@ -7,9 +7,10 @@ CREATE TABLE tipo_cedu (
 INSERT INTO tipo_cedu (item) SELECT
        (' ') UNION SELECT
        ('Kinder') UNION SELECT
-       ('Centro escolar') UNION SELECT
-       ('Centro de educación básica') UNION SELECT
-       ('Colegio');
+       ('Centro educativo básico') UNION SELECT
+       ('Centro educativo escolar') UNION SELECT
+       ('Centro educativo de ciclo común') UNION SELECT
+       ('Centro educativo diversificado');
 
 
 

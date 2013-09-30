@@ -9,9 +9,10 @@ CREATE TABLE dominios.tipo_cedu (
 INSERT INTO dominios.tipo_cedu (item) VALUES
        (' '),
        ('Kinder'),
-       ('Centro escolar'),
-       ('Centro de educación básica'),
-       ('Colegio');
+       ('Centro educativo básico'),
+       ('Centro educativo escolar'),
+       ('Centro educativo de ciclo común'),
+       ('Centro educativo diversificado');
 
 ALTER TABLE dominios.tipo_cedu OWNER TO pmf;
 
