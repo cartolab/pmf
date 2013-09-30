@@ -10,7 +10,7 @@ CREATE TRIGGER comunidades_compute_fields_update_trigger
 AFTER UPDATE ON comunidades
 FOR EACH ROW BEGIN
 	UPDATE comunidades SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
-	UPDATE viviendas SET nom_com = NEW.nombre WHERE cod_com = NEW.cod_com;
+	UPDATE informacion_general SET nom_com = NEW.nombre WHERE cod_com = NEW.cod_com;
 	UPDATE parcelas SET nom_com = NEW.nombre WHERE cod_com = NEW.cod_com;
 END;
 
@@ -64,20 +64,20 @@ END;
 
 
 
-DROP TRIGGER IF EXISTS viviendas_compute_fields_insert_trigger;
-CREATE TRIGGER viviendas_compute_fields_insert_trigger
-AFTER INSERT ON viviendas
+DROP TRIGGER IF EXISTS informacion_general_compute_fields_insert_trigger;
+CREATE TRIGGER informacion_general_compute_fields_insert_trigger
+AFTER INSERT ON informacion_general
 FOR EACH ROW BEGIN
-	UPDATE viviendas SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
-	UPDATE viviendas SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
+	UPDATE informacion_general SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
+	UPDATE informacion_general SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
 END;
 
-DROP TRIGGER IF EXISTS viviendas_compute_fields_update_trigger;
-CREATE TRIGGER viviendas_compute_fields_update_trigger
-AFTER UPDATE ON viviendas
+DROP TRIGGER IF EXISTS informacion_general_compute_fields_update_trigger;
+CREATE TRIGGER informacion_general_compute_fields_update_trigger
+AFTER UPDATE ON informacion_general
 FOR EACH ROW BEGIN
-	UPDATE viviendas SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
-	UPDATE viviendas SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
+	UPDATE informacion_general SET x = X(NEW.geom), y = Y(NEW.geom) WHERE gid = NEW.gid AND NEW.geom IS NOT NULL;
+	UPDATE informacion_general SET nom_com = (SELECT nombre FROM comunidades WHERE cod_com = NEW.cod_com) WHERE gid = NEW.gid AND cod_com IS NOT NULL;
 END;
 
 

@@ -12,7 +12,7 @@ import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.importplot.ImportPlotDialog;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -30,8 +30,8 @@ public class ImportPlotExtension extends Extension {
 		    ComunidadesForm.NAME, PmfConstants.DATA_SCHEMA,
 		    ComunidadesForm.PKFIELD, true, false);
 	    String[] codVivs = DBSession.getCurrentSession().getDistinctValues(
-		    ViviendasForm.NAME, PmfConstants.DATA_SCHEMA,
-		    ViviendasForm.PKFIELD, true, false);
+		    InformacionGeneralForm.NAME, PmfConstants.DATA_SCHEMA,
+		    InformacionGeneralForm.PKFIELD, true, false);
 
 	    ImportPlotDialog dialog = new ImportPlotDialog(
 		    validLayers.toArray(new FLyrVect[0]), codComs, codVivs);

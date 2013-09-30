@@ -55,18 +55,18 @@ AFTER INSERT OR UPDATE OR DELETE ON pmf.centros_reuniones
 
 
 
-CREATE OR REPLACE FUNCTION pmf.viviendas_compute_fields_trigger() RETURNS TRIGGER AS $viviendas_compute_fields_trigger$
+CREATE OR REPLACE FUNCTION pmf.informacion_general_compute_fields_trigger() RETURNS TRIGGER AS $informacion_general_compute_fields_trigger$
     BEGIN
 	SELECT nombre INTO NEW.nom_com FROM pmf.comunidades WHERE cod_com = NEW.cod_com;
 	IF (NEW.geom IS NOT NULL) THEN NEW.x = st_x(NEW.geom); NEW.y = st_y(NEW.geom); END IF;
     RETURN NEW;
     END;
-$viviendas_compute_fields_trigger$ LANGUAGE plpgsql;
+$informacion_general_compute_fields_trigger$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS viviendas_compute_fields_trigger ON pmf.viviendas;
-CREATE TRIGGER viviendas_compute_fields_trigger
-AFTER INSERT OR UPDATE OR DELETE ON pmf.viviendas
-    FOR EACH ROW EXECUTE PROCEDURE pmf.viviendas_compute_fields_trigger();
+DROP TRIGGER IF EXISTS informacion_general_compute_fields_trigger ON pmf.informacion_general;
+CREATE TRIGGER informacion_general_compute_fields_trigger
+AFTER INSERT OR UPDATE OR DELETE ON pmf.informacion_general
+    FOR EACH ROW EXECUTE PROCEDURE pmf.informacion_general_compute_fields_trigger();
 
 
 

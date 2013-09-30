@@ -131,7 +131,7 @@ CREATE TABLE pmf.presencia_institucional (
 
 ALTER TABLE pmf.presencia_institucional OWNER TO pmf;
 
-CREATE TABLE pmf.viviendas (
+CREATE TABLE pmf.informacion_general (
        gid SERIAL PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL,
@@ -226,16 +226,16 @@ CREATE TABLE pmf.viviendas (
 
 );
 
-SELECT addgeometrycolumn('pmf', 'viviendas', 'geom', 32616, 'POINT', 2);
-CREATE INDEX pmf_viviendas_geom ON pmf.viviendas USING GIST(geom);
+SELECT addgeometrycolumn('pmf', 'informacion_general', 'geom', 32616, 'POINT', 2);
+CREATE INDEX pmf_informacion_general_geom ON pmf.informacion_general USING GIST(geom);
 
-ALTER TABLE pmf.viviendas OWNER TO pmf;
+ALTER TABLE pmf.informacion_general OWNER TO pmf;
 
 CREATE TABLE pmf.pesca_capturas (
        gid SERIAL PRIMARY KEY,
        cod_viv VARCHAR
 	       NOT NULL
-	       REFERENCES pmf.viviendas(cod_viv),
+	       REFERENCES pmf.informacion_general(cod_viv),
        especie VARCHAR
 	       REFERENCES dominios.especie(item),
        especie_otra VARCHAR,
@@ -254,7 +254,8 @@ CREATE TABLE pmf.parcelas (
        nom_com VARCHAR,
        cod_viv VARCHAR
 	       UNIQUE
-	       NOT NULL,
+	       NOT NULL
+	       REFERENCES pmf.informacion_general(cod_viv),,
        legal_par VARCHAR
 	       REFERENCES dominios.legal_par(item),
        ot_legal_p VARCHAR,

@@ -42,81 +42,60 @@ CREATE TABLE _map_style (
 
 
 
-INSERT INTO _map VALUES ('PMF', 'centros_educativos', 'centros_educativos', 1, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'centros_reuniones', 'centros_reuniones', 2, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'centros_salud', 'centros_salud', 3, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'comunidades', 'comunidades', 4, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'parcelas', 'parcelas', 5, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'viviendas', 'viviendas', 6, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'limites_parcela', 'limites_parcela', 7, 'true', NULL, NULL, '', 'pmf', 'false');
-INSERT INTO _map VALUES ('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 8, 'true', NULL, NULL, '', 'pmf', 'false');
+INSERT INTO _map SELECT
+('PMF', 'centros_educativos', 'centros_educativos', 25, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'centros_reuniones', 'centros_reuniones', 24, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'centros_salud', 'centros_salud', 23, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'comunidades', 'comunidades', 22, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'parcelas', 'parcelas', 21, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'informacion_general', 'informacion_general', 20, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'limites_parcela', 'limites_parcela', 19, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 18, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
+('PMF', 'precipitacion1', 'precipitacion1', 17, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
+('PMF', 'precipitacion', 'precipitacion', 16, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
+('PMF', 'interes_turistico', 'interes_turistico', 15, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
+('PMF', 'infraestructuras_economicas', 'infraestructuras_economicas', 14, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
+('PMF', 'rios', 'rios', 13, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
+('PMF', 'edificaciones', 'edificaciones', 12, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
+('PMF', 'caminos', 'caminos', 11, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
+('PMF', 'curvas', 'curvas', 10, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
+('PMF', 'usos_suelo', 'usos_suelo', 9, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
+('PMF', 'sequia', 'sequia', 8, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
+('PMF', 'industrial', 'industrial', 7, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
+('PMF', 'sedimentos', 'sedimentos', 6, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
+('PMF', 'deforestacion', 'deforestacion', 5, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
+('PMF', 'riesgos', 'riesgos', 4, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
+('PMF', 'países vecinos', 'paises_vecinos', 3, true, NULL, NULL, 'C. Base área', 'pmf', NULL) UNION SELECT
+('PMF', 'municipios', 'municipioshn', 2, true, NULL, NULL, 'C. Base área', 'pmf', NULL) UNION SELECT
+('PMF', 'cuenca', 'cuenca', 1, true, NULL, NULL, 'C. Base área', 'pmf', NULL);
 
 
-INSERT INTO _map_style VALUES ('fuentes_comunitarias', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
-<xml-tag xmlns="http://www.gvsig.gva.es">
+INSERT INTO _map_style SELECT
+('informacion_general', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="0,0,255,255"/>
+        <property key="color" value="157,157,157,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="10.0"/>
+        <property key="size" value="4.0"/>
         <property key="outline" value="false"/>
-        <property key="unit" value="-1"/>
-        <property key="referenceSystem" value="0"/>
-        <property key="markerStyle" value="5"/>
+        <property key="unit" value="2"/>
+        <property key="referenceSystem" value="1"/>
+        <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-');
-INSERT INTO _map_style VALUES ('limites_parcela', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
-<xml-tag xmlns="http://www.gvsig.gva.es">
-    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
-    <xml-tag>
-        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
-        <property key="desc"/>
-        <property key="isShapeVisible" value="true"/>
-        <property key="color" value="133,131,131,255"/>
-        <property key="rotation" value="0.0"/>
-        <property key="offsetX" value="0.0"/>
-        <property key="offsetY" value="0.0"/>
-        <property key="size" value="10.0"/>
-        <property key="outline" value="false"/>
-        <property key="unit" value="-1"/>
-        <property key="referenceSystem" value="0"/>
-        <property key="markerStyle" value="2"/>
-    </xml-tag>
-</xml-tag>
-');
-INSERT INTO _map_style VALUES ('viviendas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
-<xml-tag xmlns="http://www.gvsig.gva.es">
-    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
-    <xml-tag>
-        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
-        <property key="desc"/>
-        <property key="isShapeVisible" value="true"/>
-        <property key="color" value="187,171,182,255"/>
-        <property key="rotation" value="0.0"/>
-        <property key="offsetX" value="0.0"/>
-        <property key="offsetY" value="0.0"/>
-        <property key="size" value="11.0"/>
-        <property key="outline" value="false"/>
-        <property key="unit" value="-1"/>
-        <property key="referenceSystem" value="0"/>
-        <property key="markerStyle" value="3"/>
-    </xml-tag>
-</xml-tag>
-');
-INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
-<xml-tag xmlns="http://www.gvsig.gva.es">
+') UNION SELECT
+('parcelas', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
-        <property key="color" value="102,102,255,128"/>
+        <property key="color" value="234,19,230,255"/>
         <property key="hasFill" value="true"/>
-        <property key="desc" value=""/>
+        <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
         <property key="referenceSystem" value="1"/>
         <property key="unit" value="2"/>
@@ -127,7 +106,7 @@ INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<?xml version="1.0" en
             <property key="desc"/>
             <property key="unit" value="2"/>
             <property key="referenceSystem" value="1"/>
-            <property key="color" value="102,102,255,255"/>
+            <property key="color" value="128,128,128,255"/>
             <xml-tag>
                 <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
                 <property key="desc"/>
@@ -142,82 +121,1037 @@ INSERT INTO _map_style VALUES ('parcelas', 'PMF', 'gvl', '<?xml version="1.0" en
         </xml-tag>
     </xml-tag>
 </xml-tag>
-');
-INSERT INTO _map_style VALUES ('comunidades', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+') UNION SELECT
+('comunidades', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="0,242,22,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="2"/>
+        <property key="referenceSystem" value="1"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('centros_salud', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="236,184,10,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="2"/>
+        <property key="referenceSystem" value="1"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('centros_reuniones', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="122,172,182,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="2"/>
+        <property key="referenceSystem" value="1"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('centros_educativos', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="123,141,120,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="2"/>
+        <property key="referenceSystem" value="1"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+'),
+('infraestructuras_economicas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="102,102,102,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="5.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('rios', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="desc"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="color" value="236,221,232,255"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+            <property key="desc"/>
+            <property key="lineWidth" value="1.0"/>
+            <property key="dashPhase" value="0.0"/>
+            <property key="endCap" value="0"/>
+            <property key="lineJoin" value="2"/>
+            <property key="miterLimit" value="10.0"/>
+            <property key="offset" value="0.0"/>
+            <property key="unit" value="0"/>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('edificaciones', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc" value="Default"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="255,0,0,255"/>
+        <property key="color" value="204,204,204,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="8.0"/>
+        <property key="size" value="5.0"/>
         <property key="outline" value="true"/>
         <property key="unit" value="-1"/>
-        <property key="referenceSystem" value="1"/>
-        <property key="markerStyle" value="0"/>
-        <property key="outlineColor" value="9,23,32,255"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="1"/>
+        <property key="outlineColor" value="45,45,38,255"/>
         <property key="outlineSize" value="0.0"/>
     </xml-tag>
 </xml-tag>
-');
-INSERT INTO _map_style VALUES ('centros_salud', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+') UNION SELECT
+('caminos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
-        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
-        <property key="desc"/>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="0,153,0,255"/>
-        <property key="rotation" value="0.0"/>
-        <property key="offsetX" value="0.0"/>
-        <property key="offsetY" value="0.0"/>
-        <property key="size" value="8.0"/>
-        <property key="outline" value="false"/>
+        <property key="desc" value="Default"/>
         <property key="unit" value="-1"/>
         <property key="referenceSystem" value="0"/>
-        <property key="markerStyle" value="1"/>
+        <property key="color" value="153,153,153,255"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+            <property key="desc"/>
+            <property key="lineWidth" value="1.0"/>
+            <property key="dashPhase" value="0.0"/>
+            <property key="endCap" value="2"/>
+            <property key="lineJoin" value="0"/>
+            <property key="miterLimit" value="10.0"/>
+            <property key="offset" value="0.0"/>
+            <property key="unit" value="-1"/>
+        </xml-tag>
     </xml-tag>
 </xml-tag>
-');
-INSERT INTO _map_style VALUES ('centros_reuniones', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+') UNION SELECT
+('curvas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
-        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
-        <property key="desc"/>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
         <property key="isShapeVisible" value="true"/>
+        <property key="desc" value="Default"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
         <property key="color" value="255,153,153,255"/>
-        <property key="rotation" value="0.0"/>
-        <property key="offsetX" value="0.0"/>
-        <property key="offsetY" value="0.0"/>
-        <property key="size" value="8.0"/>
-        <property key="outline" value="false"/>
-        <property key="unit" value="-1"/>
-        <property key="referenceSystem" value="0"/>
-        <property key="markerStyle" value="1"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+            <property key="desc"/>
+            <property key="lineWidth" value="1.0"/>
+            <property key="dashPhase" value="0.0"/>
+            <property key="endCap" value="2"/>
+            <property key="lineJoin" value="0"/>
+            <property key="miterLimit" value="10.0"/>
+            <property key="offset" value="0.0"/>
+            <property key="unit" value="-1"/>
+        </xml-tag>
     </xml-tag>
 </xml-tag>
-');
-INSERT INTO _map_style VALUES ('centros_educativos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+') UNION SELECT
+('usos_suelo', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend"/>
+    <property key="fieldNames" value="uso"/>
+    <property key="fieldTypes" value="12"/>
+    <property key="ownOrder" value="false"/>
+    <property key="orders" value=""/>
+    <property key="colorScheme" value="0\,0\,0\,255 ,0\,84\,0\,255 ,0\,84\,0\,255 ,0\,168\,0\,255 ,0\,168\,0\,255 ,0\,255\,0\,255 ,0\,255\,0\,255 ,0\,255\,84\,255 ,0\,255\,84\,255 ,0\,255\,168\,255 ,0\,255\,168\,255 ,0\,255\,255\,255 ,0\,255\,255\,255 ,0\,0\,255\,255 ,0\,0\,255\,255 ,128\,0\,255\,255 ,128\,0\,255\,255 ,255\,0\,220\,255 ,255\,0\,220\,255 ,255\,0\,180\,255 ,255\,0\,180\,255 ,255\,0\,128\,255 ,255\,0\,128\,255 ,255\,0\,64\,255 ,255\,0\,64\,255 ,255\,0\,0\,255 ,255\,0\,0\,255 ,220\,190\,190\,255 ,223\,190\,190\,255 ,220\,220\,220\,255 ,220\,220\,220\,255 ,255\,255\,255\,255 ,255\,255\,255\,255"/>
+    <property key="labelfield"/>
+    <property key="labelFieldHeight"/>
+    <property key="labelFieldRotation"/>
+    <property key="useDefaultSymbol" value="false"/>
+    <property key="numKeys" value="13"/>
+    <property key="tipoValueKeys" value="com.hardcode.gdbms.engine.values.NullValue"/>
+    <property key="keys" value="Acuicultura ,Agricultura ,Bosque Latifoliado ,Bosque de Mangle ,Estero ,Eucaliptos ,Industrial ,Laguna ,Matorrales ,Pecuario ,Salinera ,Suelos Desnudos ,Urbano"/>
+    <property key="values" value="Acuicultura ,Agricultura ,Bosque Latifoliado ,Bosque de Mangle ,Estero ,Eucaliptos ,Industrial ,Laguna ,Matorrales ,Pecuario ,Salinera ,Suelos Desnudos ,Urbano"/>
+    <property key="typeKeys" value="-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1"/>
+    <property key="typeValues" value="-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="60,235,235,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Por defecto"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,255,255,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Acuicultura"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,255,0,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Agricultura"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,0,255,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Bosque Latifoliado"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="220,220,220,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Bosque de Mangle"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,168,0,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Estero"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,255,84,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Eucaliptos"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,255,168,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Industrial"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="255,0,0,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Laguna"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,255,168,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Matorrales"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="220,190,190,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Pecuario"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="255,0,180,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Salinera"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,84,0,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Suelos Desnudos"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="0,255,255,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Urbano"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('sequia', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="244,244,111,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value=""/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="153,102,0,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('industrial', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="153,153,153,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value=""/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('sedimentos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="204,204,204,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value=""/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('deforestacion', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="255,153,102,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value=""/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('riesgos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend"/>
+    <property key="fieldNames" value="Tipo"/>
+    <property key="fieldTypes" value="12"/>
+    <property key="ownOrder" value="false"/>
+    <property key="orders" value=""/>
+    <property key="colorScheme" value="0\,0\,0\,255 ,0\,84\,0\,255 ,0\,84\,0\,255 ,0\,168\,0\,255 ,0\,168\,0\,255 ,0\,255\,0\,255 ,0\,255\,0\,255 ,0\,255\,84\,255 ,0\,255\,84\,255 ,0\,255\,168\,255 ,0\,255\,168\,255 ,0\,255\,255\,255 ,0\,255\,255\,255 ,0\,0\,255\,255 ,0\,0\,255\,255 ,128\,0\,255\,255 ,128\,0\,255\,255 ,255\,0\,220\,255 ,255\,0\,220\,255 ,255\,0\,180\,255 ,255\,0\,180\,255 ,255\,0\,128\,255 ,255\,0\,128\,255 ,255\,0\,64\,255 ,255\,0\,64\,255 ,255\,0\,0\,255 ,255\,0\,0\,255 ,220\,190\,190\,255 ,223\,190\,190\,255 ,220\,220\,220\,255 ,220\,220\,220\,255 ,255\,255\,255\,255 ,255\,255\,255\,255"/>
+    <property key="labelfield"/>
+    <property key="labelFieldHeight"/>
+    <property key="labelFieldRotation"/>
+    <property key="useDefaultSymbol" value="false"/>
+    <property key="numKeys" value="3"/>
+    <property key="tipoValueKeys" value="com.hardcode.gdbms.engine.values.NullValue"/>
+    <property key="keys" value="Deslizamiento ,Incendios ,Inundacion"/>
+    <property key="values" value="Deslizamiento ,Incendios ,Inundacion"/>
+    <property key="typeKeys" value="-1 ,-1 ,-1"/>
+    <property key="typeValues" value="-1 ,-1 ,-1"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="60,235,235,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Por defecto"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="96,75,44,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Deslizamiento"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="255,153,0,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Incendios"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="51,51,255,255"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc" value="Inundacion"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="128,128,128,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="1.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('cuenca', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+        <property key="color" value="204,255,204,135"/>
+        <property key="hasFill" value="true"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="unit" value="-1"/>
+        <property key="hasOutline" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="desc"/>
+            <property key="unit" value="-1"/>
+            <property key="referenceSystem" value="0"/>
+            <property key="color" value="102,102,0,255"/>
+            <xml-tag>
+                <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+                <property key="desc"/>
+                <property key="lineWidth" value="3.0"/>
+                <property key="dashPhase" value="0.0"/>
+                <property key="endCap" value="0"/>
+                <property key="lineJoin" value="2"/>
+                <property key="miterLimit" value="10.0"/>
+                <property key="offset" value="0.0"/>
+                <property key="unit" value="0"/>
+            </xml-tag>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('municipios', 'PMF', 'gvl', '<?xml version="1.0" encoding="UTF-8"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <property key="labelFieldName"/>
+    <property key="labelHeightFieldName"/>
+    <property key="labelRotationFieldName"/>
+    <property key="followHeaderEncoding" value="true"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.v02.FSymbol"/>
+        <property key="m_symbolType" value="4"/>
+        <property key="m_Style" value="1"/>
+        <property key="m_useOutline" value="true"/>
+        <property key="m_Color" value="255,255,204,205"/>
+        <property key="m_outlineColor" value="0,0,0,205"/>
+        <property key="m_bUseFontSize" value="true"/>
+        <property key="m_bDrawShape" value="true"/>
+        <property key="m_Size" value="2"/>
+        <property key="m_Rotation" value="0"/>
+        <property key="m_LinePattern" value="0"/>
+        <property key="m_stroke" value="1.0"/>
+        <property key="m_bUseSize" value="false"/>
+        <property key="m_AlingVert" value="0"/>
+        <property key="m_AlingHoriz" value="0"/>
+        <property key="m_Descrip"/>
+        <property key="rgb" value="-13882079"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('paises_vecinos', 'PMF', 'gvl', '<?xml version="1.0" encoding="UTF-8"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <property key="labelFieldName" value="DEFINICION"/>
+    <property key="labelHeightFieldName"/>
+    <property key="labelRotationFieldName"/>
+    <property key="followHeaderEncoding" value="true"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.v02.FSymbol"/>
+        <property key="m_symbolType" value="4"/>
+        <property key="m_Style" value="1"/>
+        <property key="m_useOutline" value="true"/>
+        <property key="m_Color" value="204,255,204,255"/>
+        <property key="m_outlineColor" value="7,19,6,255"/>
+        <property key="fontname" value="SansSerif"/>
+        <property key="fontstyle" value="0"/>
+        <property key="m_FontSize" value="14.0"/>
+        <property key="m_FontColor" value="0,0,0,255"/>
+        <property key="m_bUseFontSize" value="true"/>
+        <property key="m_bDrawShape" value="true"/>
+        <property key="m_Size" value="2"/>
+        <property key="m_Rotation" value="0"/>
+        <property key="m_LinePattern" value="0"/>
+        <property key="m_stroke" value="1.0"/>
+        <property key="m_bUseSize" value="false"/>
+        <property key="m_AlingVert" value="0"/>
+        <property key="m_AlingHoriz" value="0"/>
+        <property key="m_Descrip"/>
+        <property key="rgb" value="-16313594"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('interes_turistico', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
         <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
         <property key="desc"/>
         <property key="isShapeVisible" value="true"/>
-        <property key="color" value="255,153,51,255"/>
+        <property key="color" value="0,102,102,255"/>
         <property key="rotation" value="0.0"/>
         <property key="offsetX" value="0.0"/>
         <property key="offsetY" value="0.0"/>
-        <property key="size" value="8.0"/>
+        <property key="size" value="6.0"/>
         <property key="outline" value="false"/>
         <property key="unit" value="-1"/>
         <property key="referenceSystem" value="0"/>
-        <property key="markerStyle" value="1"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('precipitacion', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="26,222,242,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
+') UNION SELECT
+('precipitacion1', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="120,122,182,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
 ');

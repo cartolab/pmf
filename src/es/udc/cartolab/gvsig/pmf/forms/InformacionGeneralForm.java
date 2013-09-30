@@ -6,12 +6,12 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.tables.handler.AlphanumericTableHandler;
 
 @SuppressWarnings("serial")
-public class ViviendasForm extends BasicAbstractForm {
+public class InformacionGeneralForm extends BasicAbstractForm {
 
-    public static final String NAME = "viviendas";
+    public static final String NAME = "informacion_general";
     public static final String PKFIELD = "cod_viv";
 
-    public ViviendasForm(FLyrVect layer) {
+    public InformacionGeneralForm(FLyrVect layer) {
 	super(layer);
 
 	addTableHandler(new AlphanumericTableHandler("pesca_capturas",

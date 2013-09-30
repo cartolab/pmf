@@ -25,7 +25,7 @@ import es.udc.cartolab.gvsig.pmf.commongui.SaveFileDialog;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -218,11 +218,11 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 			+ "Disponibilidad de la mano de obra contratada (cantidad);"
 			+ "Disponibilidad de la mano de obra contratada (período);\n");
 	try {
-	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME };
+	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA };
-	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
-		    "b." + ViviendasForm.PKFIELD };
+	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,
+		    "b." + InformacionGeneralForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "b.area_tot", "b.area_cul",
 		    "b.p_riego", "b.p_huerto", "b.p_coc_mejo", "b.p_filtroag",
 		    "b.p_galline", "b.fam_cant", "b.fam_per", "b.con_cant",
@@ -244,16 +244,16 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		"Nombre del productor/a;Nombre de la comunidad;Nombre del municipio;Área total de la finca en Mz;"
 			+ "Área para cultivos en Mz;Tipo de cultivo;Área de cultivo;\n");
 	try {
-	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME,
+	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME,
 		    ComunidadesForm.NAME, CultivosForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA, PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA };
-	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
-		    "b." + ViviendasForm.PKFIELD,
+	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,
+		    "b." + InformacionGeneralForm.PKFIELD,
 		    "a." + ComunidadesForm.PKFIELD,
 		    "c." + ComunidadesForm.PKFIELD,
-		    "a." + ViviendasForm.PKFIELD, "d." + ViviendasForm.PKFIELD };
+		    "a." + InformacionGeneralForm.PKFIELD, "d." + InformacionGeneralForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "c.nombre", "c.municip",
 		    "b.area_tot", "b.area_cul", "d.tipo", "d.area" };
 	    String[][] values = session.getTableWithJoin(tableNames, schemas,
@@ -274,12 +274,12 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 			+ "Tiene sistema de riego;Tipo de prácticas conservacionistas;Tipo de abono orgánico;"
 			+ "Tipo de insecticidas orgánicos;Tipo de plaguicidas químicas;\n");
 	try {
-	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME,
+	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME,
 		    ComunidadesForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA, PmfConstants.DATA_SCHEMA };
-	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
-		    "b." + ViviendasForm.PKFIELD,
+	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,
+		    "b." + InformacionGeneralForm.PKFIELD,
 		    "a." + ComunidadesForm.PKFIELD,
 		    "c." + ComunidadesForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "c.nombre", "c.municip",
@@ -301,11 +301,11 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	StringBuffer str = new StringBuffer(
 		"Nombre productor;Nombre comunidad;Area Cultivos;\n");
 	try {
-	    String[] tableNames = { ViviendasForm.NAME, ParcelasForm.NAME };
+	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA };
-	    String[] joinFields = { "a." + ViviendasForm.PKFIELD,
-		    "b." + ViviendasForm.PKFIELD };
+	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,
+		    "b." + InformacionGeneralForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "a.nom_com", "b.area_cul" };
 	    String[][] values = session.getTableWithJoin(tableNames, schemas,
 		    joinFields, fields, "", new String[0], false);

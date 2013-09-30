@@ -21,7 +21,7 @@ import es.udc.cartolab.gvsig.pmf.forms.OrganizacionesBaseForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.forms.PescaCapturasForm;
 import es.udc.cartolab.gvsig.pmf.forms.PresenciaInstitucionalForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 
 public class PmfFormFactory extends DBConnectionBaseFormFactory {
 
@@ -35,7 +35,7 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 	mainFormNames.add(CentrosReunionesForm.NAME);
 	mainFormNames.add(CentrosSaludForm.NAME);
 	mainFormNames.add(ParcelasForm.NAME);
-	mainFormNames.add(ViviendasForm.NAME);
+	mainFormNames.add(InformacionGeneralForm.NAME);
 	mainFormNames.add(LimitesParcelaForm.NAME);
 	mainFormNames.add(FuentesComunitariasForm.NAME);
 	instance = new PmfFormFactory();
@@ -69,8 +69,8 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 		return new FuentesComunitariasForm(layer);
 	    } else if (layer.getName().equals(LimitesParcelaForm.NAME)) {
 		return new LimitesParcelaForm(layer);
-	    } else if (layer.getName().equals(ViviendasForm.NAME)) {
-		return new ViviendasForm(layer);
+	    } else if (layer.getName().equals(InformacionGeneralForm.NAME)) {
+		return new InformacionGeneralForm(layer);
 	    }
 	}
 	return null;

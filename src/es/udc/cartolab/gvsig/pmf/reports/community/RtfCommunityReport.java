@@ -45,7 +45,7 @@ import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
 import es.udc.cartolab.gvsig.pmf.forms.OrganizacionesBaseForm;
 import es.udc.cartolab.gvsig.pmf.forms.PresenciaInstitucionalForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.reports.RtfBaseReport;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
@@ -414,9 +414,9 @@ public class RtfCommunityReport extends RtfBaseReport {
 	try {
 	    String[] vivCods = session
 		    .getDistinctValues(
-			    ViviendasForm.NAME,
+			    InformacionGeneralForm.NAME,
 			    PmfConstants.DATA_SCHEMA,
-			    ViviendasForm.PKFIELD,
+			    InformacionGeneralForm.PKFIELD,
 			    false,
 			    false,
 			    "WHERE "
@@ -429,7 +429,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 
 	    // Farming table
 	    Table table = getFieldsTable(CultivosForm.NAME,
-		    ViviendasForm.PKFIELD, vivCods, cultivosFieldNames,
+		    InformacionGeneralForm.PKFIELD, vivCods, cultivosFieldNames,
 		    cultivosBoolFieldNames, cultivosFieldHeaders);
 	    document.add(table);
 	} catch (SQLException e) {

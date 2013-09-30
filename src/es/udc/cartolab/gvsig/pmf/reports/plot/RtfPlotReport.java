@@ -44,7 +44,7 @@ import com.lowagie.text.rtf.table.RtfCell;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosSaludForm;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.reports.RtfBaseReport;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
@@ -94,7 +94,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	    String[] fields = { "hay_ot_cul", "otrocan" };
 	    String[][] values = session.getTable(ParcelasForm.NAME,
 		    PmfConstants.DATA_SCHEMA, fields, "WHERE "
-			    + ViviendasForm.PKFIELD + " = '" + codViv + "'",
+			    + InformacionGeneralForm.PKFIELD + " = '" + codViv + "'",
 		    new String[0], false);
 	    if (values[0][0].equalsIgnoreCase("t")) {
 		String[] ot_cul_an = values[0][1].split(" *[,y] *");
@@ -120,7 +120,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	    String[] fields = { "hay_ot_sp", "otrocspe" };
 	    String[][] values = session.getTable(ParcelasForm.NAME,
 		    PmfConstants.DATA_SCHEMA, fields, "WHERE "
-			    + ViviendasForm.PKFIELD + " = '" + codViv + "'",
+			    + InformacionGeneralForm.PKFIELD + " = '" + codViv + "'",
 		    new String[0], false);
 	    if (values[0][0].equalsIgnoreCase("t")) {
 		String[] ot_cul_sp = values[0][1].split(" *[,y] *");
@@ -1217,7 +1217,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	String[] fields2 = { "hay_in_par" };
 	String[][] values = session.getTable(ParcelasForm.NAME,
 		PmfConstants.DATA_SCHEMA, fields2, "WHERE "
-			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
+			+ InformacionGeneralForm.PKFIELD + " = '" + codViv + "'",
 		new String[0], false);
 
 	sectionBody = new Paragraph();
@@ -1283,7 +1283,7 @@ public class RtfPlotReport extends RtfBaseReport {
 		"p_filtroag", "p_galline" };
 	String[][] values = session.getTable(ParcelasForm.NAME,
 		PmfConstants.DATA_SCHEMA, fields, "WHERE "
-			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
+			+ InformacionGeneralForm.PKFIELD + " = '" + codViv + "'",
 		new String[0], false);
 
 	// Section 2
@@ -1836,7 +1836,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	String[] fields2 = { "tipo", "area", "vol_prod" };
 	String[][] values2 = session.getTable(tableName,
 		PmfConstants.DATA_SCHEMA, fields2, "WHERE "
-			+ ViviendasForm.PKFIELD + " = '" + codViv + "'",
+			+ InformacionGeneralForm.PKFIELD + " = '" + codViv + "'",
 		new String[0], false);
 	for (String[] row : values2) {
 	    darkColor = !darkColor;

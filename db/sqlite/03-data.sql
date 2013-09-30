@@ -122,7 +122,7 @@ CREATE TABLE presencia_institucional (
 );
 
 
-CREATE TABLE viviendas (
+CREATE TABLE informacion_general (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
@@ -219,14 +219,14 @@ CREATE TABLE viviendas (
 
 );
 
-SELECT addgeometrycolumn('viviendas', 'geom', 32616, 'POINT', 2);
+SELECT addgeometrycolumn('informacion_general', 'geom', 32616, 'POINT', 2);
 
 
 CREATE TABLE pesca_capturas (
        gid INTEGER PRIMARY KEY,
        cod_viv VARCHAR
 	       NOT NULL
-	       REFERENCES viviendas(cod_viv)
+	       REFERENCES informacion_general(cod_viv)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        especie VARCHAR
 	       REFERENCES especie(item),
@@ -247,7 +247,7 @@ CREATE TABLE parcelas (
        cod_viv VARCHAR
 	       UNIQUE
 	       NOT NULL
-	       REFERENCES viviendas(cod_viv)
+	       REFERENCES informacion_general(cod_viv)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        legal_par VARCHAR
 	       REFERENCES legal_par(item),
@@ -351,7 +351,7 @@ CREATE TABLE limites_parcela (
        gid INTEGER PRIMARY KEY,
        cod_viv VARCHAR
 	       NOT NULL
-	       REFERENCES viviendas(cod_viv)
+	       REFERENCES informacion_general(cod_viv)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        cod_lim_p VARCHAR
 	       UNIQUE

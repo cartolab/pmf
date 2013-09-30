@@ -10,7 +10,7 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
-import es.udc.cartolab.gvsig.pmf.forms.ViviendasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.reports.community.SelectCommunityDialog;
 import es.udc.cartolab.gvsig.pmf.reports.plot.SelectPlotDialog;
 
@@ -49,7 +49,7 @@ public class ReportsExtension extends Extension {
 	    try {
 
 		FLyrVect layer = new TOCLayerManager()
-			.getLayerByName(ViviendasForm.NAME);
+			.getLayerByName(InformacionGeneralForm.NAME);
 
 		ReadableVectorial readable = layer.getSource();
 
