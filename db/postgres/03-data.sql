@@ -350,6 +350,9 @@ CREATE TABLE pmf.fuentes_comunitarias (
        codigo_fc VARCHAR
 	       UNIQUE
 	       NOT NULL,
+       cod_com VARCHAR
+	       NOT NULL
+	       REFERENCES pmf.comunidades(cod_com),
        x FLOAT,
        y FLOAT,
        z FLOAT

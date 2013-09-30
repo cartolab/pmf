@@ -32,6 +32,10 @@ public class ComunidadesForm extends BasicAbstractForm {
 	addTableHandler(new VectorialTableHandler(CentrosReunionesForm.NAME,
 		getWidgetComponents(), PKFIELD, CentrosReunionesForm.colNames,
 		CentrosReunionesForm.colAlias));
+	addTableHandler(new VectorialTableHandler(FuentesComunitariasForm.NAME,
+		getWidgetComponents(), PKFIELD,
+		FuentesComunitariasForm.colNames,
+		FuentesComunitariasForm.colAlias));
     }
 
     @Override

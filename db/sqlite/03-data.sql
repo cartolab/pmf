@@ -340,6 +340,10 @@ CREATE TABLE fuentes_comunitarias (
        codigo_fc VARCHAR
 	       UNIQUE
 	       NOT NULL,
+       cod_com VARCHAR
+	       NOT NULL
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        x FLOAT,
        y FLOAT,
        z FLOAT

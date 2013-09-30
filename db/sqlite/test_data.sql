@@ -33,5 +33,5 @@ INSERT INTO limites_parcela VALUES (1, 'test', '1', 0, 0, 0, GeomFromText('POINT
 INSERT INTO limites_parcela VALUES (2, 'test', '2', 0, 0, 0, GeomFromText('POINT (60 20)', 32616));
 
 
-INSERT INTO fuentes_comunitarias VALUES (1, 'fc1', 0, 0, 0, GeomFromText('POINT (30 40)', 32616));
-INSERT INTO fuentes_comunitarias VALUES (2, 'fc2', 0, 0, 0, GeomFromText('POINT (50 40)', 32616));
+INSERT INTO fuentes_comunitarias VALUES (1, 'fc1', 'test1', 0, 0, 0, GeomFromText('POINT (30 40)', 32616));
+INSERT INTO fuentes_comunitarias VALUES (2, 'fc2', 'test2', 0, 0, 0, GeomFromText('POINT (50 40)', 32616));
