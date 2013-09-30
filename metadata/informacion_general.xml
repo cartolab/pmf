@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LAYER alias="viviendas">
+<LAYER alias="informacion_general">
        <TABLENAME>informacion_general</TABLENAME>
        <PRIMARYKEY>
 	<PKELEMENT>gid</PKELEMENT>
