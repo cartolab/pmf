@@ -265,7 +265,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 	Phrase phrase;
 	List list = getFieldsList(
 		CentrosReunionesForm.NAME,
-		CentrosReunionesForm.PKFIELD,
+		ComunidadesForm.PKFIELD,
 		source.getFieldValue(nRow,
 			source.getFieldIndexByName(ComunidadesForm.PKFIELD))
 			.toString(), creuFieldNames, creuBoolFieldNames,
@@ -365,7 +365,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 	sectionBody = new Paragraph();
 	list = getFieldsList(
 		CentrosEducativosForm.NAME,
-		CentrosEducativosForm.PKFIELD,
+		ComunidadesForm.PKFIELD,
 		source.getFieldValue(nRow,
 			source.getFieldIndexByName(ComunidadesForm.PKFIELD))
 			.toString(), ceduFieldNames, ceduBoolFieldNames,
@@ -387,7 +387,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 	sectionBody = new Paragraph();
 	list = getFieldsList(
 		CentrosSaludForm.NAME,
-		CentrosSaludForm.PKFIELD,
+		ComunidadesForm.PKFIELD,
 		source.getFieldValue(nRow,
 			source.getFieldIndexByName(ComunidadesForm.PKFIELD))
 			.toString(), csaludFieldNames, csaludBoolFieldNames,
@@ -429,8 +429,9 @@ public class RtfCommunityReport extends RtfBaseReport {
 
 	    // Farming table
 	    Table table = getFieldsTable(CultivosForm.NAME,
-		    InformacionGeneralForm.PKFIELD, vivCods, cultivosFieldNames,
-		    cultivosBoolFieldNames, cultivosFieldHeaders);
+		    InformacionGeneralForm.PKFIELD, vivCods,
+		    cultivosFieldNames, cultivosBoolFieldNames,
+		    cultivosFieldHeaders);
 	    document.add(table);
 	} catch (SQLException e) {
 	    // TODO Auto-generated catch block
