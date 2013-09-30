@@ -10,7 +10,6 @@
 	<classpathentry kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
 	<classpathentry kind="src" path="/libDriverManager"/>
-	<classpathentry kind="src" path="/extLoadData"/>
 	<classpathentry kind="src" path="/extCopyFeatures"/>
 	<classpathentry kind="src" path="/libCorePlugin"/>
 	<classpathentry kind="lib" path="lib/iText-2.1.5.jar"/>
