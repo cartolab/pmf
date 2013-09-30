@@ -760,11 +760,12 @@ public class RtfPlotReport extends RtfBaseReport {
 	    }
 
 	}
-	sectionBody.add(new Chunk(".\n\n\tLa vivienda de la familia es ",
-		normalTextFont));
+	sectionBody
+		.add(new Chunk(".\n\n\tLa vivienda de la familia consta como ",
+			normalTextFont));
 	if (!source
 		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
-		.toString().toLowerCase().contains("selecciona una opción")) {
+		.toString().toLowerCase().equals(" ")) {
 	    if (source
 		    .getFieldValue(nRow,
 			    source.getFieldIndexByName("estatus_vi"))
@@ -780,8 +781,28 @@ public class RtfPlotReport extends RtfBaseReport {
 			.toString().toLowerCase(), normalTextFont));
 	    }
 	} else {
-	    sectionBody.add(new Chunk(
-		    " [no se ha seleccionado ninguna opción]", normalTextFont));
+	    sectionBody.add(new Chunk("[no se ha seleccionado ninguna opción]",
+		    normalTextFont));
+	}
+	sectionBody.add(new Chunk(" y ", normalTextFont));
+	if (!source.getFieldValue(nRow, source.getFieldIndexByName("legal_vi"))
+		.toString().toLowerCase().equals(" ")) {
+	    if (source
+		    .getFieldValue(nRow, source.getFieldIndexByName("legal_vi"))
+		    .toString().toLowerCase().equals("otro")) {
+		sectionBody.add(new Chunk(source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("ot_legal_vi"))
+			.toString().toLowerCase(), normalTextFont));
+	    } else {
+		sectionBody.add(new Chunk(source
+			.getFieldValue(nRow,
+				source.getFieldIndexByName("legal_vi"))
+			.toString().toLowerCase(), normalTextFont));
+	    }
+	} else {
+	    sectionBody.add(new Chunk("[no se ha seleccionado ninguna opción]",
+		    normalTextFont));
 	}
 	if (source
 		.getFieldValue(nRow, source.getFieldIndexByName("estatus_vi"))
@@ -846,7 +867,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	table.addCell(cell);
 	if (!source
 		.getFieldValue(nRow, source.getFieldIndexByName("mat_pared"))
-		.toString().toLowerCase().contains("selecciona una opción")) {
+		.toString().toLowerCase().equals(" ")) {
 	    if (source
 		    .getFieldValue(nRow,
 			    source.getFieldIndexByName("mat_pared")).toString()
@@ -870,7 +891,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	table.addCell(cell);
 	if (!source
 		.getFieldValue(nRow, source.getFieldIndexByName("mat_techo"))
-		.toString().toLowerCase().contains("selecciona una opción")) {
+		.toString().toLowerCase().equals(" ")) {
 	    if (source
 		    .getFieldValue(nRow,
 			    source.getFieldIndexByName("mat_techo")).toString()
@@ -893,7 +914,7 @@ public class RtfPlotReport extends RtfBaseReport {
 	setCellColor(cell);
 	table.addCell(cell);
 	if (!source.getFieldValue(nRow, source.getFieldIndexByName("mat_piso"))
-		.toString().toLowerCase().contains("selecciona una opción")) {
+		.toString().toLowerCase().equals(" ")) {
 	    if (source
 		    .getFieldValue(nRow, source.getFieldIndexByName("mat_piso"))
 		    .toString().toLowerCase().equals("otro")) {
