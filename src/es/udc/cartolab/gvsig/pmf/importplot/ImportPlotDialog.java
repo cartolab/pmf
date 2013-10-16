@@ -14,15 +14,24 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
+import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
+import com.iver.cit.gvsig.fmap.core.IGeometry;
+import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+
+import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
+import es.udc.cartolab.gvsig.pmf.utils.EditLayerHelper;
 
 @SuppressWarnings("serial")
 public class ImportPlotDialog extends JPanel implements IWindow, ActionListener {
 
-    private static Logger logger = Logger.getLogger("ReportsExtension");
+    private static Logger logger = Logger.getLogger(ImportPlotDialog.class);
 
     /*
      * The next properties are the ones related to the interface itself, so they
@@ -39,6 +48,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
     private JComboBox originCombo = null;
     private JComboBox codComCombo = null;
     private JComboBox codVivCombo = null;
+
+    private FLyrVect targetLayer;
 
     public WindowInfo getWindowInfo() {
 	if (windowInfo == null) {
@@ -64,11 +75,12 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
     }
 
     public ImportPlotDialog(FLyrVect[] validLayers, String[] codComs,
-	    String[] codVivs) {
+	    String[] codVivs, FLyrVect targetLayer) {
 	super();
 	this.validLayers = validLayers;
 	this.codComs = codComs;
 	this.codVivs = codVivs;
+	this.targetLayer = targetLayer;
 	try {
 	    initialize();
 	} catch (Exception e) {
@@ -128,11 +140,57 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 
     public void actionPerformed(ActionEvent e) {
 	if (e.getSource() == okButton) {
-	    PluginServices.getMDIManager().closeWindow(this);
-	} else if (e.getSource() == cancelButton) {
-	    PluginServices.getMDIManager().closeWindow(this);
-	}
+	    String layerName = getComboboxValue(originCombo);
+	    String codViv = getComboboxValue(codVivCombo);
+	    String codCom = getComboboxValue(codComCombo);
 
+	    if (allNotNull(layerName, codViv, codCom)) {
+		FLyrVect layer = getValidLayer(layerName);
+		try {
+		    EditLayerHelper elh = new EditLayerHelper(targetLayer);
+		    final int[] indexes = elh.getIndexes(ParcelasForm.PKFIELD,
+			    ParcelasForm.CODCOM);
+		    final Value[] values = elh.getValues(codViv, codCom);
+		    final IGeometry geom = Points2Polygon.convexHull(layer);
+		    final IRow row = elh.getRow(geom, indexes, values);
+		    elh.addRowToLayer(row);
+		} catch (ReadDriverException rde) {
+		    NotificationManager.addWarning(PluginServices.getText(this,
+			    ""));
+		    logger.error(rde);
+		} catch (StopWriterVisitorException swve) {
+		    String message = String.format(
+			    PluginServices.getText(this, "error_saving_layer"),
+			    layerName);
+		    NotificationManager.addWarning(message);
+		    logger.error(swve);
+		}
+	    }
+	}
+	PluginServices.getMDIManager().closeWindow(this);
+    }
+
+    private String getComboboxValue(JComboBox combo) {
+	Object selectedItem = combo.getSelectedItem();
+	if (selectedItem instanceof String
+		&& (selectedItem).toString().trim().length() > 0) {
+	    return selectedItem.toString();
+	}
+	return null;
+    }
+
+    private boolean allNotNull(String layerName, String codViv, String codCom) {
+	return layerName == null ? false : codViv == null ? false
+		: codCom == null ? false : true;
+    }
+
+    private FLyrVect getValidLayer(String layerName) {
+	for (FLyrVect layer : validLayers) {
+	    if (layer.getName().equals(layerName)) {
+		return layer;
+	    }
+	}
+	throw new AssertionError("This should never happer");
     }
 
     public Object getWindowProfile() {
