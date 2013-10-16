@@ -27,6 +27,7 @@ public class ParcelasForm extends BasicAbstractForm {
     public static final String PKFIELD = "cod_viv";
     private static final String FCCBKEY = "codigo_fc";
     private static final String FCBTNKEY = "fc_button";
+    public static final String CODCOM = "cod_com";
     private JComboBox fcComboBox;
     private JButton fcButton;
     private AbstractForm fcForm = FormFactory
@@ -74,10 +75,12 @@ public class ParcelasForm extends BasicAbstractForm {
     public void actionPerformed(ActionEvent e) {
 	super.actionPerformed(e);
 	if (e.getSource() == fcComboBox) {
-	    if (((KeyValue) fcComboBox.getSelectedItem()).getKey() != null) {
-		fcButton.setEnabled(true);
-	    } else {
-		fcButton.setEnabled(false);
+	    if (fcComboBox.getSelectedItem() instanceof KeyValue) {
+		if (((KeyValue) fcComboBox.getSelectedItem()).getKey() != null) {
+		    fcButton.setEnabled(true);
+		} else {
+		    fcButton.setEnabled(false);
+		}
 	    }
 	} else {
 	    if (e.getSource() == fcButton) {
