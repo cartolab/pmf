@@ -9,5 +9,6 @@ public interface PmfConstants {
 	    + "gps-matching-files";
     public static final String GENERAL_MAP = "PMF";
     public static final String SQLITE_FILE = "pmf.sqlite";
+    public static final String TEMPLATE_FILE = "pmf.gvt";
 
 }
