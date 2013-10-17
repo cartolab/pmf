@@ -70,7 +70,7 @@
 		
 		<extension class-name="es.udc.cartolab.gvsig.pmf.OpenLayout" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
-				<action-tool icon="open-layout" tooltip="open-layout-tooltip"
+				<action-tool icon="layout-template-open" tooltip="open-layout-tooltip"
 					action-command="open-layout" position="18" />
 			</tool-bar>
 			<menu text="_pmf_menu_name/open-layout"
