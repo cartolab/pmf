@@ -1,5 +1,5 @@
-cod_creu=Identifica
-cod_com:substring(Identifica,0,8)
+cod_creu=name
+cod_com:substring(name,0,6)
 x:getX
 y:getY
-z=Altitud
+z=elev
