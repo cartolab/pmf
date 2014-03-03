@@ -146,12 +146,15 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 
 	    if (allNotNull(layerName, codViv, codCom)) {
 		FLyrVect layer = getValidLayer(layerName);
+
 		try {
+
 		    EditLayerHelper elh = new EditLayerHelper(targetLayer);
 		    final int[] indexes = elh.getIndexes(ParcelasForm.PKFIELD,
 			    ParcelasForm.CODCOM);
 		    final Value[] values = elh.getValues(codViv, codCom);
-		    final IGeometry geom = Points2Polygon.convexHull(layer);
+		    final IGeometry geom = Points2Polygon.toPolygon(layer,
+			    codViv);
 		    final IRow row = elh.getRow(geom, indexes, values);
 		    elh.addRowToLayer(row);
 		} catch (ReadDriverException rde) {
