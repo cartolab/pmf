@@ -61,7 +61,10 @@ public class EditLayerHelper {
 	    ReadDriverException, StopWriterVisitorException {
 
 	ToggleEditing te = new ToggleEditing();
-	te.startEditing(layer);
+	if (!layer.isEditing()) {
+	    te.startEditing(layer);
+	}
+
 	IEditableSource source = (IEditableSource) layer.getSource();
 
 	// VectorialLayerEdited layerEdited = (VectorialLayerEdited)
