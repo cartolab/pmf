@@ -1,4 +1,4 @@
-cod_lim_p=Identifica
+cod_lim_p=name
 x:getX
 y:getY
-z=Altitud
+z=elev
