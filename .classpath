@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/libFMap"/>
 	<classpathentry kind="src" path="/_fwAndami"/>
 	<classpathentry kind="src" path="/libGDBMS"/>
 	<classpathentry kind="lib" path="lib/jasperreports-4.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/guava-16.0.1.jar"/>
 	<classpathentry kind="src" path="/appgvSIG"/>
 	<classpathentry kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
@@ -34,5 +36,7 @@
 	<classpathentry kind="src" path="/elle"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extCAD"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" path="/libSpatialite"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
