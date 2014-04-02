@@ -24,6 +24,8 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
+import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
+
 @SuppressWarnings("serial")
 public class SelectCommunityDialog extends JPanel implements IWindow,
 	ActionListener {
@@ -37,8 +39,6 @@ public class SelectCommunityDialog extends JPanel implements IWindow,
      */
 
     private WindowInfo windowInfo = null;
-    private JButton cancelButton = null;
-    private JButton okButton = null;
 
     private JComboBox communityCombo = null;
 
@@ -111,17 +111,8 @@ public class SelectCommunityDialog extends JPanel implements IWindow,
 	dotsButton.addActionListener(this);
 	this.add(dotsButton, " wrap");
 
-	okButton = new JButton();
-	okButton.setText(PluginServices.getText(this, "Ok"));
-	okButton.addActionListener(this);
-
-	cancelButton = new JButton();
-	cancelButton.setText(PluginServices.getText(this, "Cancel"));
-	cancelButton.addActionListener(this);
-
-	this.add(okButton, "center, bottom, cell 1 2");
-	this.add(cancelButton, "center, bottom, cell 1 2");
-
+	AcceptCancelPanel acceptCancelPanel = new AcceptCancelPanel(this, this);
+	add(acceptCancelPanel, "dock south");
     }
 
     private void displayFileChooser() {
@@ -166,10 +157,10 @@ public class SelectCommunityDialog extends JPanel implements IWindow,
     public void actionPerformed(ActionEvent e) {
 	if (e.getSource() == dotsButton) {
 	    displayFileChooser();
-	} else if (e.getSource() == okButton) {
+	} else if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
 	    generateReport(directoryField.getText());
 	    PluginServices.getMDIManager().closeWindow(this);
-	} else if (e.getSource() == cancelButton) {
+	} else if (e.getActionCommand() == AcceptCancelPanel.CANCEL_ACTION_COMMAND) {
 	    PluginServices.getMDIManager().closeWindow(this);
 	}
 

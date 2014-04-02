@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.commongui;
+package es.udc.cartolab.gvsig.commons.ui;
 
 import java.io.File;
 import java.io.FileOutputStream;

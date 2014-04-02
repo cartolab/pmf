@@ -21,11 +21,12 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-import es.udc.cartolab.gvsig.pmf.commongui.SaveFileDialog;
+import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
+import es.udc.cartolab.gvsig.commons.ui.SaveFileDialog;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
-import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
+import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -52,8 +53,7 @@ public class SelectQueryDialog extends JPanel implements IWindow,
     private JTextField directoryField = null;
     private JButton dotsButton = null;
     private JComboBox queryCombo = null;
-    private JButton cancelButton = null;
-    private JButton okButton = null;
+
     private final DBSession session = DBSession.getCurrentSession();
 
     @Override
@@ -122,16 +122,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	dotsButton.addActionListener(this);
 	this.add(dotsButton, "center, bottom, cell 2 2");
 
-	okButton = new JButton();
-	okButton.setText(PluginServices.getText(this, "Ok"));
-	okButton.addActionListener(this);
-
-	cancelButton = new JButton();
-	cancelButton.setText(PluginServices.getText(this, "Cancel"));
-	cancelButton.addActionListener(this);
-
-	this.add(okButton, "center, bottom, cell 1 3");
-	this.add(cancelButton, "center, bottom, cell 1 3");
+	AcceptCancelPanel acceptCancelPanel = new AcceptCancelPanel(this, this);
+	add(acceptCancelPanel, "dock south");
     }
 
     private void displayFileChooser() {
@@ -197,10 +189,10 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 
 	if (e.getSource() == dotsButton) {
 	    displayFileChooser();
-	} else if (e.getSource() == okButton) {
+	} else if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
 	    processQuery(directoryField.getText());
 	    PluginServices.getMDIManager().closeWindow(this);
-	} else if (e.getSource() == cancelButton) {
+	} else if (e.getActionCommand() == AcceptCancelPanel.CANCEL_ACTION_COMMAND) {
 	    PluginServices.getMDIManager().closeWindow(this);
 	}
 
@@ -218,7 +210,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 			+ "Disponibilidad de la mano de obra contratada (cantidad);"
 			+ "Disponibilidad de la mano de obra contratada (período);\n");
 	try {
-	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME };
+	    String[] tableNames = { InformacionGeneralForm.NAME,
+		    ParcelasForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,
@@ -244,8 +237,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		"Nombre del productor/a;Nombre de la comunidad;Nombre del municipio;Área total de la finca en Mz;"
 			+ "Área para cultivos en Mz;Tipo de cultivo;Área de cultivo;\n");
 	try {
-	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME,
-		    ComunidadesForm.NAME, CultivosForm.NAME };
+	    String[] tableNames = { InformacionGeneralForm.NAME,
+		    ParcelasForm.NAME, ComunidadesForm.NAME, CultivosForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA, PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA };
@@ -253,7 +246,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		    "b." + InformacionGeneralForm.PKFIELD,
 		    "a." + ComunidadesForm.PKFIELD,
 		    "c." + ComunidadesForm.PKFIELD,
-		    "a." + InformacionGeneralForm.PKFIELD, "d." + InformacionGeneralForm.PKFIELD };
+		    "a." + InformacionGeneralForm.PKFIELD,
+		    "d." + InformacionGeneralForm.PKFIELD };
 	    String[] fields = { "a.nom_produ", "c.nombre", "c.municip",
 		    "b.area_tot", "b.area_cul", "d.tipo", "d.area" };
 	    String[][] values = session.getTableWithJoin(tableNames, schemas,
@@ -274,8 +268,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 			+ "Tiene sistema de riego;Tipo de prácticas conservacionistas;Tipo de abono orgánico;"
 			+ "Tipo de insecticidas orgánicos;Tipo de plaguicidas químicas;\n");
 	try {
-	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME,
-		    ComunidadesForm.NAME };
+	    String[] tableNames = { InformacionGeneralForm.NAME,
+		    ParcelasForm.NAME, ComunidadesForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA, PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,
@@ -301,7 +295,8 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	StringBuffer str = new StringBuffer(
 		"Nombre productor;Nombre comunidad;Area Cultivos;\n");
 	try {
-	    String[] tableNames = { InformacionGeneralForm.NAME, ParcelasForm.NAME };
+	    String[] tableNames = { InformacionGeneralForm.NAME,
+		    ParcelasForm.NAME };
 	    String[] schemas = { PmfConstants.DATA_SCHEMA,
 		    PmfConstants.DATA_SCHEMA };
 	    String[] joinFields = { "a." + InformacionGeneralForm.PKFIELD,

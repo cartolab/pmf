@@ -3,9 +3,9 @@ package es.udc.cartolab.gvsig.pmf.importplot;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.Vector;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +25,7 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.utils.EditLayerHelper;
 
@@ -39,11 +40,9 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
      */
 
     private WindowInfo windowInfo = null;
-    private JButton cancelButton = null;
-    private JButton okButton = null;
     private FLyrVect[] validLayers;
-    private String[] codComs;
-    private String[] codVivs;
+    private Collection<String> codComs;
+    private Collection<String> codVivs;
 
     private JComboBox originCombo = null;
     private JComboBox codComCombo = null;
@@ -74,8 +73,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	return windowInfo;
     }
 
-    public ImportPlotDialog(FLyrVect[] validLayers, String[] codComs,
-	    String[] codVivs, FLyrVect targetLayer) {
+    public ImportPlotDialog(FLyrVect[] validLayers, Collection<String> codComs,
+	    Collection<String> codVivs, FLyrVect targetLayer) {
 	super();
 	this.validLayers = validLayers;
 	this.codComs = codComs;
@@ -106,40 +105,21 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	label = new JLabel(PluginServices.getText(this, "Cod_com"));
 	this.add(label);
 
-	items = new Vector<String>();
-	for (String codCom : codComs) {
-	    items.add(codCom);
-	}
-
-	codComCombo = new JComboBox(items);
+	codComCombo = new JComboBox(codComs.toArray());
 	this.add(codComCombo, "wrap");
 
 	label = new JLabel(PluginServices.getText(this, "Cod_viv"));
 	this.add(label);
 
-	items = new Vector<String>();
-	for (String codViv : codVivs) {
-	    items.add(codViv);
-	}
-
-	codVivCombo = new JComboBox(items);
+	codVivCombo = new JComboBox(codVivs.toArray());
 	this.add(codVivCombo, "wrap");
 
-	okButton = new JButton();
-	okButton.setText(PluginServices.getText(this, "Ok"));
-	okButton.addActionListener(this);
-
-	cancelButton = new JButton();
-	cancelButton.setText(PluginServices.getText(this, "Cancel"));
-	cancelButton.addActionListener(this);
-
-	this.add(okButton, "center, bottom, cell 1 4");
-	this.add(cancelButton, "center, bottom, cell 1 4");
-
+	AcceptCancelPanel acceptCancelPanel = new AcceptCancelPanel(this, this);
+	add(acceptCancelPanel, "dock south");
     }
 
     public void actionPerformed(ActionEvent e) {
-	if (e.getSource() == okButton) {
+	if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
 	    String layerName = getComboboxValue(originCombo);
 	    String codViv = getComboboxValue(codVivCombo);
 	    String codCom = getComboboxValue(codComCombo);
