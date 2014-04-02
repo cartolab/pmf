@@ -7,13 +7,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.apache.log4j.Logger;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.ProjectExtension;
+import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
@@ -23,15 +27,24 @@ import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xml.XMLEncodingUtils;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
+import es.udc.cartolab.gvsig.pmf.SelectPlotLayoutDialog;
 
 public class LayoutWrapper {
     private static final int SCALE = 500;
+
+    private static Logger logger = Logger
+	    .getLogger(SelectPlotLayoutDialog.class);
+
+    private MapContext mapContext;
+
+    public LayoutWrapper(MapContext mapContext) {
+	this.mapContext = mapContext;
+    }
 
     /**
      * 
@@ -52,7 +65,7 @@ public class LayoutWrapper {
 		.getExtension(ProjectExtension.class)).getProject();
 	FileInputStream is = null;
 	Reader reader = null;
-	Layout layout;
+	Layout layout = null;
 	try {
 	    is = new FileInputStream(file);
 	    reader = XMLEncodingUtils.getReader(is);
@@ -63,11 +76,12 @@ public class LayoutWrapper {
 	    throw new AssertionError(
 		    "File not found - This should never happen");
 	} catch (MarshalException e) {
-	    throw new ExternalError("Error leyendo fichero de template", e);
+	    logger.error(e.getStackTrace(), e);
 	} catch (ValidationException e) {
-	    throw new ExternalError("Error leyendo fichero de template", e);
+	    logger.error(e.getStackTrace(), e);
 	} catch (OpenException e) {
-	    throw new ExternalError("Error leyendo fichero de template", e);
+	    e.printStackTrace();
+	    logger.error(e.getMessage());
 	} finally {
 	    try {
 		if (reader != null) {
@@ -77,7 +91,7 @@ public class LayoutWrapper {
 		    is.close();
 		}
 	    } catch (IOException e) {
-		throw new ExternalError("Error cerrando fichero de template", e);
+		logger.error(e.getStackTrace(), e);
 	    }
 	}
 	return layout;
@@ -101,57 +115,68 @@ public class LayoutWrapper {
 	PluginServices.getMDIManager().addWindow(layout);
     }
 
-    public void centerLayout(Layout layout) {
+    private void centerLayout(Layout layout) {
 	layout.getLayoutControl().getLayoutZooms();
 	layout.getLayoutControl().getLayoutFunctions();
     }
 
-    public void foo() {
-	View view = (View) PluginServices.getMDIManager().getActiveWindow();
-	zoom();
-	view.getMapControl().getMapContext().setScaleView(SCALE);
+    public Rectangle2D zoomTo(String plotCode) {
+	IGeometry plotGeom = getGeometry(plotCode);
+	Rectangle2D rectangle = zoomTo(plotGeom);
+	mapContext.setScaleView(SCALE);
+	return rectangle;
     }
 
-    public void zoom() {
-	Rectangle2D rectangle = null;
-	int pos = 0;
+    private IGeometry getGeometry(String plotCode) {
 	FLyrVect layer = new TOCLayerManager().getLayerByName("parcelas");
 	if (layer instanceof AlphanumericData) {
+	    ReadableVectorial source = (layer).getSource();
 	    try {
-		IGeometry g;
-		ReadableVectorial source = (layer).getSource();
 		source.start();
-		g = source.getShape(pos);
-		source.stop();
-
-		if (g != null) {
-		    /*
-		     * fix to avoid zoom problems when layer and view
-		     * projections aren't the same.
-		     */
-		    if (layer.getCoordTrans() != null) {
-			g.reProject(layer.getCoordTrans());
+		int nrows = source.getShapeCount();
+		for (int i = 0; i < nrows; i++) {
+		    Value attribute = source.getFeature(i).getAttribute(3);
+		    if (attribute.toString().equals(plotCode)) {
+			IGeometry plotGeom = source.getShape(i);
+			/*
+			 * fix to avoid zoom problems when layer and view
+			 * projections aren't the same.
+			 */
+			if ((layer.getCoordTrans() != null)
+				&& (plotGeom != null)) {
+			    plotGeom.reProject(layer.getCoordTrans());
+			}
+			return plotGeom;
 		    }
-		    rectangle = g.getBounds2D();
-		    if (rectangle.getWidth() < 200) {
-			rectangle.setFrameFromCenter(rectangle.getCenterX(),
-				rectangle.getCenterY(),
-				rectangle.getCenterX() + 100,
-				rectangle.getCenterY() + 100);
-		    }
-		    if (rectangle != null) {
-			layer.getMapContext().getViewPort()
-				.setExtent(rectangle);
-		    }
-		} else {
-		    System.out.println("algo");
 		}
 	    } catch (InitializeDriverException e) {
-		System.out.println("algo");
+		logger.error(e.getStackTrace(), e);
 	    } catch (ReadDriverException e) {
-		System.out.println("algo");
+		logger.error(e.getStackTrace(), e);
+	    } finally {
+		try {
+		    source.stop();
+		} catch (ReadDriverException e) {
+		    logger.error(e.getStackTrace(), e);
+		}
 	    }
 	}
+	return null;
     }
 
+    private Rectangle2D zoomTo(IGeometry plotGeom) {
+	Rectangle2D rectangle = null;
+	rectangle = plotGeom.getBounds2D();
+	if (rectangle.getWidth() < 200) {
+	    rectangle.setFrameFromCenter(rectangle.getCenterX(),
+		    rectangle.getCenterY(), rectangle.getCenterX() + 100,
+		    rectangle.getCenterY() + 100);
+	}
+	if (rectangle != null) {
+	    ViewPort viewPort = mapContext.getViewPort();
+	    viewPort.setExtent(rectangle);
+	    viewPort.refreshExtent();
+	}
+	return rectangle;
+    }
 }
