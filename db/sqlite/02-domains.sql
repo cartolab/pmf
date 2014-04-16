@@ -1,15 +1,17 @@
+
+
 CREATE TABLE tipo_cedu (
        item VARCHAR
 	       PRIMARY KEY
 
 );
 
-INSERT INTO tipo_cedu (item) SELECT
-       (' ') UNION SELECT
-       ('Kinder') UNION SELECT
-       ('Centro educativo básico') UNION SELECT
-       ('Centro educativo escolar') UNION SELECT
-       ('Centro educativo de ciclo común') UNION SELECT
+INSERT INTO tipo_cedu (item) VALUES
+       (' '),
+       ('Kinder'),
+       ('Centro educativo básico'),
+       ('Centro educativo escolar'),
+       ('Centro educativo de ciclo común'),
        ('Centro educativo diversificado');
 
 
@@ -20,9 +22,9 @@ CREATE TABLE tip_migra (
 
 );
 
-INSERT INTO tip_migra (item) SELECT
-       (' ') UNION SELECT
-       ('Temporal') UNION SELECT
+INSERT INTO tip_migra (item) VALUES
+       (' '),
+       ('Temporal'),
        ('Permanente');
 
 
@@ -33,9 +35,9 @@ CREATE TABLE mig_dest (
 
 );
 
-INSERT INTO mig_dest (item) SELECT
-       (' ') UNION SELECT
-       ('Nacional') UNION SELECT
+INSERT INTO mig_dest (item) VALUES
+       (' '),
+       ('Nacional'),
        ('Internacional');
 
 
@@ -46,11 +48,27 @@ CREATE TABLE estatus_vi (
 
 );
 
-INSERT INTO estatus_vi (item) SELECT
-       (' ') UNION SELECT
-       ('Propia') UNION SELECT
-       ('Alquilada') UNION SELECT
+INSERT INTO estatus_vi (item) VALUES
+       (' '),
+       ('Propia'),
+       ('Alquilada'),
        ('Otras');
+
+
+
+CREATE TABLE legal_vi (
+       item VARCHAR
+	       PRIMARY KEY
+
+);
+
+INSERT INTO legal_vi (item) VALUES
+       (' '),
+       ('Dominio pleno'),
+       ('Dominio útil'),
+       ('Herencia'),
+       ('Otro'),
+       ('En proceso de adquisición');
 
 
 
@@ -60,25 +78,10 @@ CREATE TABLE pro_vivsex (
 
 );
 
-INSERT INTO pro_vivsex (item) SELECT
-       (' ') UNION SELECT
-       ('Hombre') UNION SELECT
+INSERT INTO pro_vivsex (item) VALUES
+       (' '),
+       ('Hombre'),
        ('Mujer');
-
-
-
-CREATE TABLE mat_techo (
-       item VARCHAR
-	       PRIMARY KEY
-
-);
-
-INSERT INTO mat_techo (item) SELECT
-       (' ') UNION SELECT
-       ('Teja') UNION SELECT
-       ('Alucin') UNION SELECT
-       ('Manaca') UNION SELECT
-       ('Otros');
 
 
 
@@ -88,11 +91,26 @@ CREATE TABLE mat_pared (
 
 );
 
-INSERT INTO mat_pared (item) SELECT
-       (' ') UNION SELECT
-       ('Bahareque') UNION SELECT
-       ('Adobe') UNION SELECT
-       ('Ladrillo') UNION SELECT
+INSERT INTO mat_pared (item) VALUES
+       (' '),
+       ('Bahareque'),
+       ('Adobe'),
+       ('Ladrillo'),
+       ('Otros');
+
+
+
+CREATE TABLE mat_techo (
+       item VARCHAR
+	       PRIMARY KEY
+
+);
+
+INSERT INTO mat_techo (item) VALUES
+       (' '),
+       ('Teja'),
+       ('Alucin'),
+       ('Manaca'),
        ('Otros');
 
 
@@ -103,11 +121,11 @@ CREATE TABLE mat_piso (
 
 );
 
-INSERT INTO mat_piso (item) SELECT
-       (' ') UNION SELECT
-       ('Mosaico') UNION SELECT
-       ('Tierra') UNION SELECT
-       ('Cemento') UNION SELECT
+INSERT INTO mat_piso (item) VALUES
+       (' '),
+       ('Mosaico'),
+       ('Tierra'),
+       ('Cemento'),
        ('Otros');
 
 
@@ -118,11 +136,11 @@ CREATE TABLE pesca_venta_quien (
 
 );
 
-INSERT INTO pesca_venta_quien (item) SELECT
-       (' ') UNION SELECT
-       ('Intermediarios') UNION SELECT
-       ('Comunidades') UNION SELECT
-       ('Mercados locales') UNION SELECT
+INSERT INTO pesca_venta_quien (item) VALUES
+       (' '),
+       ('Intermediarios'),
+       ('Comunidades'),
+       ('Mercados locales'),
        ('Otros');
 
 
@@ -133,12 +151,12 @@ CREATE TABLE disp_desec (
 
 );
 
-INSERT INTO disp_desec (item) SELECT
-       (' ') UNION SELECT
-       ('Quema') UNION SELECT
-       ('Enterramiento') UNION SELECT
-       ('Reciclaje') UNION SELECT
-       ('Al mar') UNION SELECT
+INSERT INTO disp_desec (item) VALUES
+       (' '),
+       ('Quema'),
+       ('Enterramiento'),
+       ('Reciclaje'),
+       ('Al mar'),
        ('Otros');
 
 
@@ -149,13 +167,13 @@ CREATE TABLE especie (
 
 );
 
-INSERT INTO especie (item) SELECT
-       (' ') UNION SELECT
-       ('Pescado rojo') UNION SELECT
-       ('Pescado blanco') UNION SELECT
-       ('Camarón') UNION SELECT
-       ('Cangrejos') UNION SELECT
-       ('Rayas') UNION SELECT
+INSERT INTO especie (item) VALUES
+       (' '),
+       ('Pescado rojo'),
+       ('Pescado blanco'),
+       ('Camarón'),
+       ('Cangrejos'),
+       ('Rayas'),
        ('Otra');
 
 
@@ -166,13 +184,13 @@ CREATE TABLE legal_par (
 
 );
 
-INSERT INTO legal_par (item) SELECT
-       (' ') UNION SELECT
-       ('Dominio pleno') UNION SELECT
-       ('Dominio útil') UNION SELECT
-       ('Herencia') UNION SELECT
-       ('En proceso de adquisición') UNION SELECT
-       ('Otro');
+INSERT INTO legal_par (item) VALUES
+       (' '),
+       ('Dominio pleno'),
+       ('Dominio útil'),
+       ('Herencia'),
+       ('Otro'),
+       ('En proceso de adquisición');
 
 
 
@@ -182,9 +200,9 @@ CREATE TABLE pro_finsex (
 
 );
 
-INSERT INTO pro_finsex (item) SELECT
-       (' ') UNION SELECT
-       ('Hombre') UNION SELECT
+INSERT INTO pro_finsex (item) VALUES
+       (' '),
+       ('Hombre'),
        ('Mujer');
 
 
@@ -195,10 +213,10 @@ CREATE TABLE deg_suelo (
 
 );
 
-INSERT INTO deg_suelo (item) SELECT
-       (' ') UNION SELECT
-       ('Alta') UNION SELECT
-       ('Media') UNION SELECT
+INSERT INTO deg_suelo (item) VALUES
+       (' '),
+       ('Alta'),
+       ('Media'),
        ('Baja');
 
 
@@ -209,11 +227,11 @@ CREATE TABLE tip_suelo (
 
 );
 
-INSERT INTO tip_suelo (item) SELECT
-       (' ') UNION SELECT
-       ('Franco-Arenoso') UNION SELECT
-       ('Franco-Limoso') UNION SELECT
-       ('Franco-Arcilloso') UNION SELECT
+INSERT INTO tip_suelo (item) VALUES
+       (' '),
+       ('Franco-Arenoso'),
+       ('Franco-Limoso'),
+       ('Franco-Arcilloso'),
        ('Otros');
 
 
@@ -224,33 +242,34 @@ CREATE TABLE pendiente (
 
 );
 
-INSERT INTO pendiente (item) SELECT
-       (' ') UNION SELECT
-       ('0-7%') UNION SELECT
-       ('8-14%') UNION SELECT
-       ('15-21%') UNION SELECT
-       ('22-28%') UNION SELECT
-       ('29-35%') UNION SELECT
-       ('36-42%') UNION SELECT
+INSERT INTO pendiente (item) VALUES
+       (' '),
+       ('0-7%'),
+       ('8-14%'),
+       ('15-21%'),
+       ('22-28%'),
+       ('29-35%'),
+       ('36-42%'),
        ('>42%');
 
 
 
-CREATE TABLE cultivo_tipo (
+CREATE TABLE tipo (
        item VARCHAR
 	       PRIMARY KEY
 
 );
 
-INSERT INTO cultivo_tipo (item) SELECT
-       (' ') UNION SELECT
-       ('Maíz') UNION SELECT
-       ('Frijol') UNION SELECT
-       ('Maicillo') UNION SELECT
-       ('Hortalizas') UNION SELECT
-       ('Yuca') UNION SELECT
-       ('Otros anuales') UNION SELECT
-       ('Musáceas') UNION SELECT
-       ('Papaya') UNION SELECT
-       ('Pastos') UNION SELECT
+INSERT INTO tipo (item) VALUES
+       (' '),
+       ('Maíz'),
+       ('Frijol'),
+       ('Maicillo'),
+       ('Hortalizas'),
+       ('Yuca'),
+       ('Otros anuales'),
+       ('Musáceas'),
+       ('Papaya'),
+       ('Pastos'),
        ('Otros semipermanentes');
+
