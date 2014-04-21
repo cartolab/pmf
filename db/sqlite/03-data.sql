@@ -326,7 +326,7 @@ CREATE TABLE cultivos (
 	       NOT NULL
 	       REFERENCES parcelas(cod_viv)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
-       tipo VARCHAR
+       cultivo_tipo VARCHAR
 	       REFERENCES cultivo_tipo(item),
        area FLOAT,
        vol_prod FLOAT,

@@ -254,13 +254,13 @@ INSERT INTO pendiente (item) VALUES
 
 
 
-CREATE TABLE tipo (
+CREATE TABLE cultivo_tipo (
        item VARCHAR
 	       PRIMARY KEY
 
 );
 
-INSERT INTO tipo (item) VALUES
+INSERT INTO cultivo_tipo (item) VALUES
        (' '),
        ('Maíz'),
        ('Frijol'),
