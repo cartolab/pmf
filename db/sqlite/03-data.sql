@@ -1,3 +1,4 @@
+
 CREATE TABLE comunidades (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
@@ -19,7 +20,7 @@ CREATE TABLE comunidades (
 );
 
 SELECT addgeometrycolumn('comunidades', 'geom', 32616, 'POINT', 2);
-
+SELECT CreateSpatialIndex('comunidades','geom');
 
 CREATE TABLE centros_educativos (
        gid INTEGER PRIMARY KEY,
@@ -35,8 +36,8 @@ CREATE TABLE centros_educativos (
 	       REFERENCES tipo_cedu(item),
        n_ninhos INTEGER,
        n_ninhas INTEGER,
-       n_docentes INTEGER,
        i_deserc FLOAT,
+       n_docentes INTEGER,
        mer_escol VARCHAR(5) DEFAULT 'false',
        x FLOAT,
        y FLOAT,
@@ -45,7 +46,7 @@ CREATE TABLE centros_educativos (
 );
 
 SELECT addgeometrycolumn('centros_educativos', 'geom', 32616, 'POINT', 2);
-
+SELECT CreateSpatialIndex('centros_educativos','geom');
 
 CREATE TABLE centros_salud (
        gid INTEGER PRIMARY KEY,
@@ -70,7 +71,7 @@ CREATE TABLE centros_salud (
 );
 
 SELECT addgeometrycolumn('centros_salud', 'geom', 32616, 'POINT', 2);
-
+SELECT CreateSpatialIndex('centros_salud','geom');
 
 CREATE TABLE centros_reuniones (
        gid INTEGER PRIMARY KEY,
@@ -91,7 +92,25 @@ CREATE TABLE centros_reuniones (
 );
 
 SELECT addgeometrycolumn('centros_reuniones', 'geom', 32616, 'POINT', 2);
+SELECT CreateSpatialIndex('centros_reuniones','geom');
 
+CREATE TABLE fuentes_comunitarias (
+       gid INTEGER PRIMARY KEY,
+       cod_com VARCHAR
+	       NOT NULL
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
+       codigo_fc VARCHAR
+	       UNIQUE
+	       NOT NULL,
+       x FLOAT,
+       y FLOAT,
+       z FLOAT
+
+);
+
+SELECT addgeometrycolumn('fuentes_comunitarias', 'geom', 32616, 'POINT', 2);
+SELECT CreateSpatialIndex('fuentes_comunitarias','geom');
 
 CREATE TABLE organizaciones_base (
        gid INTEGER PRIMARY KEY,
@@ -162,7 +181,7 @@ CREATE TABLE informacion_general (
 	       REFERENCES estatus_vi(item),
        ot_stat_vi VARCHAR,
        legal_vi VARCHAR
-               REFERENCES legal_par(item),
+	       REFERENCES legal_vi(item),
        ot_legal_vi VARCHAR,
        pro_viv VARCHAR(5) DEFAULT 'false',
        pro_vivsex VARCHAR
@@ -170,12 +189,12 @@ CREATE TABLE informacion_general (
        x FLOAT,
        y FLOAT,
        z FLOAT,
-       mat_techo VARCHAR
-	       REFERENCES mat_techo(item),
-       ot_mat_te VARCHAR,
        mat_pared VARCHAR
 	       REFERENCES mat_pared(item),
        ot_mat_pa VARCHAR,
+       mat_techo VARCHAR
+	       REFERENCES mat_techo(item),
+       ot_mat_te VARCHAR,
        mat_piso VARCHAR
 	       REFERENCES mat_piso(item),
        ot_mat_pi VARCHAR,
@@ -221,7 +240,7 @@ CREATE TABLE informacion_general (
 );
 
 SELECT addgeometrycolumn('informacion_general', 'geom', 32616, 'POINT', 2);
-
+SELECT CreateSpatialIndex('informacion_general','geom');
 
 CREATE TABLE pesca_capturas (
        gid INTEGER PRIMARY KEY,
@@ -232,8 +251,8 @@ CREATE TABLE pesca_capturas (
        especie VARCHAR
 	       REFERENCES especie(item),
        especie_otra VARCHAR,
-       cantidad NUMERIC(5,2),
-       precio NUMERIC(5,2)
+       cantidad NUMERIC(6,2),
+       precio NUMERIC(6,2)
 
 );
 
@@ -318,7 +337,7 @@ CREATE TABLE parcelas (
 );
 
 SELECT addgeometrycolumn('parcelas', 'geom', 32616, 'MULTIPOLYGON', 2);
-
+SELECT CreateSpatialIndex('parcelas','geom');
 
 CREATE TABLE cultivos (
        gid INTEGER PRIMARY KEY,
@@ -334,23 +353,6 @@ CREATE TABLE cultivos (
 
 );
 
-
-CREATE TABLE fuentes_comunitarias (
-       gid INTEGER PRIMARY KEY,
-       codigo_fc VARCHAR
-	       UNIQUE
-	       NOT NULL,
-       cod_com VARCHAR
-	       NOT NULL
-	       REFERENCES comunidades(cod_com)
-	       ON UPDATE CASCADE ON DELETE CASCADE,
-       x FLOAT,
-       y FLOAT,
-       z FLOAT
-
-);
-
-SELECT addgeometrycolumn('fuentes_comunitarias', 'geom', 32616, 'POINT', 2);
 
 CREATE TABLE limites_parcela (
        gid INTEGER PRIMARY KEY,
@@ -368,3 +370,4 @@ CREATE TABLE limites_parcela (
 );
 
 SELECT addgeometrycolumn('limites_parcela', 'geom', 32616, 'POINT', 2);
+SELECT CreateSpatialIndex('limites_parcela','geom');
