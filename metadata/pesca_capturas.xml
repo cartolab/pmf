@@ -25,7 +25,7 @@
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>especie</COMPONENT>
-				<VALUE>otra</VALUE>
+				<VALUE>Otra</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>

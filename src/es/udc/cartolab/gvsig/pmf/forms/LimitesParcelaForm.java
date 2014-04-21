@@ -8,9 +8,6 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 public class LimitesParcelaForm extends BasicAbstractForm {
 
     public static final String NAME = "limites_parcela";
-    public static String[] colNames = { "" };
-    public static String[] colAlias = { "" };
-
     public LimitesParcelaForm(FLyrVect layer) {
 	super(layer);
     }
