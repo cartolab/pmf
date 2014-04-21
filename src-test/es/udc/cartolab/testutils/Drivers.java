@@ -1,12 +1,16 @@
 package es.udc.cartolab.testutils;
+
 import java.io.File;
 
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
+import es.udc.cartolab.cit.gvsig.fmap.drivers.jdbc.spatialite.SpatiaLiteDriver;
+
 public class Drivers {
 
     public static void initgvSIGDrivers(String driversPath) {
-
+	new SpatiaLiteDriver(false, TestProperties.driversPath.replace(
+		"/drivers", "/lib/"));
 	throwIfPathNotExists(driversPath);
 	initgvSIGReadDrivers(driversPath);
 	initgvSIGWriteDrivers(driversPath);

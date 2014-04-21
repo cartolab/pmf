@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 
-import es.udc.cartolab.cit.gvsig.fmap.drivers.jdbc.spatialite.SpatiaLiteDriver;
 import es.udc.cartolab.gvsig.users.utils.DBSessionSpatiaLite;
 import es.udc.cartolab.testutils.Drivers;
 import es.udc.cartolab.testutils.TestProperties;
@@ -21,8 +20,6 @@ public class DAOTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-	new SpatiaLiteDriver(false, TestProperties.driversPath.replace(
-		"/drivers", "/lib/"));
 	Drivers.initgvSIGDrivers(TestProperties.driversPath);
 	String sqliteFile = PmfConstants.SQLITE_FILE;
 	DBSessionSpatiaLite.createConnection(sqliteFile);
