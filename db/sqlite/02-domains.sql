@@ -52,7 +52,7 @@ INSERT INTO estatus_vi (item) VALUES
        (' '),
        ('Propia'),
        ('Alquilada'),
-       ('Otras');
+       ('Otro');
 
 
 
@@ -157,7 +157,7 @@ INSERT INTO disp_desec (item) VALUES
        ('Enterramiento'),
        ('Reciclaje'),
        ('Al mar'),
-       ('Otros');
+       ('Otro');
 
 
 
