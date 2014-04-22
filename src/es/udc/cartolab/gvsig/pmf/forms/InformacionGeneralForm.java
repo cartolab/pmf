@@ -10,6 +10,8 @@ public class InformacionGeneralForm extends BasicAbstractForm {
 
     public static final String NAME = "informacion_general";
     public static final String PKFIELD = "cod_viv";
+    public static final String[] colNames = {"cod_viv", "nom_produ"};
+    public static final String[] colAlias = {"Código Vivienda", "Nombre Productor/a"};
 
     public InformacionGeneralForm(FLyrVect layer) {
 	super(layer);

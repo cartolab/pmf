@@ -94,54 +94,6 @@ CREATE TABLE centros_reuniones (
 SELECT addgeometrycolumn('centros_reuniones', 'geom', 32616, 'POINT', 2);
 SELECT CreateSpatialIndex('centros_reuniones','geom');
 
-CREATE TABLE fuentes_comunitarias (
-       gid INTEGER PRIMARY KEY,
-       cod_com VARCHAR
-	       NOT NULL
-	       REFERENCES comunidades(cod_com)
-	       ON UPDATE CASCADE ON DELETE CASCADE,
-       codigo_fc VARCHAR
-	       UNIQUE
-	       NOT NULL,
-       x FLOAT,
-       y FLOAT,
-       z FLOAT
-
-);
-
-SELECT addgeometrycolumn('fuentes_comunitarias', 'geom', 32616, 'POINT', 2);
-SELECT CreateSpatialIndex('fuentes_comunitarias','geom');
-
-CREATE TABLE organizaciones_base (
-       gid INTEGER PRIMARY KEY,
-       cod_com VARCHAR
-	       NOT NULL
-	       REFERENCES comunidades(cod_com)
-	       ON UPDATE CASCADE ON DELETE CASCADE,
-       org_exist VARCHAR
-	       UNIQUE
-	       NOT NULL,
-       func VARCHAR,
-       resp VARCHAR
-
-);
-
-
-CREATE TABLE presencia_institucional (
-       gid INTEGER PRIMARY KEY,
-       cod_com VARCHAR
-	       NOT NULL
-	       REFERENCES comunidades(cod_com)
-	       ON UPDATE CASCADE ON DELETE CASCADE,
-       org_exist VARCHAR
-	       UNIQUE
-	       NOT NULL,
-       func VARCHAR,
-       resp VARCHAR
-
-);
-
-
 CREATE TABLE informacion_general (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
@@ -257,17 +209,63 @@ CREATE TABLE pesca_capturas (
 );
 
 
-CREATE TABLE parcelas (
+CREATE TABLE fuentes_comunitarias (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
 	       REFERENCES comunidades(cod_com)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
+       codigo_fc VARCHAR
+	       UNIQUE
+	       NOT NULL,
+       x FLOAT,
+       y FLOAT,
+       z FLOAT
+
+);
+
+SELECT addgeometrycolumn('fuentes_comunitarias', 'geom', 32616, 'POINT', 2);
+SELECT CreateSpatialIndex('fuentes_comunitarias','geom');
+
+CREATE TABLE organizaciones_base (
+       gid INTEGER PRIMARY KEY,
+       cod_com VARCHAR
+	       NOT NULL
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
+       org_exist VARCHAR
+	       UNIQUE
+	       NOT NULL,
+       func VARCHAR,
+       resp VARCHAR
+
+);
+
+
+CREATE TABLE presencia_institucional (
+       gid INTEGER PRIMARY KEY,
+       cod_com VARCHAR
+	       NOT NULL
+	       REFERENCES comunidades(cod_com)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
+       org_exist VARCHAR
+	       UNIQUE
+	       NOT NULL,
+       func VARCHAR,
+       resp VARCHAR
+
+);
+
+
+CREATE TABLE parcelas (
+       gid INTEGER PRIMARY KEY,
+       cod_com VARCHAR
+	       NOT NULL
+	       ON UPDATE CASCADE ON DELETE CASCADE,
        nom_com VARCHAR,
        cod_viv VARCHAR
 	       UNIQUE
 	       NOT NULL
-	       REFERENCES informacion_general(cod_viv)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        legal_par VARCHAR
 	       REFERENCES legal_par(item),
@@ -357,9 +355,7 @@ CREATE TABLE cultivos (
 CREATE TABLE limites_parcela (
        gid INTEGER PRIMARY KEY,
        cod_viv VARCHAR
-	       NOT NULL
-	       REFERENCES informacion_general(cod_viv)
-	       ON UPDATE CASCADE ON DELETE CASCADE,
+	       NOT NULL,
        cod_lim_p VARCHAR
 	       UNIQUE
 	       NOT NULL,
