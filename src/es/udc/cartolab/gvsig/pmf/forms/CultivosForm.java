@@ -7,11 +7,17 @@ public class CultivosForm extends AbstractSubForm {
 
     public static final String NAME = "cultivos";
     public static String[] colNames = {
-"tipo", "area", "vol_prod", "vol_con"
+"cultivo", "area", "vol_prod", "vol_con"
     };
     public static String[] colAlias = {
 "Tipo", "Area", "Producido", "Consumido"
     };
+	
+	@Override
+    protected String getPrimaryKeyValue() {
+	return getFormController().getValue(PKFIELD);
+    }
+    
     @Override
     protected String getBasicName() {
 	return NAME;

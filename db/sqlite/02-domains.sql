@@ -254,22 +254,47 @@ INSERT INTO pendiente (item) VALUES
 
 
 
-CREATE TABLE cultivo_tipo (
+CREATE TABLE cultivo (
        item VARCHAR
 	       PRIMARY KEY
 
 );
 
-INSERT INTO cultivo_tipo (item) VALUES
+INSERT INTO cultivo (item) VALUES
        (' '),
-       ('Maíz'),
+       ('Aves Criollas'),
+       ('Ayote'),
+       ('Camote'),
+       ('Chile'),
+       ('Limón'),
        ('Frijol'),
+       ('Guayaba'),
        ('Maicillo'),
-       ('Hortalizas'),
-       ('Yuca'),
-       ('Otros anuales'),
+       ('Maíz'),
+       ('Marañón'),
+       ('Miel'),
        ('Musáceas'),
        ('Papaya'),
        ('Pastos'),
-       ('Otros semipermanentes');
+       ('Sandía'),
+       ('Yuca'),
+       ('Hortalizas'),
+       ('Otros anuales'),
+       ('Otros semipermanentes'),
+       ('Otros');
+
+
+
+CREATE TABLE tipo_cultivo (
+       item VARCHAR
+	       PRIMARY KEY
+
+);
+
+INSERT INTO tipo_cultivo (item) VALUES
+       (' '),
+       ('Granos básicos'),
+       ('Hortícola'),
+       ('Frutales'),
+       ('Otros');
 
