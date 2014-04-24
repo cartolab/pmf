@@ -261,12 +261,16 @@ CREATE TABLE parcelas (
        gid INTEGER PRIMARY KEY,
        cod_com VARCHAR
 	       NOT NULL
+	       REFERENCES comunidades(cod_com)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        nom_com VARCHAR,
        cod_viv VARCHAR
-	       UNIQUE
 	       NOT NULL
+	       REFERENCES informacion_general(cod_viv)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
+       cod_parcela VARCHAR
+	       UNIQUE
+	       NOT NULL,
        legal_par VARCHAR
 	       REFERENCES legal_par(item),
        ot_legal_p VARCHAR,
@@ -339,9 +343,9 @@ SELECT CreateSpatialIndex('parcelas','geom');
 
 CREATE TABLE cultivos (
        gid INTEGER PRIMARY KEY,
-       cod_viv VARCHAR
+       cod_parcela VARCHAR
 	       NOT NULL
-	       REFERENCES parcelas(cod_viv)
+	       REFERENCES parcelas(cod_parcela)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        cultivo VARCHAR
 	       REFERENCES cultivo(item),
@@ -354,7 +358,7 @@ CREATE TABLE cultivos (
 
 CREATE TABLE limites_parcela (
        gid INTEGER PRIMARY KEY,
-       cod_viv VARCHAR
+       cod_parcela VARCHAR
 	       NOT NULL,
        cod_lim_p VARCHAR
 	       UNIQUE

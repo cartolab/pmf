@@ -7,7 +7,7 @@
 
        <RECORDSET>
        	    <FIELD>
-		<FIELDNAME>cod_viv</FIELDNAME>
+		<FIELDNAME>cod_parcela</FIELDNAME>
 		<VALIDATIONRULE>MANDATORY</VALIDATIONRULE>
 	    </FIELD>
        	    <FIELD>

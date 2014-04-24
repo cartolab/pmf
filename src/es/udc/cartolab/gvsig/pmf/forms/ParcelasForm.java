@@ -24,7 +24,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 public class ParcelasForm extends BasicAbstractForm {
 
     public static final String NAME = "parcelas";
-    public static final String PKFIELD = "cod_viv";
+    public static final String PKFIELD = "cod_parcela";
     private static final String FCCBKEY = "codigo_fc";
     private static final String FCBTNKEY = "fc_button";
     public static final String CODCOM = "cod_com";

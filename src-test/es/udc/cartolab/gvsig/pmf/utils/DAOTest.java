@@ -28,22 +28,22 @@ public class DAOTest {
     @Test
     public void getCommunityCodes() throws DBException, SQLException {
 	Collection<String> expected = new ArrayList<String>();
-	Collections.addAll(expected, "000001", "000002");
+	Collections.addAll(expected, "1", "2");
 	assertEquals(expected, DAO.getCommunityCodes());
     }
 
     @Test
     public void getPlotCodes() throws SQLException {
 	Collection<String> expected = new ArrayList<String>();
-	Collections.addAll(expected, "01");
-	final String comCode = "000001";
+	Collections.addAll(expected, "110", "120");
+	final String comCode = "1";
 	assertEquals(expected, DAO.getPlotCodes(comCode));
     }
 
     @Test
     public void getHousingCodes() throws SQLException {
 	Collection<String> expected = new ArrayList<String>();
-	Collections.addAll(expected, "01");
+	Collections.addAll(expected, "1", "2");
 	assertEquals(expected, DAO.getHousingCodes());
     }
 }
