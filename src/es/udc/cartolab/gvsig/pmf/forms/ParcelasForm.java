@@ -1,9 +1,7 @@
 package es.udc.cartolab.gvsig.pmf.forms;
 
 import java.awt.event.ActionEvent;
-import java.sql.SQLException;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -17,8 +15,6 @@ import es.icarto.gvsig.navtableforms.BasicAbstractForm;
 import es.icarto.gvsig.navtableforms.gui.tables.handler.AlphanumericTableHandler;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.KeyValue;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
-import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
-import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
 public class ParcelasForm extends BasicAbstractForm {
@@ -41,22 +37,9 @@ public class ParcelasForm extends BasicAbstractForm {
 		getWidgetComponents(), PKFIELD, CultivosForm.colNames,
 		CultivosForm.colAlias));
 
+	// TODO: Filtrar por comunidad
 	fcComboBox = (JComboBox) getWidgetComponents().get(FCCBKEY);
 	fcButton = (JButton) formBody.getComponentByName(FCBTNKEY);
-	DefaultComboBoxModel model = new DefaultComboBoxModel();
-	model.addElement(new KeyValue(null, " "));
-
-	try {
-	    String[] values = DBSession.getCurrentSession().getDistinctValues(
-		    FuentesComunitariasForm.NAME, PmfConstants.DATA_SCHEMA,
-		    FuentesComunitariasForm.PKFIELD, true, false);
-	    for (String value : values) {
-		model.addElement(new KeyValue(value, value));
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-	fcComboBox.setModel(model);
 	fcComboBox.addActionListener(this);
 	fcButton.addActionListener(this);
     }

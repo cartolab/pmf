@@ -285,7 +285,8 @@ CREATE TABLE parcelas (
        poz_pro VARCHAR(5) DEFAULT 'false',
        no_fuen VARCHAR(5) DEFAULT 'false',
        existe_fc VARCHAR(5) DEFAULT 'false',
-       codigo_fc VARCHAR,
+       codigo_fc VARCHAR
+       		 REFERENCES fuentes_comunitarias(codigo_fc),
        d_fue_tan FLOAT,
        d_tan_hue FLOAT,
        hay_in_par VARCHAR(5) DEFAULT 'false',
