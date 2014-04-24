@@ -42,35 +42,36 @@ CREATE TABLE _map_style (
 
 
 
-INSERT INTO _map SELECT
-('PMF', 'centros_educativos', 'centros_educativos', 25, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'centros_reuniones', 'centros_reuniones', 24, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'centros_salud', 'centros_salud', 23, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'comunidades', 'comunidades', 22, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'parcelas', 'parcelas', 21, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'informacion_general', 'informacion_general', 20, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'limites_parcela', 'limites_parcela', 19, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 18, true, NULL, NULL, '', 'pmf', NULL) UNION SELECT
-('PMF', 'precipitacion1', 'precipitacion1', 17, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
-('PMF', 'precipitacion', 'precipitacion', 16, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
-('PMF', 'interes_turistico', 'interes_turistico', 15, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
-('PMF', 'infraestructuras_economicas', 'infraestructuras_economicas', 14, true, NULL, NULL, 'Análisis OT', 'pmf', NULL) UNION SELECT
-('PMF', 'rios', 'rios', 13, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
-('PMF', 'edificaciones', 'edificaciones', 12, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
-('PMF', 'caminos', 'caminos', 11, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
-('PMF', 'curvas', 'curvas', 10, true, NULL, NULL, 'C. Base', 'pmf', NULL) UNION SELECT
-('PMF', 'usos_suelo', 'usos_suelo', 9, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
-('PMF', 'sequia', 'sequia', 8, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
-('PMF', 'industrial', 'industrial', 7, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
-('PMF', 'sedimentos', 'sedimentos', 6, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
-('PMF', 'deforestacion', 'deforestacion', 5, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
-('PMF', 'riesgos', 'riesgos', 4, true, NULL, NULL, 'Análisis OT área', 'pmf', NULL) UNION SELECT
-('PMF', 'países vecinos', 'paises_vecinos', 3, true, NULL, NULL, 'C. Base área', 'pmf', NULL) UNION SELECT
-('PMF', 'municipios', 'municipioshn', 2, true, NULL, NULL, 'C. Base área', 'pmf', NULL) UNION SELECT
-('PMF', 'cuenca', 'cuenca', 1, true, NULL, NULL, 'C. Base área', 'pmf', NULL);
+INSERT INTO _map VALUES
+       ('PMF', 'compradores', 'compradores', 26, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'centros_educativos', 'centros_educativos', 25, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'centros_reuniones', 'centros_reuniones', 24, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'centros_salud', 'centros_salud', 23, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'comunidades', 'comunidades', 22, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'parcelas', 'parcelas', 21, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'informacion_general', 'informacion_general', 20, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'limites_parcela', 'limites_parcela', 19, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'fuentes_comunitarias', 'fuentes_comunitarias', 18, 'true', NULL, NULL, '', 'pmf', NULL),
+       ('PMF', 'precipitacion1', 'precipitacion1', 17, 'true', NULL, NULL, 'Análisis OT', 'pmf', NULL),
+       ('PMF', 'precipitacion', 'precipitacion', 16, 'true', NULL, NULL, 'Análisis OT', 'pmf', NULL),
+       ('PMF', 'interes_turistico', 'interes_turistico', 15, 'true', NULL, NULL, 'Análisis OT', 'pmf', NULL),
+       ('PMF', 'infraestructuras_economicas', 'infraestructuras_economicas', 14, 'true', NULL, NULL, 'Análisis OT', 'pmf', NULL),
+       ('PMF', 'rios', 'rios', 13, 'true', NULL, NULL, 'C. Base', 'pmf', NULL),
+       ('PMF', 'edificaciones', 'edificaciones', 12, 'true', NULL, NULL, 'C. Base', 'pmf', NULL),
+       ('PMF', 'caminos', 'caminos', 11, 'true', NULL, NULL, 'C. Base', 'pmf', NULL),
+       ('PMF', 'curvas', 'curvas', 10, 'true', NULL, NULL, 'C. Base', 'pmf', NULL),
+       ('PMF', 'usos_suelo', 'usos_suelo', 9, 'true', NULL, NULL, 'Análisis OT área', 'pmf', NULL),
+       ('PMF', 'sequia', 'sequia', 8, 'true', NULL, NULL, 'Análisis OT área', 'pmf', NULL),
+       ('PMF', 'industrial', 'industrial', 7, 'true', NULL, NULL, 'Análisis OT área', 'pmf', NULL),
+       ('PMF', 'sedimentos', 'sedimentos', 6, 'true', NULL, NULL, 'Análisis OT área', 'pmf', NULL),
+       ('PMF', 'deforestacion', 'deforestacion', 5, 'true', NULL, NULL, 'Análisis OT área', 'pmf', NULL),
+       ('PMF', 'riesgos', 'riesgos', 4, 'true', NULL, NULL, 'Análisis OT área', 'pmf', NULL),
+       ('PMF', 'países vecinos', 'paises_vecinos', 3, 'true', NULL, NULL, 'C. Base área', 'pmf', NULL),
+       ('PMF', 'municipios', 'municipioshn', 2, 'true', NULL, NULL, 'C. Base área', 'pmf', NULL),
+       ('PMF', 'cuenca', 'cuenca', 1, 'true', NULL, NULL, 'C. Base área', 'pmf', NULL);
 
 
-INSERT INTO _map_style SELECT
+INSERT INTO _map_style VALUES
 ('informacion_general', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
@@ -88,7 +89,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('parcelas', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
@@ -121,7 +122,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('comunidades', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
@@ -139,7 +140,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('centros_salud', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
@@ -157,7 +158,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('centros_reuniones', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
@@ -175,7 +176,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('centros_educativos', 'PMF', 'gvl', '<xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
     <xml-tag>
@@ -193,7 +194,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-'),
+') ,
 ('infraestructuras_economicas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -212,7 +213,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('rios', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -236,7 +237,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('edificaciones', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -257,7 +258,7 @@ INSERT INTO _map_style SELECT
         <property key="outlineSize" value="0.0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('caminos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -281,7 +282,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('curvas', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -305,7 +306,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('usos_suelo', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend"/>
@@ -731,7 +732,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('sequia', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -765,7 +766,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('industrial', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -799,7 +800,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('sedimentos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -833,7 +834,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('deforestacion', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -867,7 +868,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('riesgos', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.VectorialUniqueValueLegend"/>
@@ -1003,7 +1004,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('cuenca', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -1037,7 +1038,7 @@ INSERT INTO _map_style SELECT
         </xml-tag>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('municipios', 'PMF', 'gvl', '<?xml version="1.0" encoding="UTF-8"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -1065,7 +1066,7 @@ INSERT INTO _map_style SELECT
         <property key="rgb" value="-13882079"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('paises_vecinos', 'PMF', 'gvl', '<?xml version="1.0" encoding="UTF-8"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -1097,7 +1098,7 @@ INSERT INTO _map_style SELECT
         <property key="rgb" value="-16313594"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('interes_turistico', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -1116,7 +1117,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('precipitacion', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
@@ -1135,7 +1136,7 @@ INSERT INTO _map_style SELECT
         <property key="markerStyle" value="0"/>
     </xml-tag>
 </xml-tag>
-') UNION SELECT
+') ,
 ('precipitacion1', 'PMF', 'gvl', '<?xml version="1.0" encoding="ISO-8859-1"?>
 <xml-tag xmlns="http://www.gvsig.gva.es">
     <property key="className" value="com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend"/>
