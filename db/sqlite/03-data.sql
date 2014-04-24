@@ -356,6 +356,58 @@ CREATE TABLE cultivos (
 );
 
 
+CREATE TABLE balances (
+-- cod_parcela + cultivo + f_siembra forman la pk
+       gid INTEGER PRIMARY KEY,
+       cod_parcela VARCHAR
+	       NOT NULL
+	       REFERENCES parcelas(cod_parcela)
+	       ON UPDATE CASCADE ON DELETE CASCADE,
+       cod_balance VARCHAR
+               NOT NULL
+               UNIQUE,
+       tipo_cultivo VARCHAR
+	       REFERENCES tipo_cultivo(item),
+       cultivo VARCHAR
+               NOT NULL
+	       REFERENCES cultivo(item),
+       f_siembra Date
+               NOT NULL,
+       f_cosecha Date,
+       volumen_prod_ud FLOAT,
+       volumen_prod_kg FLOAT,
+       area_prod FLOAT,
+       rendimiento_prod FLOAT,
+       mano_obra FLOAT,
+       establecimiento FLOAT,
+       manejo FLOAT,
+       cosecha FLOAT,
+       mano_obra_otros FLOAT,
+       insumos FLOAT,
+       equipo FLOAT,
+       material FLOAT,
+       otros FLOAT,
+       transporte FLOAT,
+       alquiler FLOAT,
+       otros_otros FLOAT,
+       coste_total FLOAT,
+       venta_total FLOAT,
+       beneficio FLOAT
+
+);
+
+
+CREATE TABLE ventas (
+       gid INTEGER PRIMARY KEY,
+       cod_balance VARCHAR
+	       REFERENCES balances(cod_balance),
+       cod_comprador VARCHAR,
+       precio FLOAT,
+       volumen FLOAT,
+       total FLOAT
+
+);
+
 CREATE TABLE limites_parcela (
        gid INTEGER PRIMARY KEY,
        cod_parcela VARCHAR
@@ -371,3 +423,24 @@ CREATE TABLE limites_parcela (
 
 SELECT addgeometrycolumn('limites_parcela', 'geom', 32616, 'POINT', 2);
 SELECT CreateSpatialIndex('limites_parcela','geom');
+
+
+CREATE TABLE compradores (
+       gid INTEGER PRIMARY KEY,
+       cod_comprador VARCHAR
+	       NOT NULL
+	       UNIQUE,
+       nombre VARCHAR
+       	      NOT NULL,
+       contacto VARCHAR,
+       lugar_venta VARCHAR,
+       x FLOAT,
+       y FLOAT,
+       z FLOAT,
+       compra_total FLOAT
+
+);
+
+SELECT addgeometrycolumn('compradores', 'geom', 32616, 'POINT', 2);
+SELECT CreateSpatialIndex('compradores','geom');
+
