@@ -10,18 +10,21 @@ import es.icarto.gvsig.navtableforms.gui.tables.AbstractSubForm;
 import es.icarto.gvsig.navtableforms.utils.DBConnectionBaseFormFactory;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
+import es.udc.cartolab.gvsig.pmf.forms.BalancesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosEducativosForm;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosReunionesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosSaludForm;
+import es.udc.cartolab.gvsig.pmf.forms.CompradoresForm;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
 import es.udc.cartolab.gvsig.pmf.forms.FuentesComunitariasForm;
+import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.forms.LimitesParcelaForm;
 import es.udc.cartolab.gvsig.pmf.forms.OrganizacionesBaseForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.forms.PescaCapturasForm;
 import es.udc.cartolab.gvsig.pmf.forms.PresenciaInstitucionalForm;
-import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
+import es.udc.cartolab.gvsig.pmf.forms.VentasForm;
 
 public class PmfFormFactory extends DBConnectionBaseFormFactory {
 
@@ -38,6 +41,7 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 	mainFormNames.add(InformacionGeneralForm.NAME);
 	mainFormNames.add(LimitesParcelaForm.NAME);
 	mainFormNames.add(FuentesComunitariasForm.NAME);
+	mainFormNames.add(CompradoresForm.NAME);
 	instance = new PmfFormFactory();
     }
 
@@ -65,12 +69,14 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 		return new CentrosSaludForm(layer);
 	    } else if (layer.getName().equals(ParcelasForm.NAME)) {
 		return new ParcelasForm(layer);
-	    } else if (layer.getName().equals(FuentesComunitariasForm.NAME)) {
-		return new FuentesComunitariasForm(layer);
-	    } else if (layer.getName().equals(LimitesParcelaForm.NAME)) {
-		return new LimitesParcelaForm(layer);
 	    } else if (layer.getName().equals(InformacionGeneralForm.NAME)) {
 		return new InformacionGeneralForm(layer);
+	    } else if (layer.getName().equals(LimitesParcelaForm.NAME)) {
+		return new LimitesParcelaForm(layer);
+	    } else if (layer.getName().equals(FuentesComunitariasForm.NAME)) {
+		return new FuentesComunitariasForm(layer);
+	    } else if (layer.getName().equals(CompradoresForm.NAME)) {
+		return new CompradoresForm(layer);
 	    }
 	}
 	return null;
@@ -87,6 +93,10 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 		return new PescaCapturasForm();
 	    } else if (tableName.equals(PresenciaInstitucionalForm.NAME)) {
 		return new PresenciaInstitucionalForm();
+	    } else if (tableName.equals(BalancesForm.NAME)) {
+		return new BalancesForm();
+	    } else if (tableName.equals(VentasForm.NAME)) {
+		return new VentasForm();
 	    }
 	}
 	return null;

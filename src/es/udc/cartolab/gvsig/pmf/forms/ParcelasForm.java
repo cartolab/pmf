@@ -37,6 +37,10 @@ public class ParcelasForm extends BasicAbstractForm {
 		getWidgetComponents(), PKFIELD, CultivosForm.colNames,
 		CultivosForm.colAlias));
 
+	addTableHandler(new AlphanumericTableHandler("balances",
+		getWidgetComponents(), PKFIELD, BalancesForm.colNames,
+		BalancesForm.colAlias));
+
 	// TODO: Filtrar por comunidad
 	fcComboBox = (JComboBox) getWidgetComponents().get(FCCBKEY);
 	fcButton = (JButton) formBody.getComponentByName(FCBTNKEY);
