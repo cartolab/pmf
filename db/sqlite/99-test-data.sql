@@ -35,3 +35,5 @@ INSERT INTO limites_parcela VALUES (2, '110', '110P2', 0, 0, 0, GeomFromText('PO
 
 INSERT INTO fuentes_comunitarias VALUES (1, '1', '1fc1', 0, 0, 0, GeomFromText('POINT (30 40)', 32616));
 INSERT INTO fuentes_comunitarias VALUES (2, '1', '1fc2', 0, 0, 0, GeomFromText('POINT (50 40)', 32616));
+
+INSERT INTO compradores VALUES (1, 'comp1', 'Comprador Uno', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
