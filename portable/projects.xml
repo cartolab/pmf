@@ -16,9 +16,10 @@
 		extHyperlink,
 		extQuickPrint,
 		extLayerLoadingOrder,
-		org.gvsig.installer.app.extension
-		binaries
+		org.gvsig.installer.app.extension,
+		extHelp,
 		org.gvsig.consecutivenumber,
+		binaries
 	-->
 
 	<property name="gvSIG_dist_projects_on_main_svn" value="
@@ -67,7 +68,6 @@
 		extProjectBackup,
 		extDerivedGeometries,
 		extI18n,
-		extHelp,
 		extTableImport,
 		extTableExport
 	"/>
