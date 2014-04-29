@@ -31,12 +31,14 @@ public class VentasForm extends AbstractSubForm implements ActionListener {
 
     private boolean formInitialized = false;
     private AbstractForm compradoresForm = null;
+    private JComboBox codComprador;
 
     public VentasForm() {
 	super();
 	JButton button = (JButton) getFormPanel(null).getComponentByName(
 		"compradores_button");
 	button.addActionListener(this);
+	codComprador = (JComboBox) getWidgetComponents().get("cod_comprador");
     }
 
     @Override
@@ -46,16 +48,16 @@ public class VentasForm extends AbstractSubForm implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	JComboBox codComprador = (JComboBox) getWidgetComponents().get(
-		"cod_comprador");
 	Object item = codComprador.getSelectedItem();
-	if (item != null) {
+	if ((item instanceof KeyValue) && (item != null)) {
 	    String key = ((KeyValue) item).getKey();
-	    openFCForm(key);
+	    if (key != null) {
+		openCompradoresForm(key);
+	    }
 	}
     }
 
-    protected void openFCForm(String keyValue) {
+    protected void openCompradoresForm(String keyValue) {
 	if (!formInitialized) {
 	    formInitialized = true;
 	    compradoresForm = FormFactory
@@ -79,5 +81,13 @@ public class VentasForm extends AbstractSubForm implements ActionListener {
 	}
 	compradoresForm.setPosition(selectedFeature);
 	PluginServices.getMDIManager().addWindow(compradoresForm);
+    }
+
+    @Override
+    public void fillEmptyValues() {
+	super.fillEmptyValues();
+	KeyValue keyValue = new KeyValue(null, " ");
+	codComprador.insertItemAt(keyValue, 0);
+	codComprador.setSelectedIndex(0);
     }
 }
