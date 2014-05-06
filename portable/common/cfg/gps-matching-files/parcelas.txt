@@ -1,5 +1,0 @@
-cod_viv=name
-cod_com:substring(name,0,6)
-x:getX
-y:getY
-z=elev

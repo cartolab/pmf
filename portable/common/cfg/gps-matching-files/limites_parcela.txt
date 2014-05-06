@@ -1,4 +1,5 @@
 cod_lim_p=name
+cod_parcela:substring(name,0,11)
 x:getX
 y:getY
 z=elev

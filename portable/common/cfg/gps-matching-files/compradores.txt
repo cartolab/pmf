@@ -1,0 +1,4 @@
+cod_comprador=name
+x:getX
+y:getY
+z=elev

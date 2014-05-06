@@ -24,6 +24,7 @@ public class ParcelasForm extends BasicAbstractForm {
     private static final String FCCBKEY = "codigo_fc";
     private static final String FCBTNKEY = "fc_button";
     public static final String CODCOM = "cod_com";
+    public static final String CODVIV = "cod_viv";
     private JComboBox fcComboBox;
     private JButton fcButton;
     private AbstractForm fcForm = FormFactory

@@ -131,7 +131,7 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 
 		    EditLayerHelper elh = new EditLayerHelper(targetLayer);
 		    final int[] indexes = elh.getIndexes(ParcelasForm.PKFIELD,
-			    ParcelasForm.CODCOM);
+			    ParcelasForm.CODVIV, ParcelasForm.CODCOM);
 		    final Value[] values = elh.getValues(codViv, codCom);
 		    final IGeometry geom = Points2Polygon.toPolygon(layer,
 			    codViv);
