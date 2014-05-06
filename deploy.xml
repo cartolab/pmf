@@ -26,6 +26,16 @@
 	<property name="base-lin-path" value="${base-path}${base-lin}.tgz" />
 
 	
+	<target name="makeDBandPortables" depends="makedb, buildFromSource, makePortableLinux, makePortableWindows">
+		
+	</target>
+	
+	<target name="makedb">
+		<exec executable="bash" newenvironment="false" dir="../pmf/db/">
+			<arg value="sqlite.sh" />
+		</exec>
+				
+	</target>
 	<target name="makePortables" depends="buildFromSource, makePortableLinux, makePortableWindows">
 	</target>
 

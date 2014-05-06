@@ -1,3 +1,4 @@
+#!/bin/sh
 
 DB_PATH=../portable/common/cfg/pmf.sqlite
 
@@ -5,6 +6,10 @@ if [ -f "$DB_PATH" ] ; then
     rm $DB_PATH
 fi
 
+DEBUG=0
+if [ $1 == "--debug" ] ; then
+    DEBUG=1
+fi
 # Al usar el comando spatialite en lugar de sqlite no es necesario inicializar a mano el metadata
 # spatialite -bail $DB_PATH "SELECT InitSpatialMetaData();"
 
@@ -13,7 +18,7 @@ for file in `ls ./sqlite/*.sql` ; do
     spatialite -bail $DB_PATH < $file
 done
 
-# spatialite -bail $DB_PATH < ../data-test/99-test-data.sql
+[ $DEBUG == 1 ] && spatialite -bail $DB_PATH < ../data-test/99-test-data.sql
 
 data=./C_Base/
 
