@@ -126,8 +126,9 @@ public class PmfFormFactory extends DBConnectionBaseFormFactory {
 
     @Override
     public boolean allLayersLoaded() {
+	final TOCLayerManager tocLayerManager = new TOCLayerManager();
 	for (String layer : mainFormNames) {
-	    if (new TOCLayerManager().getLayerByName(layer) == null) {
+	    if (tocLayerManager.getLayerByName(layer) == null) {
 		return false;
 	    }
 	}
