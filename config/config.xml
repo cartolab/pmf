@@ -77,6 +77,13 @@
 				action-command="open-layout" position="30018"
 				 />
 		</extension>
+		
+		<extension class-name="es.udc.cartolab.gvsig.pmf.AutoFormsExtension" active="true">
+			<tool-bar name="_pmf-tool-bar-name" position="30"> 
+				<selectable-tool icon="auto-forms" tooltip="enable_auto_forms"
+					action-command="auto-forms" position="19" name="auto-forms" />
+			</tool-bar>
+		</extension>
 
 		
 	</extensions>
