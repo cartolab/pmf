@@ -18,6 +18,7 @@
 		extLayerLoadingOrder,
 		org.gvsig.installer.app.extension,
 		extHelp,
+		extWCS,
 		org.gvsig.consecutivenumber,
 		binaries
 	-->
@@ -61,7 +62,6 @@
 		extScripting,
 		extAnnotations,
 		extExpressionField,
-		extWCS,
 		extWFS2,
 		extWMS,
 		extIconThemeBase,
