@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 DB_PATH=../portable/common/cfg/pmf.sqlite
 
@@ -7,9 +7,8 @@ if [ -f "$DB_PATH" ] ; then
 fi
 
 DEBUG=0
-if [ $1 == "--debug" ] ; then
-    DEBUG=1
-fi
+[[ -n $1 && $1 = "--debug" ]] && DEBUG=1
+
 # Al usar el comando spatialite en lugar de sqlite no es necesario inicializar a mano el metadata
 # spatialite -bail $DB_PATH "SELECT InitSpatialMetaData();"
 
@@ -18,7 +17,10 @@ for file in `ls ./sqlite/*.sql` ; do
     spatialite -bail $DB_PATH < $file
 done
 
-[ $DEBUG == 1 ] && spatialite -bail $DB_PATH < ../data-test/99-test-data.sql
+if [ $DEBUG -eq 1 ] ; then
+    spatialite -bail $DB_PATH < ../data-test/99-data-elle.sql
+    spatialite -bail $DB_PATH < ../data-test/99-test-data.sql
+fi
 
 data=./C_Base/
 
@@ -32,7 +34,7 @@ ogr2ogr -append -progress -s_srs EPSG:32616 -t_srs EPSG:32616 -f SQLite -dialect
 
 layer=caserios_comunidades_PMF
 echo -e "\nProcesando $layer"
-ogr2ogr -append -progress -skipfailures -s_srs EPSG:32616 -t_srs EPSG:32616 -f SQLite -dialect sqlite -nln $layer -nlt PROMOTE_TO_MULTI $DB_PATH ${data}${layer}.shp -dsco SPATIALITE=yes -gt 65536 --config OGR_SQLITE_CACHE 512
+ogr2ogr -append -progress -s_srs EPSG:32616 -t_srs EPSG:32616 -f SQLite -dialect sqlite -nln $layer -nlt PROMOTE_TO_MULTI $DB_PATH ${data}${layer}.shp -dsco SPATIALITE=yes -gt 65536 --config OGR_SQLITE_CACHE 512
 
 layer=curvas_nivel_10m_PMF
 echo -e "\nProcesando $layer"
