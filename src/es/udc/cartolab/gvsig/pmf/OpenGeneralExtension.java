@@ -13,6 +13,7 @@ import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
+import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.ProjectDocumentFactory;
@@ -65,16 +66,30 @@ public class OpenGeneralExtension extends Extension {
     private static void zoomToLayer(final View view, final String layername) {
 	try {
 	    MapContext mapContext = view.getMapControl().getMapContext();
-	    Rectangle2D fullExtent = mapContext.getLayers().getLayer(layername)
-		    .getFullExtent();
-	    if (!fullExtent.equals(new Rectangle2D.Double(1, 1, 10, 10))) {
-		mapContext.getViewPort().setExtent(fullExtent);
+	    final FLayer layer = mapContext.getLayers().getLayer(layername);
+	    if (layer == null) {
+		return;
 	    }
+	    Rectangle2D fullExtent = layer.getFullExtent();
+
+	    if (isDefaultExtent(fullExtent)
+		    || (hasWidthInKmLessThan(fullExtent, 2))) {
+		return;
+	    }
+	    mapContext.getViewPort().setExtent(fullExtent);
 	} catch (ExpansionFileReadException e) {
 	    e.printStackTrace();
 	} catch (ReadDriverException e) {
 	    e.printStackTrace();
 	}
+    }
+
+    private static boolean hasWidthInKmLessThan(Rectangle2D extent, float km) {
+	return extent.getWidth() < km * 1000;
+    }
+
+    public static boolean isDefaultExtent(Rectangle2D fullExtent) {
+	return fullExtent.equals(new Rectangle2D.Double(1, 1, 10, 10));
     }
 
     protected void registerIcons() {
