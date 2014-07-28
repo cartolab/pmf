@@ -252,49 +252,52 @@ INSERT INTO pendiente (item) VALUES
        ('36-42%'),
        ('>42%');
 
-
-
-CREATE TABLE cultivo (
+CREATE TABLE tipo_rubro (
        item VARCHAR
 	       PRIMARY KEY
 
 );
 
-INSERT INTO cultivo (item) VALUES
-       (' '),
-       ('Aves Criollas'),
-       ('Ayote'),
-       ('Camote'),
-       ('Chile'),
-       ('Limón'),
-       ('Frijol'),
-       ('Guayaba'),
-       ('Maicillo'),
-       ('Maíz'),
-       ('Marañón'),
-       ('Miel'),
-       ('Musáceas'),
-       ('Papaya'),
-       ('Pastos'),
-       ('Sandía'),
-       ('Yuca'),
-       ('Hortalizas'),
-       ('Otros anuales'),
-       ('Otros semipermanentes'),
-       ('Otros');
-
-
-
-CREATE TABLE tipo_cultivo (
-       item VARCHAR
-	       PRIMARY KEY
-
-);
-
-INSERT INTO tipo_cultivo (item) VALUES
+INSERT INTO tipo_rubro (item) VALUES
        (' '),
        ('Granos básicos'),
        ('Hortícola'),
        ('Frutales'),
+       ('Pecuario'),
        ('Otros');
 
+CREATE TABLE rubro (
+       item VARCHAR
+	       PRIMARY KEY,
+       tipo_rubro VARCHAR
+	       REFERENCES tipo_rubro(item)
+
+);
+
+INSERT INTO rubro (item, tipo_rubro) VALUES
+       (' ', ' '),
+       ('Aves Criollas', 'Pecuario'),
+       ('Ayote', ' '),
+       ('Cabras', 'Pecuario'),
+       ('Camote', ' '),
+       ('Cerdos', 'Pecuario'),
+       ('Chile', ' '),
+       ('Lácteos', 'Pecuario'),
+       ('Limón', ' '),
+       ('Frijol', ' '),
+       ('Guayaba', ' '),
+       ('Maicillo', ' '),
+       ('Maíz', ' '),
+       ('Marañón', ' '),
+       ('Miel', 'Pecuario'),
+       ('Musáceas', ' '),
+       ('Papaya', ' '),
+       ('Pastos', ' '),
+       ('Sandía', ' '),
+       ('Yuca', ' '),
+       ('Hortalizas', ' '),
+       ('Huevos', 'Pecuario'),
+       ('Otros anuales', ' '),
+       ('Otros semipermanentes', ' '),
+       ('Otros', ' '),
+       ('Vacas', 'Pecuario');

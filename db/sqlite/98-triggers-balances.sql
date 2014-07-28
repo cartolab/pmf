@@ -3,8 +3,8 @@ CREATE TRIGGER balances_compute_fields_insert_trigger
 AFTER INSERT ON balances
 FOR EACH ROW BEGIN
 	UPDATE balances SET
-	       cod_balance = NEW.cod_parcela || NEW.cultivo || NEW.f_siembra,
-	       rendimiento_prod = NEW.volumen_prod_kg / NEW.area_prod,
+	       cod_balance = NEW.cod_parcela || NEW.rubro || NEW.f_siembra,
+	       rendimiento_prod = coalesce(NEW.volumen_prod_kg, NEW.volumen_prod_ud, 0) / NEW.area_prod,
 	       mano_obra = NEW.establecimiento + NEW.manejo + NEW.cosecha + NEW.mano_obra_otros,
 	       otros = NEW.transporte + NEW.alquiler + NEW.otros_otros
 	WHERE gid = NEW.gid;
@@ -25,8 +25,8 @@ CREATE TRIGGER balances_compute_fields_update_trigger
 AFTER UPDATE ON balances
 FOR EACH ROW BEGIN
 	UPDATE balances SET
-	       cod_balance = NEW.cod_parcela || NEW.cultivo || NEW.f_siembra,
-	       rendimiento_prod = NEW.volumen_prod_kg / NEW.area_prod,
+	       cod_balance = NEW.cod_parcela || NEW.rubro || NEW.f_siembra,
+	       rendimiento_prod =  coalesce(NEW.volumen_prod_kg, NEW.volumen_prod_ud, 0) / NEW.area_prod,
 	       mano_obra = NEW.establecimiento + NEW.manejo + NEW.cosecha + NEW.mano_obra_otros,
 	       otros = NEW.transporte + NEW.alquiler + NEW.otros_otros
 	WHERE gid = NEW.gid;

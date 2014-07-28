@@ -349,7 +349,7 @@ CREATE TABLE cultivos (
 	       REFERENCES parcelas(cod_parcela)
 	       ON UPDATE CASCADE ON DELETE CASCADE,
        cultivo VARCHAR
-	       REFERENCES cultivo(item),
+	       REFERENCES rubro(item),
        area FLOAT,
        vol_prod FLOAT,
        vol_con FLOAT
@@ -358,7 +358,7 @@ CREATE TABLE cultivos (
 
 
 CREATE TABLE balances (
--- cod_parcela + cultivo + f_siembra forman la pk
+-- cod_parcela + rubro + f_siembra forman la pk
        gid INTEGER PRIMARY KEY,
        cod_parcela VARCHAR
 	       NOT NULL
@@ -367,11 +367,11 @@ CREATE TABLE balances (
        cod_balance VARCHAR
                NOT NULL
                UNIQUE,
-       tipo_cultivo VARCHAR
-	       REFERENCES tipo_cultivo(item),
-       cultivo VARCHAR
+       tipo_rubro VARCHAR
+	       REFERENCES tipo_rubro(item),
+       rubro VARCHAR
                NOT NULL
-	       REFERENCES cultivo(item),
+	       REFERENCES rubro(item),
        f_siembra Date
                NOT NULL,
        f_cosecha Date,
@@ -393,6 +393,7 @@ CREATE TABLE balances (
        otros_otros FLOAT,
        coste_total FLOAT,
        venta_total FLOAT,
+       consumo_familiar FLOAT,
        beneficio FLOAT
 
 );
