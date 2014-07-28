@@ -34,7 +34,6 @@ import es.icarto.gvsig.navtableforms.ormlite.XMLSAXParser;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalidator.rules.ValidationRule;
 import es.icarto.gvsig.navtableforms.ormlite.domainvalues.DomainValues;
 import es.icarto.gvsig.navtableforms.utils.AbeilleParser;
-import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 import es.udc.cartolab.gvsig.users.utils.DBSessionSpatiaLite;
 import es.udc.cartolab.testutils.Drivers;
@@ -51,7 +50,8 @@ public abstract class CommonMethodsForTestDBForms {
     public static void doSetupBeforeClass() {
 	Drivers.initgvSIGDrivers(TestProperties.driversPath);
 	try {
-	    DBSessionSpatiaLite.createConnection(PmfConstants.SQLITE_FILE);
+	    DBSessionSpatiaLite
+		    .createConnection("portable/common/cfg/pmf.sqlite");
 	} catch (DBException e) {
 	    e.printStackTrace();
 	}

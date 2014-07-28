@@ -9,10 +9,11 @@ public class BalancesForm extends AbstractSubForm {
 
     public static final String NAME = "balances";
     private static final String PKFIELD = "cod_balance";
-    public static String[] colNames = { "cultivo", "f_siembra", "f_cosecha",
-	    "coste_total", "venta_total", "beneficio" };
-    public static String[] colAlias = { "Cultivo", "Fecha siembra",
-	    "Fecha cosecha", "Coste (L)", "Venta (L)", "Beneficio (L)" };
+    public static String[] colNames = { "rubro", "f_siembra", "f_cosecha",
+	    "coste_total", "venta_total", "beneficio", "rendimiento_prod" };
+    public static String[] colAlias = { "Rubro", "Fecha siembra",
+	    "Fecha cosecha", "Coste (L)", "Venta (L)", "Beneficio (L)",
+	    "Rendimiento ({Kg,Ud}/Ha)" };
 
     public BalancesForm() {
 	addTableHandler(new AlphanumericTableHandler(VentasForm.NAME,
