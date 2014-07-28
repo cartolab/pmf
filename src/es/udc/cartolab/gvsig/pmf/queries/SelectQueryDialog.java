@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,6 +28,7 @@ import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
 import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
+import es.udc.cartolab.gvsig.pmf.utils.DAO;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -42,11 +44,13 @@ public class SelectQueryDialog extends JPanel implements IWindow,
     private final String QUERY3 = "Listado de fincas";
     private final String QUERY4 = "Listado de fincas y cultivos";
     private final String QUERY5 = "Listado de planificación";
+    private final String QUERY6 = "Listado agregado de rubros por comunidad";
     private final String OUTPUT1 = "listadoComunidades";
     private final String OUTPUT2 = "listadoProductores";
     private final String OUTPUT3 = "listadoFincas";
     private final String OUTPUT4 = "listadoFincasCultivos";
     private final String OUTPUT5 = "listadoPlanificación";
+    private final String OUTPUT6 = "listadoAgregadoRubrosComunidad";
 
     private final String SELECTQUERY = "_selectQuery";
 
@@ -100,7 +104,7 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 		"20[fill][fill]30%[fill, bottom]"));
 	this.setLayout(new MigLayout());
 
-	String[] items = { QUERY1, QUERY2, QUERY3, QUERY4, QUERY5 };
+	String[] items = { QUERY1, QUERY2, QUERY3, QUERY4, QUERY5, QUERY6 };
 
 	this.add(new JLabel(PluginServices.getText(this, SELECTQUERY)));
 
@@ -170,6 +174,9 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	    } else if (query.equals(QUERY5)) {
 		result = query5();
 		fileName += "/" + OUTPUT5 + ".csv";
+	    } else if (query.equals(QUERY6)) {
+		result = query6();
+		fileName += "/" + OUTPUT6 + ".csv";
 	    }
 
 	    for (int i = 0; i < 10; i++) {
@@ -196,6 +203,19 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	    PluginServices.getMDIManager().closeWindow(this);
 	}
 
+    }
+
+    private String query6() {
+	StringBuffer str = new StringBuffer(
+		"Código Comunidad;Rubro;Área de producción;Volumen producido (kg);Volumen producido (ud);Ingresos por venta;Consumo familiar;\n");
+	String[][] values = new String[0][0];
+	try {
+	    values = DAO.getRubrosAgregated();
+	} catch (SQLException e) {
+	    logger.error(e.getStackTrace(), e);
+	}
+	str.append(matrixToString(values));
+	return str.toString();
     }
 
     // private final String QUERY5 = "Listado de planificación";

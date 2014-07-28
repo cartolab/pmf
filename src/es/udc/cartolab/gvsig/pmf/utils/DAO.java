@@ -80,15 +80,12 @@ public final class DAO {
 
     }
 
-    public static String[][] getRubrosAgregated(String codCom)
-	    throws SQLException {
+    public static String[][] getRubrosAgregated() throws SQLException {
 	ArrayList<String[]> rows = new ArrayList<String[]>();
 	Connection con = DBSession.getCurrentSession().getJavaConnection();
 
 	Statement statement = con.createStatement();
-	String sql = String
-		.format("SELECT rubro, sum(area_prod), sum(volumen_prod_kg), sum(volumen_prod_ud), sum(venta_total), sum(consumo_familiar) FROM balances WHERE cod_parcela IN (SELECT cod_parcela FROM parcelas WHERE cod_com = '%s') GROUP BY rubro",
-			codCom);
+	String sql = "SELECT a.cod_com, b.rubro, sum(b.area_prod), sum(b.volumen_prod_kg), sum(b.volumen_prod_ud), sum(b.venta_total), sum(b.consumo_familiar) FROM balances AS b join parcelas AS a ON a.cod_parcela = b.cod_parcela GROUP BY a.cod_com, b.rubro";
 	ResultSet rs = statement.executeQuery(sql);
 	int columnCount = rs.getMetaData().getColumnCount();
 	while (rs.next()) {

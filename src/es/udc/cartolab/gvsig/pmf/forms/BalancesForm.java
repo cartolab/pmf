@@ -10,6 +10,7 @@ public class BalancesForm extends AbstractSubForm {
     public static final String NAME = "balances";
     public static final String PKFIELD = "cod_balance";
     public static final String RUBRO = "rubro";
+    public static final String COD_PARCELA = "cod_parcela";
 
     public static String[] colNames = { "rubro", "f_siembra", "f_cosecha",
 	    "coste_total", "venta_total", "beneficio", "rendimiento_prod" };

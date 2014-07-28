@@ -466,12 +466,15 @@ public class RtfCommunityReport extends RtfBaseReport {
 
 	try {
 
-	    String[][] rows = DAO.getRubrosAgregated(codCom);
+	    String[][] rows = DAO.getRubrosAgregated();
 	    hasRows = (rows.length > 0);
 	    for (String[] row : rows) {
+		if (!row[0].equalsIgnoreCase(codCom)) {
+		    continue;
+		}
 		int len = fieldHeaders.length;
 		darkColor = !darkColor;
-		for (int i = 0; i < len; i++) {
+		for (int i = 1; i < len + 1; i++) {
 		    cell = new RtfCell(new Phrase(row[i], normalBoldTextFont));
 		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		    setCellColor(cell);
