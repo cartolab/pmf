@@ -64,7 +64,7 @@ public class VentasForm extends AbstractSubForm implements ActionListener {
 		    .createFormRegistered(CompradoresForm.NAME);
 	    compradoresForm.init();
 	}
-	int selectedFeature = 0;
+	int selectedFeature = -1;
 	try {
 	    SelectableDataSource sds = compradoresForm.getRecordset();
 	    int pkIndex;
@@ -79,14 +79,17 @@ public class VentasForm extends AbstractSubForm implements ActionListener {
 	} catch (ReadDriverException e) {
 	    e.printStackTrace();
 	}
-	compradoresForm.setPosition(selectedFeature);
-	PluginServices.getMDIManager().addWindow(compradoresForm);
+	if (selectedFeature != -1) {
+	    compradoresForm.setPosition(selectedFeature);
+	    PluginServices.getMDIManager().addWindow(compradoresForm);
+	}
+
     }
 
     @Override
     public void fillEmptyValues() {
 	super.fillEmptyValues();
-	KeyValue keyValue = new KeyValue(null, " ");
+	KeyValue keyValue = new KeyValue(" ", " ");
 	codComprador.insertItemAt(keyValue, 0);
 	codComprador.setSelectedIndex(0);
     }
