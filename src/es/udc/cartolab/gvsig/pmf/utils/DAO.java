@@ -1,6 +1,9 @@
 package es.udc.cartolab.gvsig.pmf.utils;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,5 +78,32 @@ public final class DAO {
 			selectedItem.toString()), null, false);
 	return (List<String>) flat(table);
 
+    }
+
+    public static String[][] getRubrosAgregated(String codCom)
+	    throws SQLException {
+	ArrayList<String[]> rows = new ArrayList<String[]>();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+
+	Statement statement = con.createStatement();
+	String sql = String
+		.format("SELECT rubro, sum(area_prod), sum(volumen_prod_kg), sum(volumen_prod_ud), sum(venta_total), sum(consumo_familiar) FROM balances WHERE cod_parcela IN (SELECT cod_parcela FROM parcelas WHERE cod_com = '%s') GROUP BY rubro",
+			codCom);
+	ResultSet rs = statement.executeQuery(sql);
+	int columnCount = rs.getMetaData().getColumnCount();
+	while (rs.next()) {
+	    String[] row = new String[columnCount];
+	    for (int i = 1; i <= columnCount; i++) {
+		String val = rs.getString(i);
+		if (val == null) {
+		    val = "";
+		}
+		row[i - 1] = val;
+	    }
+	    rows.add(row);
+	}
+	rs.close();
+	statement.close();
+	return rows.toArray(new String[0][0]);
     }
 }

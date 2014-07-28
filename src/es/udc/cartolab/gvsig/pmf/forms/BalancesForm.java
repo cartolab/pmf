@@ -8,7 +8,9 @@ import es.icarto.gvsig.navtableforms.gui.tables.handler.BaseTableHandler;
 public class BalancesForm extends AbstractSubForm {
 
     public static final String NAME = "balances";
-    private static final String PKFIELD = "cod_balance";
+    public static final String PKFIELD = "cod_balance";
+    public static final String RUBRO = "rubro";
+
     public static String[] colNames = { "rubro", "f_siembra", "f_cosecha",
 	    "coste_total", "venta_total", "beneficio", "rendimiento_prod" };
     public static String[] colAlias = { "Rubro", "Fecha siembra",

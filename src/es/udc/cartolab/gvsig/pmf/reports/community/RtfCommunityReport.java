@@ -26,8 +26,10 @@ import java.sql.SQLException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
 import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.List;
 import com.lowagie.text.ListItem;
@@ -37,16 +39,18 @@ import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.document.RtfDocumentSettings;
 import com.lowagie.text.rtf.style.RtfFont;
+import com.lowagie.text.rtf.table.RtfCell;
 
 import es.udc.cartolab.gvsig.pmf.forms.CentrosEducativosForm;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosReunionesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CentrosSaludForm;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
-import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
 import es.udc.cartolab.gvsig.pmf.forms.OrganizacionesBaseForm;
+import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.forms.PresenciaInstitucionalForm;
 import es.udc.cartolab.gvsig.pmf.reports.RtfBaseReport;
+import es.udc.cartolab.gvsig.pmf.utils.DAO;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
 public class RtfCommunityReport extends RtfBaseReport {
@@ -85,9 +89,9 @@ public class RtfCommunityReport extends RtfBaseReport {
     private final String[] presInstFieldHeaders = {
 	    "NOMBRE DE LA ORGANIZACIÓN", "FUNCIONES DE LA ORGANIZACIÓN",
 	    "PERSONA RESPONSABLE" };
-    private final String[] cultivosFieldNames = { "area", "tipo" };
+    private final String[] cultivosFieldNames = { "area", "cultivo" };
     private final String[] cultivosBoolFieldNames = {};
-    private final String[] cultivosFieldHeaders = { "ÁREA", "TIPO DE CULTIVO" };
+    private final String[] cultivosFieldHeaders = { "ÁREA", "RUBRO" };
 
     // FONT STYLES
     private final RtfFont titleFont = new RtfFont("Century Gothic", 24,
@@ -127,6 +131,7 @@ public class RtfCommunityReport extends RtfBaseReport {
 	    createSection2();
 	    createSection3();
 	    createSection4();
+	    createSection5();
 
 	    // close document
 	    document.close();
@@ -413,31 +418,81 @@ public class RtfCommunityReport extends RtfBaseReport {
 	document.add(sectionTitle);
 
 	try {
-	    String[] vivCods = session
-		    .getDistinctValues(
-			    InformacionGeneralForm.NAME,
-			    PmfConstants.DATA_SCHEMA,
-			    InformacionGeneralForm.PKFIELD,
-			    false,
-			    false,
-			    "WHERE "
-				    + ComunidadesForm.PKFIELD
-				    + " = '"
-				    + source.getFieldValue(
-					    nRow,
-					    source.getFieldIndexByName(ComunidadesForm.PKFIELD))
-					    .toString() + "'");
+	    String[] parCodes = session.getDistinctValues(ParcelasForm.NAME,
+		    PmfConstants.DATA_SCHEMA, CultivosForm.COD_PARCELA, true,
+		    false, String.format("WHERE %s='%s'", CultivosForm.COD_COM,
+			    codCom));
 
 	    // Farming table
 	    Table table = getFieldsTable(CultivosForm.NAME,
-		    InformacionGeneralForm.PKFIELD, vivCods,
-		    cultivosFieldNames, cultivosBoolFieldNames,
-		    cultivosFieldHeaders);
+		    CultivosForm.COD_PARCELA, parCodes, cultivosFieldNames,
+		    cultivosBoolFieldNames, cultivosFieldHeaders);
 	    document.add(table);
 	} catch (SQLException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+
+    private void createSection5() throws DocumentException, ReadDriverException {
+
+	Paragraph sectionTitle = new Paragraph(
+		"\n\n5. RESUMEN DE COSTO-GANACIA FAMILIARES:\n", sectionFont);
+	document.add(sectionTitle);
+
+	Table table = createTableRubros(new String[] { "Rubro",
+		"Área de producción", "Volumen producido (kg)",
+		"Volumen producido (ud)", "Ingresos por venta",
+		"Consumo familiar" });
+
+	document.add(table);
+
+    }
+
+    private Table createTableRubros(String[] fieldHeaders)
+	    throws BadElementException {
+	Table table = new Table(fieldHeaders.length);
+	darkColor = true;
+
+	for (String header : fieldHeaders) {
+	    RtfCell cell = new RtfCell(new Phrase(header, tableTitleTextFont));
+	    setCellColor(cell);
+	    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	    table.addCell(cell);
+	}
+	table.endHeaders();
+	boolean hasRows = false;
+	RtfCell cell;
+
+	try {
+
+	    String[][] rows = DAO.getRubrosAgregated(codCom);
+	    hasRows = (rows.length > 0);
+	    for (String[] row : rows) {
+		int len = fieldHeaders.length;
+		darkColor = !darkColor;
+		for (int i = 0; i < len; i++) {
+		    cell = new RtfCell(new Phrase(row[i], normalBoldTextFont));
+		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		    setCellColor(cell);
+		    table.addCell(cell);
+		}
+
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	if (!hasRows) {
+	    darkColor = !darkColor;
+	    for (String header : fieldHeaders) {
+		cell = new RtfCell(new Phrase("", normalTextFont));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		setCellColor(cell);
+		table.addCell(cell);
+	    }
+	}
+	return table;
+
     }
 
 }// Class
