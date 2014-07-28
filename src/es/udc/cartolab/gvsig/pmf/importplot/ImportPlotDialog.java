@@ -3,12 +3,18 @@ package es.udc.cartolab.gvsig.pmf.importplot;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -27,10 +33,13 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
+import es.udc.cartolab.gvsig.pmf.utils.DAO;
 import es.udc.cartolab.gvsig.pmf.utils.EditLayerHelper;
 
 @SuppressWarnings("serial")
 public class ImportPlotDialog extends JPanel implements IWindow, ActionListener {
+
+    private static final String prototypeDisplayValue = "XXXXXXXXXXXXXXXXXXXX";
 
     private static Logger logger = Logger.getLogger(ImportPlotDialog.class);
 
@@ -50,6 +59,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 
     private FLyrVect targetLayer;
 
+    private JTextField codParTF;
+
     public WindowInfo getWindowInfo() {
 	if (windowInfo == null) {
 	    windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
@@ -67,8 +78,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	    } else {
 		width = new Double(dim.getWidth()).intValue() + 5;
 	    }
-	    windowInfo.setWidth(width);
-	    windowInfo.setHeight(height);
+	    windowInfo.setWidth(width + 10);
+	    windowInfo.setHeight(height + 10);
 	}
 	return windowInfo;
     }
@@ -100,19 +111,68 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	}
 
 	originCombo = new JComboBox(items);
+	originCombo.setPrototypeDisplayValue(prototypeDisplayValue);
 	this.add(originCombo, "wrap");
 
 	label = new JLabel(PluginServices.getText(this, "Cod_com"));
 	this.add(label);
 
 	codComCombo = new JComboBox(codComs.toArray());
+	codComCombo.setPrototypeDisplayValue(prototypeDisplayValue);
 	this.add(codComCombo, "wrap");
 
 	label = new JLabel(PluginServices.getText(this, "Cod_viv"));
 	this.add(label);
 
 	codVivCombo = new JComboBox(codVivs.toArray());
+	codVivCombo.setPrototypeDisplayValue(prototypeDisplayValue);
 	this.add(codVivCombo, "wrap");
+	codVivCombo.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		String expectedPlotCode = "";
+		if (codVivCombo.getSelectedItem() == null) {
+		    codParTF.setText("");
+		    return;
+		}
+
+		try {
+		    List<String> plotCodes = DAO.getPlotCodesForViv(codVivCombo
+			    .getSelectedItem().toString());
+		    if (plotCodes.isEmpty()) {
+			expectedPlotCode = codVivCombo.getSelectedItem()
+				.toString() + "P01";
+		    } else {
+			Collections.sort(plotCodes, new Comparator<String>() {
+
+			    @Override
+			    public int compare(String o1, String o2) {
+				return o1.compareToIgnoreCase(o2);
+			    }
+			});
+			String a = plotCodes.get(plotCodes.size() - 1);
+			String lastChar = a.substring(a.length() - 1);
+			int newLastChar = Integer.parseInt(lastChar) + 1;
+			expectedPlotCode = a.substring(0, a.length() - 1)
+				+ newLastChar;
+		    }
+
+		} catch (SQLException e1) {
+		    logger.error(e1.getStackTrace(), e1);
+		} catch (NumberFormatException e2) {
+		    logger.error(e2.getStackTrace(), e2);
+		}
+		codParTF.setText(expectedPlotCode);
+	    }
+	});
+
+	label = new JLabel("Código de parcela esperado");
+	this.add(label);
+	codParTF = new JTextField(15);
+	codParTF.setEditable(false);
+	codParTF.setEnabled(false);
+	this.add(codParTF, "wrap");
 
 	AcceptCancelPanel acceptCancelPanel = new AcceptCancelPanel(this, this);
 	add(acceptCancelPanel, "dock south");
@@ -123,8 +183,13 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	    String layerName = getComboboxValue(originCombo);
 	    String codViv = getComboboxValue(codVivCombo);
 	    String codCom = getComboboxValue(codComCombo);
-
-	    if (allNotNull(layerName, codViv, codCom)) {
+	    String codPar = codParTF.getText();
+	    if (allNotNull(layerName, codViv, codCom, codPar)) {
+		if (codPar.trim().isEmpty()) {
+		    JOptionPane.showConfirmDialog(this,
+			    "El código de parcela no es válido");
+		    return;
+		}
 		FLyrVect layer = getValidLayer(layerName);
 
 		try {
@@ -132,9 +197,10 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 		    EditLayerHelper elh = new EditLayerHelper(targetLayer);
 		    final int[] indexes = elh.getIndexes(ParcelasForm.PKFIELD,
 			    ParcelasForm.CODVIV, ParcelasForm.CODCOM);
-		    final Value[] values = elh.getValues(codViv, codCom);
+		    final Value[] values = elh
+			    .getValues(codPar, codViv, codCom);
 		    final IGeometry geom = Points2Polygon.toPolygon(layer,
-			    codViv);
+			    codPar);
 		    final IRow row = elh.getRow(geom, indexes, values);
 		    elh.addRowToLayer(row);
 		} catch (ReadDriverException rde) {
@@ -162,9 +228,13 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	return null;
     }
 
-    private boolean allNotNull(String layerName, String codViv, String codCom) {
-	return layerName == null ? false : codViv == null ? false
-		: codCom == null ? false : true;
+    private boolean allNotNull(String... values) {
+	for (String s : values) {
+	    if (s == null) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     private FLyrVect getValidLayer(String layerName) {
@@ -177,6 +247,6 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
     }
 
     public Object getWindowProfile() {
-	return null;
+	return WindowInfo.DIALOG_PROFILE;
     }
 }

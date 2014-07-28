@@ -64,7 +64,7 @@ public class Points2Polygon {
 	// .getShapeCount()];
 
 	SortedMap<String, Geometry> jtsPointGeoms = new TreeMap<String, Geometry>();
-	String realFilter = filter.toUpperCase() + "P";
+	String realFilter = filter.toUpperCase();
 
 	for (int i = 0; i < readableVectorial.getShapeCount(); i++) {
 	    IFeature iFeature = readableVectorial.getFeature(i);

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.InformacionGeneralForm;
@@ -60,5 +61,19 @@ public final class DAO {
 		new String[] { InformacionGeneralForm.PKFIELD }, null, null,
 		false);
 	return flat(table);
+    }
+
+    public static List<String> getPlotCodesForViv(String selectedItem)
+	    throws SQLException {
+
+	DBSession session = DBSession.getCurrentSession();
+	String[][] table = session.getTable(
+		ParcelasForm.NAME,
+		PmfConstants.DATA_SCHEMA,
+		new String[] { ParcelasForm.PKFIELD },
+		String.format("%s='%s'", ParcelasForm.CODVIV,
+			selectedItem.toString()), null, false);
+	return (List<String>) flat(table);
+
     }
 }
