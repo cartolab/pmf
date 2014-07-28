@@ -21,7 +21,7 @@ public class DAOTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
 	Drivers.initgvSIGDrivers(TestProperties.driversPath);
-	String sqliteFile = PmfConstants.SQLITE_FILE;
+	String sqliteFile = "portable/common/cfg/pmf.sqlite";
 	DBSessionSpatiaLite.createConnection(sqliteFile);
     }
 

@@ -32,13 +32,14 @@ import com.iver.utiles.xml.XMLEncodingUtils;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
-import es.udc.cartolab.gvsig.pmf.SelectPlotLayoutDialog;
+import es.udc.cartolab.gvsig.pmf.SelectHousingLayoutDialog;
+import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 
 public class LayoutWrapper {
     private static final int SCALE = 500;
 
     private static Logger logger = Logger
-	    .getLogger(SelectPlotLayoutDialog.class);
+	    .getLogger(SelectHousingLayoutDialog.class);
 
     private MapContext mapContext;
 
@@ -115,28 +116,28 @@ public class LayoutWrapper {
 	PluginServices.getMDIManager().addWindow(layout);
     }
 
-    private void centerLayout(Layout layout) {
-	layout.getLayoutControl().getLayoutZooms();
-	layout.getLayoutControl().getLayoutFunctions();
-    }
-
-    public Rectangle2D zoomTo(String plotCode) {
-	IGeometry plotGeom = getGeometry(plotCode);
-	Rectangle2D rectangle = zoomTo(plotGeom);
+    public Rectangle2D zoomTo(String housingCode) {
+	Rectangle2D plotsGeom = getGeometry(housingCode);
+	Rectangle2D rectangle = zoomTo(plotsGeom);
 	mapContext.setScaleView(SCALE);
 	return rectangle;
     }
 
-    private IGeometry getGeometry(String plotCode) {
-	FLyrVect layer = new TOCLayerManager().getLayerByName("parcelas");
+    private Rectangle2D getGeometry(String housingCode) {
+	FLyrVect layer = new TOCLayerManager()
+		.getLayerByName(ParcelasForm.NAME);
+	Rectangle2D plotsBound = null;
 	if (layer instanceof AlphanumericData) {
 	    ReadableVectorial source = (layer).getSource();
 	    try {
+		int attIndex = layer.getRecordset().getFieldIndexByName(
+			ParcelasForm.CODVIV);
 		source.start();
 		int nrows = source.getShapeCount();
 		for (int i = 0; i < nrows; i++) {
-		    Value attribute = source.getFeature(i).getAttribute(3);
-		    if (attribute.toString().equals(plotCode)) {
+		    Value attribute = source.getFeature(i).getAttribute(
+			    attIndex);
+		    if (attribute.toString().equals(housingCode)) {
 			IGeometry plotGeom = source.getShape(i);
 			/*
 			 * fix to avoid zoom problems when layer and view
@@ -146,7 +147,11 @@ public class LayoutWrapper {
 				&& (plotGeom != null)) {
 			    plotGeom.reProject(layer.getCoordTrans());
 			}
-			return plotGeom;
+			if (plotsBound == null) {
+			    plotsBound = plotGeom.getBounds2D();
+			} else {
+			    plotsBound.add(plotGeom.getBounds2D());
+			}
 		    }
 		}
 	    } catch (InitializeDriverException e) {
@@ -161,12 +166,10 @@ public class LayoutWrapper {
 		}
 	    }
 	}
-	return null;
+	return plotsBound;
     }
 
-    private Rectangle2D zoomTo(IGeometry plotGeom) {
-	Rectangle2D rectangle = null;
-	rectangle = plotGeom.getBounds2D();
+    private Rectangle2D zoomTo(Rectangle2D rectangle) {
 	if (rectangle.getWidth() < 200) {
 	    rectangle.setFrameFromCenter(rectangle.getCenterX(),
 		    rectangle.getCenterY(), rectangle.getCenterX() + 100,

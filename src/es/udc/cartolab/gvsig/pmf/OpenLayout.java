@@ -44,14 +44,14 @@ public class OpenLayout extends Extension implements LayerDrawingListener {
     public void execute(String actionCommand) {
 	zoomed = false;
 	drawed = false;
-	SelectPlotLayoutDialog dialog = new SelectPlotLayoutDialog();
+	SelectHousingLayoutDialog dialog = new SelectHousingLayoutDialog();
 	PluginServices.getMDIManager().addCentredWindow(dialog);
-	String plotCode = dialog.getPlotCode();
+	String housingCode = dialog.getHousingCode();
 	View view = (View) PluginServices.getMDIManager().getActiveWindow();
 	mapContext = view.getMapControl().getMapContext();
 	lw = new LayoutWrapper(mapContext);
 	mapContext.addLayerDrawingListener(this);
-	rectangle = lw.zoomTo(plotCode);
+	rectangle = lw.zoomTo(housingCode);
 	zoomed = true;
     }
 

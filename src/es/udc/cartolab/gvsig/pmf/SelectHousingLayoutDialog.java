@@ -18,39 +18,39 @@ import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
 import es.udc.cartolab.gvsig.pmf.utils.DAO;
 
 @SuppressWarnings("serial")
-public class SelectPlotLayoutDialog extends AbstractIWindow implements
+public class SelectHousingLayoutDialog extends AbstractIWindow implements
 	ActionListener {
 
     private static Logger logger = Logger
-	    .getLogger(SelectPlotLayoutDialog.class);
+	    .getLogger(SelectHousingLayoutDialog.class);
 
     private JComboBox cb;
 
-    private String plotCode;
+    private String housingCode;
 
-    public SelectPlotLayoutDialog() {
+    public SelectHousingLayoutDialog() {
 	super();
-	setWindowTitle("Escoja una parcela");
-	addPlotCB();
+	setWindowTitle("Escoja una vivienda");
+	addHousingCB();
 	addAcceptCancelPanel(this, this);
     }
 
-    private void addPlotCB() {
-	Collection<String> plotCodes;
+    private void addHousingCB() {
+	Collection<String> housingCodes;
 	try {
-	    plotCodes = DAO.getPlotCodes();
+	    housingCodes = DAO.getHousingCodes();
 	} catch (SQLException e) {
-	    plotCodes = Collections.emptyList();
+	    housingCodes = Collections.emptyList();
 	    logger.error(e.getStackTrace(), e);
 	}
 
-	cb = new JComboBox(plotCodes.toArray());
-	add(new JLabel("Código de parcela: "));
+	cb = new JComboBox(housingCodes.toArray());
+	add(new JLabel("Código de vivienda: "));
 	add(cb);
     }
 
-    public String getPlotCode() {
-	return plotCode;
+    public String getHousingCode() {
+	return housingCode;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SelectPlotLayoutDialog extends AbstractIWindow implements
 	    if (cb.getSelectedIndex() == -1) {
 		return;
 	    }
-	    plotCode = cb.getSelectedItem().toString();
+	    housingCode = cb.getSelectedItem().toString();
 	}
 	PluginServices.getMDIManager().closeWindow(this);
     }
