@@ -44,14 +44,112 @@
 		<ENABLEIF>
 			<CONDITION>
 				<COMPONENT>rubro</COMPONENT>
-				<VALUE>Otros</VALUE>
-				
+				<VALUE>Aves Criollas</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>			
+				<VALUE>Huevos</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>	
+				<VALUE>Vacas</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>	
+				<VALUE>Cerdos</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Cabras</VALUE>
 			</CONDITION>
 		</ENABLEIF>
 	    </FIELD>
        	    <FIELD>
 		<FIELDNAME>volumen_prod_kg</FIELDNAME>
 		<VALIDATIONRULE>DOUBLE_POSITIVE</VALIDATIONRULE>
+		<ENABLEIF>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Ayote</VALUE>
+			</CONDITION>
+			
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Camote</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Chile</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Lácteos</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Limón</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Frijol</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Guayaba</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Maicillo</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Maíz</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Marañón</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Miel</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Musáceas</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Papaya</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Pastos</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Sandía</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Yuca</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Hortalizas</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Otros anuales</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Otros semipermanentes</VALUE>
+			</CONDITION>
+			<CONDITION>
+				<COMPONENT>rubro</COMPONENT>
+				<VALUE>Otros</VALUE>
+			</CONDITION>
+		</ENABLEIF>
 	    </FIELD>
        	    <FIELD>
 		<FIELDNAME>area_prod</FIELDNAME>
