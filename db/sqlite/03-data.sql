@@ -392,6 +392,9 @@ CREATE TABLE balances (
        alquiler FLOAT,
        otros_otros FLOAT,
        coste_total FLOAT,
+       empleo_temp_total INTEGER,
+       empleo_temp_hombre INTEGER,
+       empleo_temp_mujer INTEGER,
        venta_total FLOAT,
        consumo_familiar FLOAT,
        beneficio FLOAT
