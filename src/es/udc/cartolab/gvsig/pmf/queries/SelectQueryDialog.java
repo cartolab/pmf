@@ -1,6 +1,5 @@
 package es.udc.cartolab.gvsig.pmf.queries;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -11,17 +10,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
+import es.udc.cartolab.gvsig.commons.ui.AbstractIWindow;
 import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
 import es.udc.cartolab.gvsig.commons.ui.SaveFileDialog;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
@@ -33,26 +29,33 @@ import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
-public class SelectQueryDialog extends JPanel implements IWindow,
+public class SelectQueryDialog extends AbstractIWindow implements
 	ActionListener {
 
-    private static Logger logger = Logger.getLogger("QueriesExtension");
-    private WindowInfo windowInfo = null;
+    private static final Logger logger = Logger
+	    .getLogger(SelectQueryDialog.class);
 
-    private final String QUERY1 = "Listado de comunidades";
-    private final String QUERY2 = "Listado de productores";
-    private final String QUERY3 = "Listado de fincas";
-    private final String QUERY4 = "Listado de fincas y cultivos";
-    private final String QUERY5 = "Listado de planificación";
-    private final String QUERY6 = "Listado agregado de rubros por comunidad";
-    private final String OUTPUT1 = "listadoComunidades";
-    private final String OUTPUT2 = "listadoProductores";
-    private final String OUTPUT3 = "listadoFincas";
-    private final String OUTPUT4 = "listadoFincasCultivos";
-    private final String OUTPUT5 = "listadoPlanificación";
-    private final String OUTPUT6 = "listadoAgregadoRubrosComunidad";
+    private static final String QUERY1 = "Listado de comunidades";
+    private static final String QUERY2 = "Listado de productores";
+    private static final String QUERY3 = "Listado de fincas";
+    private static final String QUERY4 = "Listado de fincas y cultivos";
+    private static final String QUERY5 = "Listado de planificación";
+    private static final String QUERY6 = "Listado agregado de rubros por comunidad";
+    private static final String QUERY7 = "Empleos generados por rubro";
+    private static final String QUERY8 = "Ingresos y producción familiar";
+    private static final String OUTPUT1 = "listadoComunidades";
+    private static final String OUTPUT2 = "listadoProductores";
+    private static final String OUTPUT3 = "listadoFincas";
+    private static final String OUTPUT4 = "listadoFincasCultivos";
+    private static final String OUTPUT5 = "listadoPlanificación";
+    private static final String OUTPUT6 = "listadoAgregadoRubrosComunidad";
+    private static final String OUTPUT7 = "empleos_generados_rubro";
+    private static final String OUTPUT8 = "ingresos_produccion_familiar";
 
-    private final String SELECTQUERY = "_selectQuery";
+    String[] items = { QUERY1, QUERY2, QUERY3, QUERY4, QUERY5, QUERY6, QUERY7,
+	    QUERY8 };
+
+    private static final String SELECTQUERY = "_selectQuery";
 
     private JTextField directoryField = null;
     private JButton dotsButton = null;
@@ -60,51 +63,15 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 
     private final DBSession session = DBSession.getCurrentSession();
 
-    @Override
-    public WindowInfo getWindowInfo() {
-	if (windowInfo == null) {
-	    windowInfo = new WindowInfo(WindowInfo.MODALDIALOG
-		    | WindowInfo.RESIZABLE | WindowInfo.PALETTE);
-	    windowInfo.setTitle(PluginServices.getText(this, "Queries"));
-	    Dimension dim = getPreferredSize();
-	    int width, height = 0;
-	    if (dim.getHeight() > 550) {
-		height = 550;
-	    } else {
-		height = 65;
-	    }
-	    if (dim.getWidth() > 650) {
-		width = 650;
-	    } else {
-		width = new Double(dim.getWidth()).intValue() + 20;
-	    }
-	    windowInfo.setWidth(width);
-	    windowInfo.setHeight(height);
-	}
-	return windowInfo;
-    }
-
-    @Override
-    public Object getWindowProfile() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
     public SelectQueryDialog() {
 	super();
-	try {
-	    initialize();
-	} catch (Exception e) {
-	    logger.error(e.getMessage(), e);
-	}
+	setWindowTitle("Consultas");
+	setWindowInfoProperties(WindowInfo.MODALDIALOG);
+	addAcceptCancelPanel(this, this);
+	initialize();
     }
 
-    private void initialize() throws Exception {
-	this.setLayout(new MigLayout("center", "[fill][grow 0][grow 0][fill]",
-		"20[fill][fill]30%[fill, bottom]"));
-	this.setLayout(new MigLayout());
-
-	String[] items = { QUERY1, QUERY2, QUERY3, QUERY4, QUERY5, QUERY6 };
+    private void initialize() {
 
 	this.add(new JLabel(PluginServices.getText(this, SELECTQUERY)));
 
@@ -125,9 +92,6 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	dotsButton = new JButton("...");
 	dotsButton.addActionListener(this);
 	this.add(dotsButton, "center, bottom, cell 2 2");
-
-	AcceptCancelPanel acceptCancelPanel = new AcceptCancelPanel(this, this);
-	add(acceptCancelPanel, "dock south");
     }
 
     private void displayFileChooser() {
@@ -177,6 +141,12 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	    } else if (query.equals(QUERY6)) {
 		result = query6();
 		fileName += "/" + OUTPUT6 + ".csv";
+	    } else if (query.equals(QUERY7)) {
+		result = query7();
+		fileName += "/" + OUTPUT7 + ".csv";
+	    } else if (query.equals(QUERY8)) {
+		result = query8();
+		fileName += "/" + OUTPUT8 + ".csv";
 	    }
 
 	    for (int i = 0; i < 10; i++) {
@@ -192,17 +162,30 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	}
     }
 
-    public void actionPerformed(ActionEvent e) {
-
-	if (e.getSource() == dotsButton) {
-	    displayFileChooser();
-	} else if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
-	    processQuery(directoryField.getText());
-	    PluginServices.getMDIManager().closeWindow(this);
-	} else if (e.getActionCommand() == AcceptCancelPanel.CANCEL_ACTION_COMMAND) {
-	    PluginServices.getMDIManager().closeWindow(this);
+    private String query8() {
+	StringBuffer str = new StringBuffer(
+		"Código vivienda;Productor/a;Rubro;Producción (ud);Producción (kg);Beneficio;\n");
+	String[][] values = new String[0][0];
+	try {
+	    values = DAO.getIngresosProduccionFamiliar();
+	} catch (SQLException e) {
+	    logger.error(e.getStackTrace(), e);
 	}
+	str.append(matrixToString(values));
+	return str.toString();
+    }
 
+    private String query7() {
+	StringBuffer str = new StringBuffer(
+		"Comunidad;Rubro;Total empleo;Empleo hombre;Empleo mujer;\n");
+	String[][] values = new String[0][0];
+	try {
+	    values = DAO.getEmpleoComunidad();
+	} catch (SQLException e) {
+	    logger.error(e.getStackTrace(), e);
+	}
+	str.append(matrixToString(values));
+	return str.toString();
     }
 
     private String query6() {
@@ -357,6 +340,19 @@ public class SelectQueryDialog extends JPanel implements IWindow,
 	    result += "\n";
 	}
 	return result;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+
+	if (e.getSource() == dotsButton) {
+	    displayFileChooser();
+	} else if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
+	    processQuery(directoryField.getText());
+	    PluginServices.getMDIManager().closeWindow(this);
+	} else if (e.getActionCommand() == AcceptCancelPanel.CANCEL_ACTION_COMMAND) {
+	    PluginServices.getMDIManager().closeWindow(this);
+	}
+
     }
 
 }
