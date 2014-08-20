@@ -49,8 +49,11 @@ public class Points2Polygon {
 
     // TODO: Index of the field and the filter is hardcoded. This method sould
     // rececive an interface that has all the information about the filter
+    /**
+     * @throws InvalidInputDataException
+     */
     public static IGeometry toPolygon(FLyrVect pointLayer, String filter)
-	    throws ReadDriverException {
+	    throws ReadDriverException, InvalidInputDataException {
 
 	ICoordTrans ct = null;
 	if (pointLayer.getProjection() != pointLayer.getMapContext()
@@ -64,7 +67,7 @@ public class Points2Polygon {
 	// .getShapeCount()];
 
 	SortedMap<String, Geometry> jtsPointGeoms = new TreeMap<String, Geometry>();
-	String realFilter = filter.toUpperCase();
+	String realFilter = filter.toUpperCase() + "V";
 
 	for (int i = 0; i < readableVectorial.getShapeCount(); i++) {
 	    IFeature iFeature = readableVectorial.getFeature(i);
@@ -77,6 +80,13 @@ public class Points2Polygon {
 		}
 		jtsPointGeoms.put(key, gvPointGeom.toJTSGeometry());
 	    }
+	}
+
+	if (jtsPointGeoms.size() < 4) {
+	    throw new InvalidInputDataException(
+		    String.format(
+			    "El número de vértices de la parcela\n %s \n debe ser igual o superior a cuatro y sólo tiene %d",
+			    filter, jtsPointGeoms.size()));
 	}
 
 	GeometryFactory fact = new GeometryFactory();

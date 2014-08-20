@@ -43,11 +43,6 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 
     private static Logger logger = Logger.getLogger(ImportPlotDialog.class);
 
-    /*
-     * The next properties are the ones related to the interface itself, so they
-     * don't need a real explanation
-     */
-
     private WindowInfo windowInfo = null;
     private FLyrVect[] validLayers;
     private Collection<String> codComs;
@@ -118,6 +113,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	this.add(label);
 
 	codComCombo = new JComboBox(codComs.toArray());
+	codComCombo.addItem("");
+	codComCombo.setSelectedIndex(codComCombo.getItemCount() - 1);
 	codComCombo.setPrototypeDisplayValue(prototypeDisplayValue);
 	this.add(codComCombo, "wrap");
 
@@ -125,6 +122,8 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	this.add(label);
 
 	codVivCombo = new JComboBox(codVivs.toArray());
+	codVivCombo.addItem("");
+	codVivCombo.setSelectedIndex(codVivCombo.getItemCount() - 1);
 	codVivCombo.setPrototypeDisplayValue(prototypeDisplayValue);
 	this.add(codVivCombo, "wrap");
 	codVivCombo.addActionListener(new ActionListener() {
@@ -132,7 +131,9 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		String expectedPlotCode = "";
-		if (codVivCombo.getSelectedItem() == null) {
+		if ((codVivCombo.getSelectedItem() == null)
+			|| (codVivCombo.getSelectedItem().toString().trim()
+				.isEmpty())) {
 		    codParTF.setText("");
 		    return;
 		}
@@ -159,8 +160,10 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 		    }
 
 		} catch (SQLException e1) {
+		    expectedPlotCode = "";
 		    logger.error(e1.getStackTrace(), e1);
 		} catch (NumberFormatException e2) {
+		    expectedPlotCode = "";
 		    logger.error(e2.getStackTrace(), e2);
 		}
 		codParTF.setText(expectedPlotCode);
@@ -204,15 +207,26 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 		    final IRow row = elh.getRow(geom, indexes, values);
 		    elh.addRowToLayer(row);
 		} catch (ReadDriverException rde) {
-		    NotificationManager.addWarning(PluginServices.getText(this,
-			    ""));
+		    JOptionPane.showConfirmDialog(this,
+			    "Error procesando la capa", "Error",
+			    JOptionPane.DEFAULT_OPTION,
+			    JOptionPane.ERROR_MESSAGE);
 		    logger.error(rde);
 		} catch (StopWriterVisitorException swve) {
 		    String message = String.format(
 			    PluginServices.getText(this, "error_saving_layer"),
 			    layerName);
+		    JOptionPane.showConfirmDialog(this, message, "Error",
+			    JOptionPane.DEFAULT_OPTION,
+			    JOptionPane.ERROR_MESSAGE);
 		    NotificationManager.addWarning(message);
 		    logger.error(swve);
+		} catch (InvalidInputDataException e1) {
+		    JOptionPane.showConfirmDialog(this, e1.getMessage(),
+			    "Error", JOptionPane.DEFAULT_OPTION,
+			    JOptionPane.ERROR_MESSAGE);
+		    NotificationManager.addWarning(e1.getMessage());
+		    logger.error(e1.getStackTrace(), e1);
 		}
 	    }
 	}
