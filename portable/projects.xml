@@ -19,6 +19,7 @@
 		org.gvsig.installer.app.extension,
 		extHelp,
 		extWCS,
+		extWFS2,
 		org.gvsig.consecutivenumber,
 		binaries
 	-->
@@ -62,7 +63,7 @@
 		extScripting,
 		extAnnotations,
 		extExpressionField,
-		extWFS2,
+		
 		extWMS,
 		extIconThemeBase,
 		extProjectBackup,
