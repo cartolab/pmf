@@ -13,8 +13,9 @@ import org.apache.log4j.Logger;
 import com.iver.andami.PluginServices;
 import com.iver.utiles.swing.JComboBox;
 
-import es.udc.cartolab.gvsig.commons.ui.AbstractIWindow;
-import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
+import es.icarto.gvsig.commons.gui.AbstractIWindow;
+import es.icarto.gvsig.commons.gui.OkCancelPanel;
+import es.icarto.gvsig.commons.gui.WidgetFactory;
 import es.udc.cartolab.gvsig.pmf.utils.DAO;
 
 @SuppressWarnings("serial")
@@ -32,7 +33,7 @@ public class SelectHousingLayoutDialog extends AbstractIWindow implements
 	super();
 	setWindowTitle("Escoja una vivienda");
 	addHousingCB();
-	addAcceptCancelPanel(this, this);
+	WidgetFactory.okCancelPanel(this, this, this);
     }
 
     private void addHousingCB() {
@@ -55,7 +56,7 @@ public class SelectHousingLayoutDialog extends AbstractIWindow implements
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
+	if (e.getActionCommand() == OkCancelPanel.OK_ACTION_COMMAND) {
 	    if (cb.getSelectedIndex() == -1) {
 		return;
 	    }

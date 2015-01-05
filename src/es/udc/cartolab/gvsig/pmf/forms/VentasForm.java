@@ -35,7 +35,7 @@ public class VentasForm extends AbstractSubForm implements ActionListener {
 
     public VentasForm() {
 	super();
-	JButton button = (JButton) getFormPanel(null).getComponentByName(
+	JButton button = (JButton) getFormPanel().getComponentByName(
 		"compradores_button");
 	button.addActionListener(this);
 	codComprador = (JComboBox) getWidgetComponents().get("cod_comprador");

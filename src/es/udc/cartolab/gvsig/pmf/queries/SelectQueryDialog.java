@@ -17,8 +17,9 @@ import org.apache.log4j.Logger;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
-import es.udc.cartolab.gvsig.commons.ui.AbstractIWindow;
-import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
+import es.icarto.gvsig.commons.gui.AbstractIWindow;
+import es.icarto.gvsig.commons.gui.OkCancelPanel;
+import es.icarto.gvsig.commons.gui.WidgetFactory;
 import es.udc.cartolab.gvsig.commons.ui.SaveFileDialog;
 import es.udc.cartolab.gvsig.pmf.forms.ComunidadesForm;
 import es.udc.cartolab.gvsig.pmf.forms.CultivosForm;
@@ -67,7 +68,7 @@ public class SelectQueryDialog extends AbstractIWindow implements
 	super();
 	setWindowTitle("Consultas");
 	setWindowInfoProperties(WindowInfo.MODALDIALOG);
-	addAcceptCancelPanel(this, this);
+	WidgetFactory.okCancelPanel(this, this, this);
 	initialize();
     }
 
@@ -346,10 +347,10 @@ public class SelectQueryDialog extends AbstractIWindow implements
 
 	if (e.getSource() == dotsButton) {
 	    displayFileChooser();
-	} else if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
+	} else if (e.getActionCommand() == OkCancelPanel.OK_ACTION_COMMAND) {
 	    processQuery(directoryField.getText());
 	    PluginServices.getMDIManager().closeWindow(this);
-	} else if (e.getActionCommand() == AcceptCancelPanel.CANCEL_ACTION_COMMAND) {
+	} else if (e.getActionCommand() == OkCancelPanel.CANCEL_ACTION_COMMAND) {
 	    PluginServices.getMDIManager().closeWindow(this);
 	}
 

@@ -76,12 +76,13 @@
 		org.gvsig.copypastegeom,
 		org.gvsig.selectduplicates,
 		org.gvsig.newgeoprocess,
+		es.icarto.gvsig.commons,
 		extNavTable
 	"/>
 	
 	<property name="custom-projects" value="
 		extDBConnection,
-		elle,
+		extELLE,
 		extCopyFeatures,
 		extNavTableForms,
 		extTOCExtra,

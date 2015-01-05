@@ -31,7 +31,8 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
-import es.udc.cartolab.gvsig.commons.ui.AcceptCancelPanel;
+import es.icarto.gvsig.commons.gui.OkCancelPanel;
+import es.icarto.gvsig.commons.gui.WidgetFactory;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.utils.DAO;
 import es.udc.cartolab.gvsig.pmf.utils.EditLayerHelper;
@@ -176,13 +177,11 @@ public class ImportPlotDialog extends JPanel implements IWindow, ActionListener 
 	codParTF.setEditable(false);
 	codParTF.setEnabled(false);
 	this.add(codParTF, "wrap");
-
-	AcceptCancelPanel acceptCancelPanel = new AcceptCancelPanel(this, this);
-	add(acceptCancelPanel, "dock south");
+	WidgetFactory.okCancelPanel(this, this, this);
     }
 
     public void actionPerformed(ActionEvent e) {
-	if (e.getActionCommand() == AcceptCancelPanel.OK_ACTION_COMMAND) {
+	if (e.getActionCommand() == OkCancelPanel.OK_ACTION_COMMAND) {
 	    String layerName = getComboboxValue(originCombo);
 	    String codViv = getComboboxValue(codVivCombo);
 	    String codCom = getComboboxValue(codComCombo);
