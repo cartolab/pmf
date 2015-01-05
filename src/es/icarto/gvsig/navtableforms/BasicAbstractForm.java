@@ -20,7 +20,7 @@ public abstract class BasicAbstractForm extends AbstractForm {
     public FormPanel getFormBody() {
 	if (formBody == null) {
 	    InputStream stream = getClass().getClassLoader()
-		    .getResourceAsStream("ui/" + getBasicName() + ".xml");
+		    .getResourceAsStream("forms/" + getBasicName() + ".xml");
 	    try {
 		formBody = new FormPanel(stream);
 	    } catch (FormException e) {
@@ -33,7 +33,7 @@ public abstract class BasicAbstractForm extends AbstractForm {
     @Override
     public String getXMLPath() {
 	return this.getClass().getClassLoader()
-		.getResource("metadata/" + getBasicName() + ".xml").getPath();
+		.getResource("rules/" + getBasicName() + ".xml").getPath();
     }
 
     @Override

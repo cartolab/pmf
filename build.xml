@@ -43,12 +43,12 @@
 	
 	<target name="copy-data-files">
 		<copy file="config/config.xml" todir="${dist}"/>
-		<copy todir="${dist}/ui" overwrite="true">
-			<fileset dir="ui"/>
+		<copy todir="${dist}/forms" overwrite="true">
+			<fileset dir="forms"/>
 		</copy>
 		
-		<copy todir="${dist}/metadata" overwrite="true">
-			<fileset dir="metadata"/>
+		<copy todir="${dist}/rules" overwrite="true">
+			<fileset dir="rules"/>
 		</copy>
 		
 		<copy file="config/about.htm" todir="${dist}"/>
