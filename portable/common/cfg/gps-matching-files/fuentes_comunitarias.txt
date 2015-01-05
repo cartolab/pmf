@@ -1,5 +1,5 @@
 codigo_fc=name
-cod_com:substring(name,0,6)
+cod_com:substring(name,0,8)
 x:getX
 y:getY
 z=elev
