@@ -168,7 +168,7 @@
 		<FIELDNAME>ot_mat_pa</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>mat_techo</COMPONENT>
+				<COMPONENT>mat_pared</COMPONENT>
 				<VALUE>otros</VALUE>
 			</CONDITION>
 		</ENABLEIF>
