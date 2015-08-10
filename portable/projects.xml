@@ -1,99 +1,60 @@
-<project name="fonsagua-projects">
-
-	<!-- Removed
-		extOracleSpatial,
-		libArcIMS,
-		extArcims,
-		gvsig-bindings,
-		extSDE,
-		appCatalogAndGazetteerClient,
-		extCatalogAndGazetteer,
-		extCenterViewToPoint,
-		org.gvsig.chartlegend,
-		extTableSummarize,
-		extSelectionTools,
-		extQuickInfo,
-		extHyperlink,
-		extQuickPrint,
-		extLayerLoadingOrder,
-		org.gvsig.installer.app.extension,
-		extHelp,
-		extWCS,
-		extWFS2,
-		org.gvsig.consecutivenumber,
-		binaries
-	-->
-
-	<property name="gvSIG_dist_projects_on_main_svn" value="
-		libExceptions,
-		libInternationalization,
-		libIverUtiles,
-		libUIComponent,
-		_fwAndami,
-		libGeoUtils,
-		libCorePlugin,
-		libProjection,
-		libRaster,
-		libDXF,
-		libDriverManager,
-		libRemoteServices,
-		libGDBMS,
-		libFMap,
-		libSpatialite,
-		libGPE,
-		libGPE-XML,
-		libGPE-GML,
-		libGPE-KML,
-		appgvSIG,
-		libJCRS,
-		extJCRS,
-		libTopology,
-		libDwg,
-		extDwg,
-		extSymbology,
-		extRasterTools-SE,
-		extAddEventTheme,
-		extJDBC,
-		extCAD,
-		extGPE-gvSIG,
-		extDataLocator,
-		extGeoProcessing,
-		extGeoprocessingExtensions,
-		extGeoreferencing,
-		extScripting,
-		extAnnotations,
-		extExpressionField,
-		
-		extWMS,
-		extIconThemeBase,
-		extProjectBackup,
-		extDerivedGeometries,
-		extI18n,
-		extTableImport,
-		extTableExport
-	"/>
+<project name="pmf-projects">
 	
-	<property name="gvSIG_dist_projects_on_other_svn" value="
-		org.gvsig.copypastegeom,
-		org.gvsig.selectduplicates,
-		org.gvsig.newgeoprocess,
-		es.icarto.gvsig.commons,
-		extNavTable
-	"/>
+	<property name="gvSIG_dist_projects_on_main_svn" value="
+			libIverUtiles,
+			libExceptions,
+			libInternationalization,
+			libUIComponent,
+			_fwAndami,
+			libCorePlugin,
+			libProjection,
+			libRaster,
+			libDriverManager,
+			libRemoteServices,
+			libGDBMS,
+			libFMap,
+			appgvSIG,
+			extRasterTools-SE,
+			extScripting,
+			libJCRS,
+			extJCRS,
+			extSymbology,
+			extJDBC,
+			extCAD,
+			extIconThemeBase,
+			libDwg,
+			extDwg,
+			extGeoProcessing,
+			extGeoprocessingExtensions,
+			libGPE,
+			libGPE-XML,
+			libGPE-GML,
+			libGPE-KML,
+			extGPE-gvSIG,
+			extAddEventTheme,
+			extExpressionField,
+			extGeoreferencing,
+			extTableExport,
+			extTableImport,
+			org.gvsig.copypastegeom,
+			extDerivedGeometries,
+			org.gvsig.installer.app.extension
+		"/>
 	
 	<property name="custom-projects" value="
+		es.icarto.gvsig.commons,
+		extGPX,
+		extNavTable,
+		libSpatialite,
 		extDBConnection,
 		extELLE,
 		extCopyFeatures,
 		extNavTableForms,
-		extTOCExtra,
-		pmf,
-		jgpx
+		pmf
 	"/>
 		
 	<property name="gvSIG_dist" value="
 		${gvSIG_dist_projects_on_main_svn},
-		${gvSIG_dist_projects_on_other_svn},
 		${custom-projects}
 	"/>
 
