@@ -20,7 +20,7 @@ import es.udc.cartolab.gvsig.pmf.utils.DAO;
 
 @SuppressWarnings("serial")
 public class SelectHousingLayoutDialog extends AbstractIWindow implements
-	ActionListener {
+ActionListener {
 
     private static Logger logger = Logger
 	    .getLogger(SelectHousingLayoutDialog.class);
@@ -39,7 +39,7 @@ public class SelectHousingLayoutDialog extends AbstractIWindow implements
     private void addHousingCB() {
 	Collection<String> housingCodes;
 	try {
-	    housingCodes = DAO.getHousingCodes();
+	    housingCodes = DAO.getHousingCodesFromParcelas();
 	} catch (SQLException e) {
 	    housingCodes = Collections.emptyList();
 	    logger.error(e.getStackTrace(), e);

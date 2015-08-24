@@ -11,47 +11,40 @@ import org.apache.log4j.Logger;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 
-import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.layout.ProjectMap;
+import com.iver.cit.gvsig.project.documents.layout.fframes.FFrameView;
+import com.iver.cit.gvsig.project.documents.layout.fframes.IFFrame;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xml.XMLEncodingUtils;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 
-import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.pmf.SelectHousingLayoutDialog;
-import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 
 public class LayoutWrapper {
-    private static final int SCALE = 500;
 
     private static Logger logger = Logger
 	    .getLogger(SelectHousingLayoutDialog.class);
 
     private MapContext mapContext;
+    private String templatePath;
 
-    public LayoutWrapper(MapContext mapContext) {
+    public LayoutWrapper(MapContext mapContext, String templatePath) {
 	this.mapContext = mapContext;
+	this.templatePath = templatePath;
     }
 
     /**
-     * 
+     *
      * The paths to the logos and north sign in pmf.gvt should be relative to
      * andami.jar
-     * 
+     *
      * @param file
      *            file that contains the gvsig layout template
      * @return
@@ -100,7 +93,7 @@ public class LayoutWrapper {
 
     /**
      * Adds the layout to the project documents and opens the layout window
-     * 
+     *
      * @param layout
      *            the layout to open
      * @param layoutName
@@ -117,69 +110,32 @@ public class LayoutWrapper {
     }
 
     public Rectangle2D zoomTo(String housingCode) {
-	Rectangle2D plotsGeom = getGeometry(housingCode);
-	Rectangle2D rectangle = zoomTo(plotsGeom);
-	mapContext.setScaleView(SCALE);
-	return rectangle;
-    }
+	final ZoomToParcel zoom = new ZoomToParcel();
+	zoom.onFinishZoom(new Runnable() {
 
-    private Rectangle2D getGeometry(String housingCode) {
-	FLyrVect layer = new TOCLayerManager()
-		.getLayerByName(ParcelasForm.NAME);
-	Rectangle2D plotsBound = null;
-	if (layer instanceof AlphanumericData) {
-	    ReadableVectorial source = (layer).getSource();
-	    try {
-		int attIndex = layer.getRecordset().getFieldIndexByName(
-			ParcelasForm.CODVIV);
-		source.start();
-		int nrows = source.getShapeCount();
-		for (int i = 0; i < nrows; i++) {
-		    Value attribute = source.getFeature(i).getAttribute(
-			    attIndex);
-		    if (attribute.toString().equals(housingCode)) {
-			IGeometry plotGeom = source.getShape(i);
-			/*
-			 * fix to avoid zoom problems when layer and view
-			 * projections aren't the same.
-			 */
-			if ((layer.getCoordTrans() != null)
-				&& (plotGeom != null)) {
-			    plotGeom.reProject(layer.getCoordTrans());
-			}
-			if (plotsBound == null) {
-			    plotsBound = plotGeom.getBounds2D();
-			} else {
-			    plotsBound.add(plotGeom.getBounds2D());
+	    @Override
+	    public void run() {
+		try {
+		    Layout layout = getLayoutFromTemplate(new File(templatePath));
+
+		    // layout.commandRefresh();
+		    // layout.commandRepaint();
+		    openLayoutWindow(layout, "PMF");
+		    IFFrame[] fFrames = layout.getLayoutContext().getFFrames();
+		    for (IFFrame fFrame : fFrames) {
+			if (fFrame instanceof FFrameView) {
+			    FFrameView frameView = (FFrameView) fFrame;
+			    frameView.setNewExtent(mapContext
+				    .getGraphicsLayer().getFullExtent());
+			    // frameView.setLinked(false);
+			    // frameView.refresh();
 			}
 		    }
-		}
-	    } catch (InitializeDriverException e) {
-		logger.error(e.getStackTrace(), e);
-	    } catch (ReadDriverException e) {
-		logger.error(e.getStackTrace(), e);
-	    } finally {
-		try {
-		    source.stop();
-		} catch (ReadDriverException e) {
-		    logger.error(e.getStackTrace(), e);
+		} catch (ExternalError ex) {
+		    logger.error(ex.getStackTrace(), ex);
 		}
 	    }
-	}
-	return plotsBound;
-    }
-
-    private Rectangle2D zoomTo(Rectangle2D rectangle) {
-	if (rectangle.getWidth() < 200) {
-	    rectangle.setFrameFromCenter(rectangle.getCenterX(),
-		    rectangle.getCenterY(), rectangle.getCenterX() + 100,
-		    rectangle.getCenterY() + 100);
-	}
-	if (rectangle != null) {
-	    ViewPort viewPort = mapContext.getViewPort();
-	    viewPort.setExtent(rectangle);
-	    viewPort.refreshExtent();
-	}
-	return rectangle;
+	});
+	return zoom.zoom(housingCode);
     }
 }

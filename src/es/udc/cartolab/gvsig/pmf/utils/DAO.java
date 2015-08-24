@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +65,15 @@ public final class DAO {
 		new String[] { InformacionGeneralForm.PKFIELD }, null, null,
 		false);
 	return flat(table);
+    }
+
+    public static Collection<String> getHousingCodesFromParcelas()
+	    throws SQLException {
+	DBSession session = DBSession.getCurrentSession();
+	String[] table = session.getDistinctValues(ParcelasForm.NAME,
+		PmfConstants.DATA_SCHEMA, InformacionGeneralForm.PKFIELD, true,
+		true, "");
+	return new ArrayList<String>(Arrays.asList(table));
     }
 
     public static List<String> getPlotCodesForViv(String selectedItem)
