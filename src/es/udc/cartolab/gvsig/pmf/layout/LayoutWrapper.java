@@ -118,8 +118,8 @@ public class LayoutWrapper {
 		try {
 		    Layout layout = getLayoutFromTemplate(new File(templatePath));
 
-		    // layout.commandRefresh();
-		    // layout.commandRepaint();
+		    layout.commandRefresh();
+		    layout.commandRepaint();
 		    openLayoutWindow(layout, "PMF");
 		    IFFrame[] fFrames = layout.getLayoutContext().getFFrames();
 		    for (IFFrame fFrame : fFrames) {
@@ -128,7 +128,7 @@ public class LayoutWrapper {
 			    frameView.setNewExtent(mapContext
 				    .getGraphicsLayer().getFullExtent());
 			    // frameView.setLinked(false);
-			    // frameView.refresh();
+			    frameView.refresh();
 			}
 		    }
 		} catch (ExternalError ex) {

@@ -27,6 +27,8 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.lowagie.text.Chunk;
@@ -49,6 +51,8 @@ import es.udc.cartolab.gvsig.pmf.reports.RtfBaseReport;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
 public class RtfPlotReport extends RtfBaseReport {
+
+    private static final Logger logger = Logger.getLogger(RtfPlotReport.class);
 
     private Set<String> cul_an;
     private Set<String> cul_sp;
@@ -175,13 +179,13 @@ public class RtfPlotReport extends RtfBaseReport {
 
 	    startDocument();
 	    createSection1();
-	    createSection2();
+	    createParcelaSecion();
 
 	    // close document
 	    document.close();
 
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    logger.error(e.getStackTrace(), e);
 	}
     }
 
@@ -1287,9 +1291,8 @@ public class RtfPlotReport extends RtfBaseReport {
 	return v.equals("t") || v.equals("true");
     }
 
-    // TODO: Sólo funciona con 1 parcela por vivienda
-    private void createSection2() throws DocumentException,
-	    ReadDriverException, SQLException {
+    private void createParcelaSecion() throws ReadDriverException,
+    DocumentException, SQLException {
 
 	String[] fields = { "area_tot", "area_cul", "legal_par", "ot_legal_p",
 		"legal_par", "pendiente", "tip_suelo", "ot_tip_su",
@@ -1303,6 +1306,21 @@ public class RtfPlotReport extends RtfBaseReport {
 		PmfConstants.DATA_SCHEMA, fields, "WHERE "
 			+ InformacionGeneralForm.PKFIELD + " = '" + codViv
 			+ "'", new String[0], false);
+	createSection2(values);
+
+	if ((values != null) && (values.length > 1)) {
+	    for (int i = 1; i < values.length; i++) {
+		for (int j = 0; j < values[0].length; j++) {
+		    values[0][j] = values[i][j];
+		}
+		createSection2(values);
+	    }
+	}
+
+    }
+
+    private void createSection2(String[][] values) throws DocumentException,
+	    ReadDriverException, SQLException {
 
 	// Section 2
 	Paragraph sectionTitle = new Paragraph(
