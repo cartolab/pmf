@@ -10,11 +10,8 @@ import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.ExtentEvent;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.ProjectionEvent;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.ViewPortListener;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -31,7 +28,7 @@ public class ZoomToParcel implements LayerDrawingListener {
 
     private static final Logger logger = Logger.getLogger(ZoomToParcel.class);
 
-    private static final int SCALE = 500;
+    public static final int SCALE = 500;
 
     private MapControl mapControl;
 
@@ -103,7 +100,7 @@ public class ZoomToParcel implements LayerDrawingListener {
 
     private FLyrVect getEnvelopeConstantLayer() {
 	return new TOCLayerManager(mapControl)
-	.getLayerByName(ParcelasForm.NAME);
+		.getLayerByName(ParcelasForm.NAME);
     }
 
     private Rectangle2D zoomTo(Rectangle2D rectangle) {
@@ -157,6 +154,6 @@ public class ZoomToParcel implements LayerDrawingListener {
 
 }
 
-//Capa y posición
+// Capa y posición
 //
-//Geometría
+// Geometría

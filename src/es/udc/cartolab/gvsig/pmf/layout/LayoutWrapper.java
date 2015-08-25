@@ -127,7 +127,8 @@ public class LayoutWrapper {
 			    FFrameView frameView = (FFrameView) fFrame;
 			    frameView.setNewExtent(mapContext
 				    .getGraphicsLayer().getFullExtent());
-			    // frameView.setLinked(false);
+			    frameView.setLinked(false);
+			    frameView.setScale(ZoomToParcel.SCALE);
 			    frameView.refresh();
 			}
 		    }
