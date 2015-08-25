@@ -109,8 +109,9 @@ CREATE TABLE mat_techo (
 INSERT INTO mat_techo (item) VALUES
        (' '),
        ('Teja'),
-       ('Alucin'),
+       ('Aluzinc'),
        ('Manaca'),
+       ('Teja y Aluzinc'),
        ('Otros');
 
 
@@ -301,3 +302,18 @@ INSERT INTO rubro (item, tipo_rubro) VALUES
        ('Otros semipermanentes', 'Otros'),
        ('Otros', 'Otros'),
        ('Vacas', 'Pecuario');
+
+CREATE TABLE ingresos_generales_familiares (
+       item VARCHAR
+       	    PRIMARY KEY
+);
+
+INSERT INTO ingresos_generales_familiares (item) VALUES
+       (' '),
+       ('1000 - 2000'),
+       ('2001 - 3000'),
+       ('3001 - 4000'),
+       ('4001 - 5000'),
+       ('5001 - 6000'),
+       ('6001 - 7000'),
+       ('> 7000');

@@ -187,7 +187,7 @@
 		<FIELDNAME>ot_mat_te</FIELDNAME>
 		<ENABLEIF>
 			<CONDITION>
-				<COMPONENT>mat_pared</COMPONENT>
+				<COMPONENT>mat_techo</COMPONENT>
 				<VALUE>otros</VALUE>
 			</CONDITION>
 		</ENABLEIF>
@@ -377,6 +377,17 @@
 				<VALUE>Otro</VALUE>
 			</CONDITION>
 		</ENABLEIF>
+	    </FIELD>
+	    
+	    <FIELD>
+		<FIELDNAME>ingresos_generales_familiares</FIELDNAME>
+		<DOMAINREADER>
+			<DRTYPE>db</DRTYPE>
+			<DRDBSCHEMA>dominios</DRDBSCHEMA>
+			<DRDBTABLE>ingresos_generales_familiares</DRDBTABLE>
+			<DRDBCOLUMNALIAS>item</DRDBCOLUMNALIAS>
+			<DRDBCOLUMNVALUE>item</DRDBCOLUMNVALUE>
+		</DOMAINREADER>
 	    </FIELD>
        </RECORDSET>
 

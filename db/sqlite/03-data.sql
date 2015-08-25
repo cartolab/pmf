@@ -187,7 +187,9 @@ CREATE TABLE informacion_general (
        otra_logistica_cual VARCHAR,
        disp_desec VARCHAR
 	       REFERENCES disp_desec(item),
-       disp_desec_cual VARCHAR
+       disp_desec_cual VARCHAR,
+       ingresos_generales_familiares VARCHAR
+               REFERENCES ingresos_generales_familiares(item)
 
 );
 
