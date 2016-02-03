@@ -11,6 +11,9 @@
 	<resourceBundle name="text"/>
 	<extensions>
 	
+		<extension class-name="es.udc.cartolab.gvsig.pmf.ConfigExtension" active="true">
+		</extension>
+		
 			<extension class-name="es.udc.cartolab.gvsig.pmf.OpenGeneralExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
 				<action-tool icon="load-layers-launcher-icon" tooltip="_load-layers-launcher-tooltip"

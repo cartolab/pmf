@@ -12,10 +12,8 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
-import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.pmf.utils.PmfFormFactory;
 import es.udc.cartolab.gvsig.pmf.utils.PmfTocMenuEntry;
-import es.udc.cartolab.gvsig.tools.CopyFeaturesExtension;
 
 public class FormsLauncherExtension extends Extension {
 
@@ -34,12 +32,6 @@ public class FormsLauncherExtension extends Extension {
     }
 
     protected void registerIcons() {
-	// Workaround to use another icon for CopyFeatures extension instead of
-	// the default
-	PluginServices.getIconTheme().registerDefault(
-		CopyFeaturesExtension.COPY_FEATURES_ICON,
-		this.getClass().getClassLoader()
-			.getResource("images/copy_features.png"));
 	PluginServices.getIconTheme()
 		.registerDefault(
 			"forms-launcher-icon",
@@ -53,20 +45,11 @@ public class FormsLauncherExtension extends Extension {
 	ExtensionPoints extensionPoints = ExtensionPointsSingleton
 		.getInstance();
 	extensionPoints.add("View_TocActions", "PMF", new PmfTocMenuEntry());
-	// CopyFeaturesExtension cfe = ((CopyFeaturesExtension) PluginServices
-	// .getExtension(CopyFeaturesExtension.class));
-	// cfe.setDefaultPath(LoadDataConfigDialog.getConfigPath(false));
 	About about = (About) PluginServices.getExtension(About.class);
 	FPanelAbout panelAbout = about.getAboutPanel();
 	java.net.URL aboutURL = this.getClass().getResource("/about.htm");
 	panelAbout.addAboutUrl("PMF", aboutURL);
 	PmfFormFactory.registerFormFactory();
-    }
-
-    @Override
-    public void postInitialize() {
-	// We configure the CopyFeatures dialog to open in a predefined folder
-	CopyFeaturesExtension.setDefaultPath(PmfConstants.GPS_MATCHING_FILES);
     }
 
     public boolean isEnabled() {
