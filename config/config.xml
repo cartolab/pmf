@@ -16,7 +16,7 @@
 		
 			<extension class-name="es.udc.cartolab.gvsig.pmf.OpenGeneralExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
-				<action-tool icon="load-layers-launcher-icon" tooltip="_load-layers-launcher-tooltip"
+				<action-tool icon="es.udc.cartolab.gvsig.pmf.OpenGeneralExtension" tooltip="_load-layers-launcher-tooltip"
 					action-command="open" position="1" />
 			</tool-bar>
 			<menu text="_pmf_menu_name/_load-layers-launcher"
@@ -26,7 +26,7 @@
 		
 		<extension class-name="es.udc.cartolab.gvsig.pmf.FormsLauncherExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
-				<action-tool icon="forms-launcher-icon" tooltip="_forms-launcher-tooltip"
+				<action-tool icon="es.udc.cartolab.gvsig.pmf.FormsLauncherExtension" tooltip="_forms-launcher-tooltip"
 					action-command="FormsLauncher" position="10" />
 			</tool-bar>
 			<menu text="_pmf_menu_name/_forms-launcher"
@@ -54,7 +54,7 @@
 		
 		<extension class-name="es.udc.cartolab.gvsig.pmf.QueryExtension" description="QUERIES_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
-				<action-tool icon="query-launcher-icon" tooltip="_query-launcher-tooltip"
+				<action-tool icon="es.udc.cartolab.gvsig.pmf.QueryExtension" tooltip="_query-launcher-tooltip"
 					action-command="Queries" position="16" />
 			</tool-bar>
 			<menu text="_pmf_menu_name/_query-report-launcher"
@@ -64,7 +64,7 @@
 
 		<extension class-name="es.udc.cartolab.gvsig.pmf.ImportPlotExtension" description="REPORTS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
-				<action-tool icon="import-plot-launcher-icon" tooltip="_import-plot-launcher-tooltip"
+				<action-tool icon="es.udc.cartolab.gvsig.pmf.ImportPlotExtension" tooltip="_import-plot-launcher-tooltip"
 					action-command="parcela" position="17" />
 			</tool-bar>
 			<menu text="_pmf_menu_name/_import-plot-launcher"
@@ -84,7 +84,7 @@
 		
 		<extension class-name="es.udc.cartolab.gvsig.pmf.AutoFormsExtension" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30"> 
-				<selectable-tool icon="auto-forms" tooltip="enable_auto_forms"
+				<selectable-tool icon="es.udc.cartolab.gvsig.pmf.AutoFormsExtension" tooltip="enable_auto_forms"
 					action-command="auto-forms" position="19" name="auto-forms" />
 			</tool-bar>
 		</extension>

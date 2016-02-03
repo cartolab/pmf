@@ -1,16 +1,16 @@
 package es.udc.cartolab.gvsig.pmf;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.FileUtils;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.pmf.layout.LayoutWrapper;
 import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 
-public class OpenLayoutExtension extends Extension {
+public class OpenLayoutExtension extends AbstractExtension {
 
     private static String templatePath = FileUtils.getAppHomeDir()
 	    + PmfConstants.TEMPLATE_FILE;
@@ -37,11 +37,6 @@ public class OpenLayoutExtension extends Extension {
     @Override
     public boolean isEnabled() {
 	return FormFactory.allLayersLoadedRegistered();
-    }
-
-    @Override
-    public boolean isVisible() {
-	return true;
     }
 
 }

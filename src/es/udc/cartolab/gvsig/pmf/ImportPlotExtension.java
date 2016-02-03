@@ -7,16 +7,16 @@ import java.util.List;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.pmf.forms.ParcelasForm;
 import es.udc.cartolab.gvsig.pmf.importplot.ImportPlotDialog;
 import es.udc.cartolab.gvsig.pmf.utils.DAO;
 
-public class ImportPlotExtension extends Extension {
+public class ImportPlotExtension extends AbstractExtension {
 
     @Override
     public void execute(String actionCommand) {
@@ -47,26 +47,9 @@ public class ImportPlotExtension extends Extension {
 
     }
 
-    protected void registerIcons() {
-	PluginServices.getIconTheme().registerDefault(
-		"import-plot-launcher-icon",
-		this.getClass().getClassLoader()
-			.getResource("images/import.png"));
-    }
-
-    @Override
-    public void initialize() {
-	registerIcons();
-    }
-
     @Override
     public boolean isEnabled() {
 	return FormFactory.checkLayerLoadedRegistered(ParcelasForm.NAME);
-    }
-
-    @Override
-    public boolean isVisible() {
-	return true;
     }
 
 }

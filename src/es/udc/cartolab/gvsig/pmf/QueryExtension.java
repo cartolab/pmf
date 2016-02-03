@@ -1,20 +1,12 @@
 package es.udc.cartolab.gvsig.pmf;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.pmf.queries.SelectQueryDialog;
 
-public class QueryExtension extends Extension {
-
-    @Override
-    public void initialize() {
-	PluginServices.getIconTheme().registerDefault(
-		"query-launcher-icon",
-		this.getClass().getClassLoader()
-			.getResource("images/queries.png"));
-    }
+public class QueryExtension extends AbstractExtension {
 
     @Override
     public void execute(String actionCommand) {
@@ -24,11 +16,6 @@ public class QueryExtension extends Extension {
     @Override
     public boolean isEnabled() {
 	return FormFactory.allLayersLoadedRegistered();
-    }
-
-    @Override
-    public boolean isVisible() {
-	return true;
     }
 
 }

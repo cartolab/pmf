@@ -1,8 +1,6 @@
 package es.udc.cartolab.gvsig.pmf;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
-import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
@@ -10,12 +8,13 @@ import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.navtable.AbstractNavTable;
 import es.udc.cartolab.gvsig.pmf.utils.PmfFormFactory;
 import es.udc.cartolab.gvsig.pmf.utils.PmfTocMenuEntry;
 
-public class FormsLauncherExtension extends Extension {
+public class FormsLauncherExtension extends AbstractExtension {
 
     private BaseView view = null;
     private String layerName;
@@ -31,16 +30,9 @@ public class FormsLauncherExtension extends Extension {
 	}
     }
 
-    protected void registerIcons() {
-	PluginServices.getIconTheme()
-		.registerDefault(
-			"forms-launcher-icon",
-			this.getClass().getClassLoader()
-				.getResource("images/form.png"));
-    }
-
+    @Override
     public void initialize() {
-	registerIcons();
+	super.initialize();
 	// Entry at TOC contextual menu
 	ExtensionPoints extensionPoints = ExtensionPointsSingleton
 		.getInstance();
@@ -53,22 +45,20 @@ public class FormsLauncherExtension extends Extension {
     }
 
     public boolean isEnabled() {
-	IWindow window = PluginServices.getMDIManager().getActiveWindow();
+	view = getView();
+	if (view == null) {
+	    return false;
+	}
 	boolean isEnabled = false;
-	if (window instanceof BaseView) {
-	    view = (BaseView) window;
-	    FLayer[] actives = view.getMapControl().getMapContext().getLayers()
-		    .getActives();
-	    if (1 == actives.length) {
-		layerName = actives[0].getName();
-		isEnabled = FormFactory.hasMainFormRegistered(layerName);
-	    }
+
+	FLayer[] actives = view.getMapControl().getMapContext().getLayers()
+		.getActives();
+	if (1 == actives.length) {
+	    layerName = actives[0].getName();
+	    isEnabled = FormFactory.hasMainFormRegistered(layerName);
 	}
 
 	return isEnabled;
     }
 
-    public boolean isVisible() {
-	return true;
-    }
 }

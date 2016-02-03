@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
-import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
@@ -21,6 +20,7 @@ import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.utiles.FileUtils;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 import es.udc.cartolab.gvsig.elle.utils.ELLEMap;
 import es.udc.cartolab.gvsig.elle.utils.LoadLegend;
@@ -30,7 +30,7 @@ import es.udc.cartolab.gvsig.pmf.utils.PmfConstants;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 import es.udc.cartolab.gvsig.users.utils.DBSessionSpatiaLite;
 
-public class OpenGeneralExtension extends Extension {
+public class OpenGeneralExtension extends AbstractExtension {
 
     private static final Logger logger = Logger
 	    .getLogger(OpenGeneralExtension.class);
@@ -92,18 +92,6 @@ public class OpenGeneralExtension extends Extension {
 	return fullExtent.equals(new Rectangle2D.Double(1, 1, 10, 10));
     }
 
-    protected void registerIcons() {
-	PluginServices.getIconTheme().registerDefault(
-		"load-layers-launcher-icon",
-		this.getClass().getClassLoader()
-			.getResource("images/load-layers.png"));
-    }
-
-    @Override
-    public void initialize() {
-	registerIcons();
-    }
-
     @Override
     public void execute(String actionCommand) {
 
@@ -135,11 +123,6 @@ public class OpenGeneralExtension extends Extension {
 	boolean enabled = (DBSession.getCurrentSession() != null);
 	enabled = enabled || new File(sqliteFilePath).canRead();
 	return (enabled && !FormFactory.allLayersLoadedRegistered());
-    }
-
-    @Override
-    public boolean isVisible() {
-	return true;
     }
 
 }

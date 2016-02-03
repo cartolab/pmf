@@ -2,12 +2,10 @@ package es.udc.cartolab.gvsig.pmf;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
-import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.mdiFrame.JToolBarToggleButton;
 import com.iver.andami.ui.mdiFrame.MDIFrame;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -15,37 +13,29 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.listeners.CADListenerManager;
 import com.iver.cit.gvsig.listeners.EndGeometryListener;
 
+import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.navtableforms.AbstractForm;
 import es.icarto.gvsig.navtableforms.utils.FormFactory;
 
-public class AutoFormsExtension extends Extension {
+public class AutoFormsExtension extends AbstractExtension {
 
-    private static String KEY_NAME;
     private boolean formsEnabled = false;
     private File fileFlag;
 
     @Override
     public void initialize() {
-	KEY_NAME = getClass().getName();
+	super.initialize();
 	fileFlag = new File(Launcher.getAppHomeDir() + "pmf-auto-forms");
 	formsEnabled = getLastSessionEnabilityState();
 
 	if (formsEnabled) {
 	    NTEndGeometryListener listener = new NTEndGeometryListener();
-	    CADListenerManager.addEndGeometryListener(KEY_NAME, listener);
+	    CADListenerManager.addEndGeometryListener(id, listener);
 	}
-
-	registerIcon();
     }
 
     private boolean getLastSessionEnabilityState() {
 	return fileFlag.exists();
-    }
-
-    private void registerIcon() {
-	URL icon = this.getClass().getClassLoader()
-		.getResource("images/auto-forms.png");
-	PluginServices.getIconTheme().registerDefault("auto-forms", icon);
     }
 
     @Override
@@ -58,11 +48,11 @@ public class AutoFormsExtension extends Extension {
 
 	if (!formsEnabled) {
 	    NTEndGeometryListener listener = new NTEndGeometryListener();
-	    CADListenerManager.addEndGeometryListener(KEY_NAME, listener);
+	    CADListenerManager.addEndGeometryListener(id, listener);
 	    NotificationManager.addInfo("Formularios automáticos activados");
 	    formsEnabled = true;
 	} else {
-	    CADListenerManager.removeEndGeometryListener(KEY_NAME);
+	    CADListenerManager.removeEndGeometryListener(id);
 	    NotificationManager.addInfo("Formularios automáticos desactivados");
 	    formsEnabled = false;
 	}
@@ -109,11 +99,6 @@ public class AutoFormsExtension extends Extension {
 
     @Override
     public boolean isEnabled() {
-	return true;
-    }
-
-    @Override
-    public boolean isVisible() {
 	return true;
     }
 
