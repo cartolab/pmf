@@ -10,10 +10,10 @@
 	<libraries library-dir="lib"/>
 	<resourceBundle name="text"/>
 	<extensions>
-	
+
 		<extension class-name="es.udc.cartolab.gvsig.pmf.ConfigExtension" active="true">
 		</extension>
-		
+
 			<extension class-name="es.udc.cartolab.gvsig.pmf.OpenGeneralExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
 				<action-tool icon="es.udc.cartolab.gvsig.pmf.OpenGeneralExtension" tooltip="_load-layers-launcher-tooltip"
@@ -23,7 +23,7 @@
 				action-command="open" position="30001"
 				 />
 		</extension>
-		
+
 		<extension class-name="es.udc.cartolab.gvsig.pmf.FormsLauncherExtension" description="FORMS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
 				<action-tool icon="es.udc.cartolab.gvsig.pmf.FormsLauncherExtension" tooltip="_forms-launcher-tooltip"
@@ -31,7 +31,7 @@
 			</tool-bar>
 			<menu text="_pmf_menu_name/_forms-launcher"
 				action-command="FormsLauncher" position="30010"
-				 /> 
+				 />
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.pmf.ReportsExtension" description="REPORTS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
@@ -40,7 +40,7 @@
 			</tool-bar>
 			<menu text="_pmf_menu_name/_reports_menu/_community-report-launcher"
 				action-command="comunidad" position="30012"
-				 /> 
+				 />
 		</extension>
 		<extension class-name="es.udc.cartolab.gvsig.pmf.ReportsExtension" description="REPORTS_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
@@ -49,9 +49,9 @@
 			</tool-bar>
 			<menu text="_pmf_menu_name/_reports_menu/_plot-report-launcher"
 				action-command="parcela" position="30014"
-				 /> 
+				 />
 		</extension>
-		
+
 		<extension class-name="es.udc.cartolab.gvsig.pmf.QueryExtension" description="QUERIES_PANEL" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
 				<action-tool icon="es.udc.cartolab.gvsig.pmf.QueryExtension" tooltip="_query-launcher-tooltip"
@@ -59,7 +59,7 @@
 			</tool-bar>
 			<menu text="_pmf_menu_name/_query-report-launcher"
 				action-command="Queries" position="30016"
-				 /> 
+				 />
 		</extension>
 
 		<extension class-name="es.udc.cartolab.gvsig.pmf.ImportPlotExtension" description="REPORTS_PANEL" active="true">
@@ -71,24 +71,31 @@
 				action-command="parcela" position="30017"
 				 />
 		</extension>
-		
+
+		<extension class-name="es.udc.cartolab.gvsig.pmf.ImporterExtension" active="true">
+			<tool-bar name="_pmf-tool-bar-name" position="30">
+				<action-tool icon="es.udc.cartolab.gvsig.pmf.ImporterExtension" tooltip="es.udc.cartolab.gvsig.pmf.ImporterExtension.tooltip" position="18" />
+			</tool-bar>
+			<menu text="_pmf_menu_name/es.udc.cartolab.gvsig.pmf.ImporterExtension.tooltip" position="30018" />
+		</extension>
+
 		<extension class-name="es.udc.cartolab.gvsig.pmf.OpenLayoutExtension" active="true">
 			<tool-bar name="_pmf-tool-bar-name" position="30">
 				<action-tool icon="layout-template-open" tooltip="open-layout-tooltip"
-					action-command="open-layout" position="18" />
+					action-command="open-layout" position="19" />
 			</tool-bar>
 			<menu text="_pmf_menu_name/open-layout"
-				action-command="open-layout" position="30018"
+				action-command="open-layout" position="30019"
 				 />
 		</extension>
-		
+
 		<extension class-name="es.udc.cartolab.gvsig.pmf.AutoFormsExtension" active="true">
-			<tool-bar name="_pmf-tool-bar-name" position="30"> 
+			<tool-bar name="_pmf-tool-bar-name" position="30">
 				<selectable-tool icon="es.udc.cartolab.gvsig.pmf.AutoFormsExtension" tooltip="enable_auto_forms"
-					action-command="auto-forms" position="19" name="auto-forms" />
+					action-command="auto-forms" position="20" name="auto-forms" />
 			</tool-bar>
 		</extension>
 
-		
+
 	</extensions>
 </plugin-config>
