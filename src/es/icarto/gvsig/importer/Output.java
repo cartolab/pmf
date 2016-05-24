@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.JDialog;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
@@ -21,15 +19,23 @@ public class Output {
 
     private static final Logger logger = Logger.getLogger(Output.class);
 
-    public void process(DefaultTableModel table) {
-	reorder(table);
-	// showJTable(table);
+    private boolean errors(DefaultTableModel table) {
 	for (int i = 0; i < table.getRowCount(); i++) {
 	    Object error = table.getValueAt(i, 5);
 	    if (error != null) {
-		showJTable(table);
-		return;
+		return true;
 	    }
+	}
+	return false;
+    }
+
+    public void process(DefaultTableModel table) {
+	reorder(table);
+	TableInfo dialog = new TableInfo(table);
+	dialog.openDialog();
+	if (!dialog.isGood() || errors(table)) {
+	    System.out.println("Saliendo");
+	    return;
 	}
 
 	Connection con = DBSession.getCurrentSession().getJavaConnection();
@@ -111,14 +117,6 @@ public class Output {
 		logger.error(e1.getStackTrace(), e1);
 	    }
 	}
-    }
-
-    private void showJTable(DefaultTableModel tableModel) {
-	JTable table = new JTable(tableModel);
-	JDialog dialog = new JDialog();
-	dialog.getContentPane().add(table);
-	dialog.setSize(200, 200);
-	dialog.setVisible(true);
     }
 
     public void reorder(DefaultTableModel table) {
