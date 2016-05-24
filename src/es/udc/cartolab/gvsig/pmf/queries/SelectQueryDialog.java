@@ -1,5 +1,6 @@
 package es.udc.cartolab.gvsig.pmf.queries;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -7,10 +8,8 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +17,7 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
+import es.icarto.gvsig.commons.gui.FolderChooser;
 import es.icarto.gvsig.commons.gui.OkCancelPanel;
 import es.icarto.gvsig.commons.gui.WidgetFactory;
 import es.udc.cartolab.gvsig.commons.ui.SaveFileDialog;
@@ -31,7 +31,7 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 @SuppressWarnings("serial")
 public class SelectQueryDialog extends AbstractIWindow implements
-	ActionListener {
+ActionListener {
 
     private static final Logger logger = Logger
 	    .getLogger(SelectQueryDialog.class);
@@ -58,11 +58,11 @@ public class SelectQueryDialog extends AbstractIWindow implements
 
     private static final String SELECTQUERY = "_selectQuery";
 
-    private JTextField directoryField = null;
-    private JButton dotsButton = null;
     private JComboBox queryCombo = null;
 
     private final DBSession session = DBSession.getCurrentSession();
+
+    private FolderChooser folder;
 
     public SelectQueryDialog() {
 	super();
@@ -75,92 +75,51 @@ public class SelectQueryDialog extends AbstractIWindow implements
     private void initialize() {
 
 	this.add(new JLabel(PluginServices.getText(this, SELECTQUERY)));
-
 	queryCombo = new JComboBox(items);
-
 	this.add(queryCombo);
 
-	JLabel outputLabel = new JLabel(PluginServices.getText(this, "Save_in"));
-	this.add(outputLabel, "right, bottom, cell 0 2");
-
-	String userHome = System.getProperty("user.home");
-
-	directoryField = new JTextField("");
-
-	this.add(directoryField, "grow, bottom, cell 1 2");
-	directoryField.setText(userHome);
-
-	dotsButton = new JButton("...");
-	dotsButton.addActionListener(this);
-	this.add(dotsButton, "center, bottom, cell 2 2");
-    }
-
-    private void displayFileChooser() {
-	File currentDirectory = new File(directoryField.getText());
-	JFileChooser chooser;
-	if (currentDirectory.isDirectory()) {
-	    chooser = new JFileChooser(currentDirectory);
-	} else {
-	    chooser = new JFileChooser();
-	}
-	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-	int returnVal = chooser.showOpenDialog(directoryField);
-	if (returnVal == JFileChooser.APPROVE_OPTION) {
-	    directoryField.setText(chooser.getSelectedFile().getAbsolutePath());
-	}
+	folder = new FolderChooser(this,
+		PluginServices.getText(this, "Save_in"),
+		System.getProperty("user.home"));
     }
 
     private void processQuery(String outputPath) {
-	if (!outputPath.endsWith(File.separator)) {
-	    outputPath = outputPath + File.separator;
+
+	String query = this.queryCombo.getSelectedItem().toString();
+	String result = null;
+
+	if (query.equals(QUERY1)) {
+	    result = query1();
+	    outputPath += OUTPUT1 + ".csv";
+	} else if (query.equals(QUERY2)) {
+	    result = query2();
+	    outputPath += OUTPUT2 + ".csv";
+	} else if (query.equals(QUERY3)) {
+	    result = query3();
+	    outputPath += OUTPUT3 + ".csv";
+	} else if (query.equals(QUERY4)) {
+	    result = query4();
+	    outputPath += OUTPUT4 + ".csv";
+	} else if (query.equals(QUERY5)) {
+	    result = query5();
+	    outputPath += OUTPUT5 + ".csv";
+	} else if (query.equals(QUERY6)) {
+	    result = query6();
+	    outputPath += OUTPUT6 + ".csv";
+	} else if (query.equals(QUERY7)) {
+	    result = query7();
+	    outputPath += OUTPUT7 + ".csv";
+	} else if (query.equals(QUERY8)) {
+	    result = query8();
+	    outputPath += OUTPUT8 + ".csv";
 	}
-	File dir = new File(outputPath);
-	if (dir.isDirectory() && dir.canWrite()) {
-	    String query = this.queryCombo.getSelectedItem().toString();
-	    String fileName = directoryField.getText();
-	    if (fileName.length() < 1) {
-		return;
-	    }
 
-	    String result = null;
-
-	    if (query.equals(QUERY1)) {
-		result = query1();
-		fileName += "/" + OUTPUT1 + ".csv";
-	    } else if (query.equals(QUERY2)) {
-		result = query2();
-		fileName += "/" + OUTPUT2 + ".csv";
-	    } else if (query.equals(QUERY3)) {
-		result = query3();
-		fileName += "/" + OUTPUT3 + ".csv";
-	    } else if (query.equals(QUERY4)) {
-		result = query4();
-		fileName += "/" + OUTPUT4 + ".csv";
-	    } else if (query.equals(QUERY5)) {
-		result = query5();
-		fileName += "/" + OUTPUT5 + ".csv";
-	    } else if (query.equals(QUERY6)) {
-		result = query6();
-		fileName += "/" + OUTPUT6 + ".csv";
-	    } else if (query.equals(QUERY7)) {
-		result = query7();
-		fileName += "/" + OUTPUT7 + ".csv";
-	    } else if (query.equals(QUERY8)) {
-		result = query8();
-		fileName += "/" + OUTPUT8 + ".csv";
-	    }
-
-	    for (int i = 0; i < 10; i++) {
-		result = result.replace("." + ((Integer) i).toString(), ","
-			+ ((Integer) i).toString());
-	    }
-
-	    SaveFileDialog.writeFileToDisk(result, new File(fileName));
-	} else {
-	    JOptionPane.showMessageDialog(this,
-		    "El directorio seleccionado no es válido.", "Error",
-		    JOptionPane.ERROR_MESSAGE);
+	for (int i = 0; i < 10; i++) {
+	    result = result.replace("." + ((Integer) i).toString(), ","
+		    + ((Integer) i).toString());
 	}
+
+	SaveFileDialog.writeFileToDisk(result, new File(outputPath));
     }
 
     private String query8() {
@@ -223,7 +182,7 @@ public class SelectQueryDialog extends AbstractIWindow implements
 	    String[] fields = { "a.nom_produ", "b.area_tot", "b.area_cul",
 		    "b.p_riego", "b.p_huerto", "b.p_coc_mejo", "b.p_filtroag",
 		    "b.p_galline", "b.fam_cant", "b.fam_per", "b.con_cant",
-		    "b.con_per" };
+	    "b.con_per" };
 	    String[][] values = session.getTableWithJoin(tableNames, schemas,
 		    joinFields, fields, "", new String[0], false);
 	    str.append(matrixToString(values));
@@ -344,16 +303,27 @@ public class SelectQueryDialog extends AbstractIWindow implements
     }
 
     public void actionPerformed(ActionEvent e) {
-
-	if (e.getSource() == dotsButton) {
-	    displayFileChooser();
-	} else if (e.getActionCommand() == OkCancelPanel.OK_ACTION_COMMAND) {
-	    processQuery(directoryField.getText());
+	if (e.getActionCommand() == OkCancelPanel.OK_ACTION_COMMAND) {
+	    if (!folder.isFolder()) {
+		JOptionPane.showMessageDialog(this,
+			"Escoja un directorio válido");
+	    }
+	    processQuery(folder.getFolderPath());
 	    PluginServices.getMDIManager().closeWindow(this);
 	} else if (e.getActionCommand() == OkCancelPanel.CANCEL_ACTION_COMMAND) {
 	    PluginServices.getMDIManager().closeWindow(this);
 	}
 
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return null;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 
 }

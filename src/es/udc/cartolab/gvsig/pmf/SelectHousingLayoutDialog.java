@@ -1,11 +1,13 @@
 package es.udc.cartolab.gvsig.pmf;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
@@ -20,7 +22,7 @@ import es.udc.cartolab.gvsig.pmf.utils.DAO;
 
 @SuppressWarnings("serial")
 public class SelectHousingLayoutDialog extends AbstractIWindow implements
-ActionListener {
+	ActionListener {
 
     private static Logger logger = Logger
 	    .getLogger(SelectHousingLayoutDialog.class);
@@ -63,5 +65,15 @@ ActionListener {
 	    housingCode = cb.getSelectedItem().toString();
 	}
 	PluginServices.getMDIManager().closeWindow(this);
+    }
+
+    @Override
+    protected JButton getDefaultButton() {
+	return null;
+    }
+
+    @Override
+    protected Component getDefaultFocusComponent() {
+	return null;
     }
 }
