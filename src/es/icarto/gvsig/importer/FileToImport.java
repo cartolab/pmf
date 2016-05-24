@@ -25,6 +25,13 @@ public class FileToImport extends AbstractIWindow implements ActionListener {
 	WidgetFactory.okCancelPanel(this, this, this);
     }
 
+    public FileToImport(String initFile, String desc, String ext) {
+	selectFile = new SelectFileWidget(this, "Seleccione hoja de cálculo",
+		initFile, false);
+	selectFile.setFilter(desc, ext);
+	WidgetFactory.okCancelPanel(this, this, this);
+    }
+
     @Override
     protected JButton getDefaultButton() {
 	return null;

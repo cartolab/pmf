@@ -33,9 +33,9 @@ public class ImporterExtension extends AbstractExtension {
     @Override
     public void execute(String actionCommand) {
 
-	FileToImport fileToImport = new FileToImport(initFile);
-	fileToImport.openDialog();
-	File file = fileToImport.getFile();
+	FileToImport dialog = new FileToImport(initFile, "Ficheros DBF", "dbf");
+	dialog.openDialog();
+	File file = dialog.getFile();
 	if ((file == null) || !file.isFile()) {
 	    return;
 	}
