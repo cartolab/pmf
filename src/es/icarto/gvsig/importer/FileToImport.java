@@ -18,9 +18,9 @@ public class FileToImport extends AbstractIWindow implements ActionListener {
     private SelectFileWidget selectFile;
     private File file;
 
-    public FileToImport() {
+    public FileToImport(String initFile) {
 	selectFile = new SelectFileWidget(this, "Seleccione hoja de cálculo",
-		null, false);
+		initFile, false);
 	selectFile.setFilter("Fichero excel", "xlsx");
 	WidgetFactory.okCancelPanel(this, this, this);
     }

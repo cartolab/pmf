@@ -28,15 +28,18 @@ public class ImporterExtension extends AbstractExtension {
     private static final Logger logger = Logger
 	    .getLogger(ImporterExtension.class);
 
+    private String initFile = null;
+
     @Override
     public void execute(String actionCommand) {
 
-	FileToImport fileToImport = new FileToImport();
+	FileToImport fileToImport = new FileToImport(initFile);
 	fileToImport.openDialog();
 	File file = fileToImport.getFile();
 	if ((file == null) || !file.isFile()) {
 	    return;
 	}
+	initFile = file.getAbsolutePath();
 
 	ImportManager importManager = new ImportManager();
 	try {
