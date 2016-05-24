@@ -1,7 +1,6 @@
 package es.udc.cartolab.gvsig.pmf;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,14 +8,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import es.icarto.gvsig.commons.AbstractExtension;
+import es.icarto.gvsig.importer.DBF;
 import es.icarto.gvsig.importer.FileToImport;
 import es.icarto.gvsig.importer.Header;
 import es.icarto.gvsig.importer.HeaderField;
 import es.icarto.gvsig.importer.ImportManager;
-import es.icarto.gvsig.importer.XLS;
+import es.icarto.gvsig.importer.Reader;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 // Autodetectar cuando son UTM y cuando GEO
@@ -42,24 +41,19 @@ public class ImporterExtension extends AbstractExtension {
 	initFile = file.getAbsolutePath();
 
 	ImportManager importManager = new ImportManager();
-	try {
-	    XLS xls = new XLS(file);
-	    xls.setHeaderLine(XLS.FIRST_NOT_EMPTY);
 
-	    importManager.setReader(xls);
-	    Header header = new Header();
-	    header.setFromRules(createHeader());
-	    importManager.setHeader(header);
+	Reader reader = new DBF(file);
+	// XLS reader = new XLS(file);
+	// reader.setHeaderLine(XLS.FIRST_NOT_EMPTY);
 
-	    importManager.readHeader();
+	importManager.setReader(reader);
+	Header header = new Header();
+	header.setFromRules(createHeader());
+	importManager.setHeader(header);
 
-	    importManager.processFile();
-	} catch (InvalidFormatException e) {
-	    logger.error(e.getStackTrace(), e);
-	} catch (IOException e) {
-	    logger.error(e.getStackTrace(), e);
-	}
+	importManager.readHeader();
 
+	importManager.processFile();
     }
 
     private List<HeaderField> createHeader() {

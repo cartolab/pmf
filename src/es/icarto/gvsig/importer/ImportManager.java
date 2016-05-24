@@ -6,13 +6,13 @@ import javax.swing.table.DefaultTableModel;
 
 public class ImportManager {
 
-    private XLS xls;
+    private Reader reader;
     private Header header;
     private Ruler ruler = new Ruler();
     private Output output = new Output();
 
-    public void setReader(XLS xls) {
-	this.xls = xls;
+    public void setReader(Reader reader) {
+	this.reader = reader;
     }
 
     public void setHeader(Header header) {
@@ -20,7 +20,7 @@ public class ImportManager {
     }
 
     public void readHeader() {
-	List<SimpleHeaderField> readHead = xls.getSimpleHeader();
+	List<SimpleHeaderField> readHead = reader.getSimpleHeader();
 	for (SimpleHeaderField s : readHead) {
 	    header.addFromSource(s.name, s.pos);
 	    // Si lo devuelto tiene el campo de stop debería parar
@@ -29,7 +29,7 @@ public class ImportManager {
     }
 
     public void processFile() {
-	DefaultTableModel table = xls.getValues();
+	DefaultTableModel table = reader.getValues();
 	table.addColumn("tablename");
 	table.addColumn("geom");
 	table.addColumn("Errores");

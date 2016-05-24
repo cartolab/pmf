@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-public class XLS {
+public class XLS implements Reader {
 
     private Sheet sheet;
     private Collator collator;
@@ -51,7 +51,7 @@ public class XLS {
      * throws an IllegalArgumentException If "i" is different that
      * FIRST_NOT_EMPTY or NO_HEADER that number will be used as the first valid
      * row in the sheet and it will contain the header
-     * 
+     *
      * @param i
      */
     public void setHeaderLine(int i) {
