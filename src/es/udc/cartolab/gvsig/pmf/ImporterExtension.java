@@ -1,6 +1,5 @@
 package es.udc.cartolab.gvsig.pmf;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,9 +11,11 @@ import es.icarto.gvsig.importer.Header;
 import es.icarto.gvsig.importer.ImportManager;
 import es.icarto.gvsig.importer.Output;
 import es.icarto.gvsig.importer.Reader;
+import es.icarto.gvsig.importer.Ruler;
 import es.icarto.gvsig.importer.XLS;
 import es.udc.cartolab.gvsig.pmf.importer.PMFHeader;
 import es.udc.cartolab.gvsig.pmf.importer.PMFOutput;
+import es.udc.cartolab.gvsig.pmf.importer.PMFRuler;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 // Autodetectar cuando son UTM y cuando GEO
@@ -23,30 +24,33 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 // Separar errores de warnings
 public class ImporterExtension extends AbstractExtension {
 
-    private String initFile = null;
+    private FileToImport dialog;
+
+    @Override
+    public void initialize() {
+	super.initialize();
+	XLS xls = new XLS();
+	xls.setHeaderLine(XLS.FIRST_NOT_EMPTY);
+	List<Reader> readers = Arrays.asList(new DBF(), new GPX(), xls);
+	dialog = new FileToImport(null);
+	dialog.setReaders(readers);
+    }
 
     @Override
     public void execute(String actionCommand) {
 
-	XLS xls = new XLS();
-	xls.setHeaderLine(XLS.FIRST_NOT_EMPTY);
-	List<Reader> readers = Arrays.asList(new DBF(), new GPX(), xls);
-
-	FileToImport dialog = new FileToImport(initFile);
-	dialog.setReaders(readers);
-
 	dialog.openDialog();
-	File file = dialog.getFile();
-	if ((file == null) || !file.isFile()) {
-	    return;
-	}
-	initFile = file.getAbsolutePath();
 
 	Reader reader = dialog.getInitializedReader();
+	if (reader == null) {
+	    return;
+	}
 	Header header = new PMFHeader().getHeader();
 	Output output = new PMFOutput();
+	Ruler ruler = new PMFRuler();
 
-	ImportManager importManager = new ImportManager(reader, header, output);
+	ImportManager importManager = new ImportManager(reader, header, output,
+		ruler);
 
 	importManager.readHeader();
 	importManager.processFile();

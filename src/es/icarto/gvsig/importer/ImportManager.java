@@ -9,12 +9,14 @@ public class ImportManager {
     private final Reader reader;
     private final Header header;
     private final Output output;
-    private Ruler ruler = new Ruler();
+    private final Ruler ruler;
 
-    public ImportManager(Reader reader, Header header, Output output) {
+    public ImportManager(Reader reader, Header header, Output output,
+	    Ruler ruler) {
 	this.reader = reader;
 	this.header = header;
 	this.output = output;
+	this.ruler = ruler;
     }
 
     public void readHeader() {

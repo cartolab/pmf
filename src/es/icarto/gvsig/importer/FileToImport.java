@@ -45,6 +45,12 @@ public class FileToImport extends AbstractIWindow implements ActionListener {
     }
 
     @Override
+    public void openDialog() {
+	file = null;
+	super.openDialog();
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
 	if (e.getActionCommand().equals(OkCancelPanel.OK_ACTION_COMMAND)) {
 	    if (selectFile.isValidAndExist()) {
@@ -84,6 +90,10 @@ public class FileToImport extends AbstractIWindow implements ActionListener {
 
     public Reader getInitializedReader() {
 	File choosedFile = getFile();
+
+	if ((choosedFile == null) || !choosedFile.isFile()) {
+	    return null;
+	}
 	for (Reader reader : this.readers) {
 	    if (reader.getFileFilter().accept(choosedFile)) {
 		reader.initReader(choosedFile);

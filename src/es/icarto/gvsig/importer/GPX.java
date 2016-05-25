@@ -58,8 +58,16 @@ public class GPX implements Reader {
 	values = new DefaultTableModel();
 
 	// TODO
-	// Probablemente crear mi propio table model es lo que tiene más sentido
+	// Probablemente crear mi propio table model es lo que tiene más
+	// sentido. O una clase genérica propia que encapsule un table model
+
 	// Hay que gestionar la reproyección de los puntos
+
+	// Tiene sentido mostrar la x/y lat/lng originales y un campo adicional
+	// con los valores proyectados ya sacados de la geometría final
+
+	// Añadir regla para vértices de parcelas y como generar el polígono a
+	// partir de los vértices
 	values.addColumn("id");
 	values.addColumn("x");
 	values.addColumn("y");
