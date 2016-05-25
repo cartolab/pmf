@@ -6,17 +6,15 @@ import javax.swing.table.DefaultTableModel;
 
 public class ImportManager {
 
-    private Reader reader;
-    private Header header;
+    private final Reader reader;
+    private final Header header;
+    private final Output output;
     private Ruler ruler = new Ruler();
-    private Output output = new Output();
 
-    public void setReader(Reader reader) {
+    public ImportManager(Reader reader, Header header, Output output) {
 	this.reader = reader;
-    }
-
-    public void setHeader(Header header) {
 	this.header = header;
+	this.output = output;
     }
 
     public void readHeader() {
