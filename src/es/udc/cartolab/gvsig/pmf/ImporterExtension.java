@@ -1,6 +1,8 @@
 package es.udc.cartolab.gvsig.pmf;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.importer.DBF;
@@ -9,6 +11,7 @@ import es.icarto.gvsig.importer.Header;
 import es.icarto.gvsig.importer.ImportManager;
 import es.icarto.gvsig.importer.Output;
 import es.icarto.gvsig.importer.Reader;
+import es.icarto.gvsig.importer.XLS;
 import es.udc.cartolab.gvsig.pmf.importer.PMFHeader;
 import es.udc.cartolab.gvsig.pmf.importer.PMFOutput;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -24,10 +27,13 @@ public class ImporterExtension extends AbstractExtension {
     @Override
     public void execute(String actionCommand) {
 
-	Reader reader = new DBF();
+	XLS xls = new XLS();
+	xls.setHeaderLine(XLS.FIRST_NOT_EMPTY);
+	List<Reader> readers = Arrays.asList(new DBF(), xls);
 
 	FileToImport dialog = new FileToImport(initFile);
-	dialog.addChoosableFileFilter(reader.getFileFilter());
+	dialog.setReaders(readers);
+
 	dialog.openDialog();
 	File file = dialog.getFile();
 	if ((file == null) || !file.isFile()) {
@@ -35,10 +41,7 @@ public class ImporterExtension extends AbstractExtension {
 	}
 	initFile = file.getAbsolutePath();
 
-	reader.initReader(file);
-	// XLS reader = new XLS(file);
-	// reader.setHeaderLine(XLS.FIRST_NOT_EMPTY);
-
+	Reader reader = dialog.getInitializedReader();
 	Header header = new PMFHeader().getHeader();
 	Output output = new PMFOutput();
 

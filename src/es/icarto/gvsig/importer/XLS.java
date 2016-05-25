@@ -28,7 +28,7 @@ public class XLS implements Reader {
     private int headerLine = FIRST_NOT_EMPTY;
     private int realHeaderRowNumber;
 
-    public XLS() throws InvalidFormatException, IOException {
+    public XLS() {
 	collator = Collator.getInstance();
 	collator.setStrength(Collator.PRIMARY);
     }
