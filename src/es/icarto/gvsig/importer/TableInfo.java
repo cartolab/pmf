@@ -56,7 +56,7 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
 	for (int i = 0; i < table.getColumnCount(); i++) {
 	    int m = (table.getColumnName(i).length() > maxLengths[i]) ? table
 		    .getColumnName(i).length() : maxLengths[i];
-	    needed += m;
+		    needed += m;
 	}
 
 	for (int i = 0; i < table.getModel().getColumnCount(); i++) {
@@ -64,7 +64,7 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
 
 	    preferredWidth = 150;
 	    table.getColumnModel().getColumn(i)
-	    .setPreferredWidth((int) preferredWidth);
+		    .setPreferredWidth((int) preferredWidth);
 	}
     }
 
@@ -113,8 +113,9 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
     }
 
     private boolean errors() {
+	int idx = ((DefaultTableModel) table.getModel()).findColumn("Errores");
 	for (int i = 0; i < table.getRowCount(); i++) {
-	    Object error = table.getValueAt(i, 5);
+	    Object error = table.getValueAt(i, idx);
 	    if (error != null) {
 		return true;
 	    }

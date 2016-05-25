@@ -24,25 +24,25 @@ public class Ruler {
     private static final Logger logger = Logger.getLogger(Ruler.class);
     /*
      * Código de comunidad: 8 dígitos. Por ejemplo: 17090401.
-     * 
+     *
      * Código de vivienda (información general): 13 dígitos. Código de Comunidad
      * + VI + XXX. Por ejemplo: 17090401vi001.
-     * 
+     *
      * Código de parcela: 16 dígitos. Código de vivienda + P + XX. Por ejemplo
      * 17090401vi001p01
-     * 
+     *
      * Código de vértices de parcelas: 19 dígitos. Código de Parcela + V + XX.
      * Por ejemplo 17090401vi001p01v01.
-     * 
+     *
      * Centro educativo: Codigo Comunidad + CE + XX
-     * 
+     *
      * Centro reuniones: Codigo Comunidad + CR + XX
-     * 
+     *
      * Centro salud: Codigo Comunidad + CS + XX
-     * 
+     *
      * Fuente comunitaria: Codigo Comunidad + FC + XX
-     * 
-     * 
+     *
+     *
      * Comprador
      */
     public final static Pattern comunidadPattern = Pattern.compile("^\\d{8}$",
@@ -109,7 +109,8 @@ public class Ruler {
 	    return;
 	}
 
-	table.setValueAt("", i, 3);
+	int tablenameIdx = table.findColumn("tablename");
+	table.setValueAt("", i, tablenameIdx);
 	addWarning(table, i, "Identificador no reconocido");
     }
 
@@ -143,11 +144,13 @@ public class Ruler {
 		    matcher.group(1)));
 	}
 
-	table.setValueAt(tablename, i, 3);
+	int tablenameIdx = table.findColumn("tablename");
+	int geomIdx = table.findColumn("geom");
+	table.setValueAt(tablename, i, tablenameIdx);
 	String xStr = table.getValueAt(i, 1).toString();
 	String yStr = table.getValueAt(i, 2).toString();
 	IGeometry geom = getGeometry(xStr, yStr);
-	table.setValueAt(geom, i, 4);
+	table.setValueAt(geom, i, geomIdx);
 
 	// Comprobar que la geometría está dentro de la zona de interés
 	// Double bbox = new Rectangle2D.Double(x, y, w, h);
@@ -178,11 +181,13 @@ public class Ruler {
 		    matcher.group(1)));
 	}
 
-	table.setValueAt("informacion_general", i, 3);
+	int tablenameIdx = table.findColumn("tablename");
+	int geomIdx = table.findColumn("geom");
+	table.setValueAt("informacion_general", i, tablenameIdx);
 	String xStr = table.getValueAt(i, 1).toString();
 	String yStr = table.getValueAt(i, 2).toString();
 	IGeometry geom = getGeometry(xStr, yStr);
-	table.setValueAt(geom, i, 4);
+	table.setValueAt(geom, i, geomIdx);
 
 	// Comprobar que la geometría está dentro de la zona de interés
 	// Double bbox = new Rectangle2D.Double(x, y, w, h);
@@ -208,11 +213,13 @@ public class Ruler {
 			    matcher.group()));
 	}
 
-	table.setValueAt("comunidades", i, 3);
+	int tablenameIdx = table.findColumn("tablename");
+	int geomIdx = table.findColumn("geom");
+	table.setValueAt("comunidades", i, tablenameIdx);
 	String xStr = table.getValueAt(i, 1).toString();
 	String yStr = table.getValueAt(i, 2).toString();
 	IGeometry geom = getGeometry(xStr, yStr);
-	table.setValueAt(geom, i, 4);
+	table.setValueAt(geom, i, geomIdx);
 
 	// Comprobar que la geometría está dentro de la zona de interés
 	// Double bbox = new Rectangle2D.Double(x, y, w, h);
@@ -221,8 +228,9 @@ public class Ruler {
 
     private boolean existsInProcessed(DefaultTableModel table,
 	    String tablename, String code) {
+	int tablenameIdx = table.findColumn("tablename");
 	for (int row = 0; row < table.getRowCount(); row++) {
-	    Object c = table.getValueAt(row, 3);
+	    Object c = table.getValueAt(row, tablenameIdx);
 	    if ((c != null) && c.toString().equalsIgnoreCase(tablename)) {
 		if (code.equalsIgnoreCase(table.getValueAt(row, 0).toString())) {
 		    return true;
@@ -255,10 +263,11 @@ public class Ruler {
 
     @SuppressWarnings("unchecked")
     private void addWarning(DefaultTableModel table, int row, String msg) {
-	List<String> l = (List<String>) table.getValueAt(row, 5);
+	int errorIdx = table.findColumn("Errores");
+	List<String> l = (List<String>) table.getValueAt(row, errorIdx);
 	if (l == null) {
 	    l = new ArrayList<String>();
-	    table.setValueAt(l, row, 5);
+	    table.setValueAt(l, row, errorIdx);
 
 	}
 	l.add(msg);

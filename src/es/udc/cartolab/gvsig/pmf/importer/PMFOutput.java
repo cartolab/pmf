@@ -22,7 +22,15 @@ public class PMFOutput implements Output {
 
     private static final Logger logger = Logger.getLogger(PMFOutput.class);
 
+    private int indexForColumnName(DefaultTableModel table, String columnName) {
+	return table.findColumn(columnName);
+    }
+
     public void process(DefaultTableModel table) {
+	int tablenameIdx = indexForColumnName(table, "tablename");
+	int geomIdx = indexForColumnName(table, "geom");
+	int errorIdx = indexForColumnName(table, "Errores");
+
 	reorder(table);
 	TableInfo dialog = new TableInfo(table);
 	dialog.openDialog();
@@ -39,15 +47,15 @@ public class PMFOutput implements Output {
 	    statement = con.createStatement();
 
 	    for (int i = 0; i < table.getRowCount(); i++) {
-		String tablename = table.getValueAt(i, 3).toString();
+		String tablename = table.getValueAt(i, tablenameIdx).toString();
 		if (tablename.isEmpty()) {
 		    continue;
 		}
-		if (table.getValueAt(i, 5) != null) {
+		if (table.getValueAt(i, errorIdx) != null) {
 		    continue;
 		}
 
-		IGeometry geom = (IGeometry) table.getValueAt(i, 4);
+		IGeometry geom = (IGeometry) table.getValueAt(i, geomIdx);
 		String geomAsWKT = geom.toJTSGeometry().toText();
 
 		String id = table.getValueAt(i, 0).toString();
