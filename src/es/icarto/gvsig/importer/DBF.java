@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
@@ -20,7 +22,10 @@ public class DBF implements Reader {
     private List<SimpleHeaderField> simpleHeader;
     private DefaultTableModel values;
 
-    public DBF(File file) {
+    public DBF() {
+    }
+
+    public void initReader(File file) {
 	try {
 	    driver = new DBFDriver();
 	    // driver.setCharSet(charSet);
@@ -78,6 +83,13 @@ public class DBF implements Reader {
     @Override
     public DefaultTableModel getValues() {
 	return values;
+    }
+
+    @Override
+    public FileFilter getFileFilter() {
+	String description = "Ficheros DBF";
+	String extensions = "dbf";
+	return new FileNameExtensionFilter(description, extensions);
     }
 
 }

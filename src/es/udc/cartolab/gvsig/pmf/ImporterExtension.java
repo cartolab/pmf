@@ -24,7 +24,10 @@ public class ImporterExtension extends AbstractExtension {
     @Override
     public void execute(String actionCommand) {
 
-	FileToImport dialog = new FileToImport(initFile, "Ficheros DBF", "dbf");
+	Reader reader = new DBF();
+
+	FileToImport dialog = new FileToImport(initFile);
+	dialog.addChoosableFileFilter(reader.getFileFilter());
 	dialog.openDialog();
 	File file = dialog.getFile();
 	if ((file == null) || !file.isFile()) {
@@ -32,7 +35,7 @@ public class ImporterExtension extends AbstractExtension {
 	}
 	initFile = file.getAbsolutePath();
 
-	Reader reader = new DBF(file);
+	reader.initReader(file);
 	// XLS reader = new XLS(file);
 	// reader.setHeaderLine(XLS.FIRST_NOT_EMPTY);
 

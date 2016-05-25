@@ -6,8 +6,12 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,15 +21,33 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class XLS implements Reader {
 
+    private static final Logger logger = Logger.getLogger(XLS.class);
+
     private Sheet sheet;
     private Collator collator;
     private int headerLine = FIRST_NOT_EMPTY;
     private int realHeaderRowNumber;
 
-    public XLS(File file) throws InvalidFormatException, IOException {
+    public XLS() throws InvalidFormatException, IOException {
 	collator = Collator.getInstance();
 	collator.setStrength(Collator.PRIMARY);
-	Workbook wb = WorkbookFactory.create(file);
+    }
+
+    @Override
+    public void initReader(File file) {
+	Workbook wb;
+	try {
+	    wb = WorkbookFactory.create(file);
+	} catch (EncryptedDocumentException e) {
+	    logger.error(e.getStackTrace(), e);
+	    throw new RuntimeException("Error leyendo excel", e);
+	} catch (InvalidFormatException e) {
+	    logger.error(e.getStackTrace(), e);
+	    throw new RuntimeException("Error leyendo excel", e);
+	} catch (IOException e) {
+	    logger.error(e.getStackTrace(), e);
+	    throw new RuntimeException("Error leyendo excel", e);
+	}
 	int sheetIdx = wb.getActiveSheetIndex();
 	if (sheetIdx != 0) {
 	    // addWarning("La última hoja empleada no es la primera del libro. Compruebe que esto es correcto");
@@ -127,5 +149,12 @@ public class XLS implements Reader {
 	}
 
 	return table;
+    }
+
+    @Override
+    public FileFilter getFileFilter() {
+	String description = "Ficheros Excel";
+	String extensions = "xlsx";
+	return new FileNameExtensionFilter(description, extensions);
     }
 }

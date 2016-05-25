@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.filechooser.FileFilter;
 
 import es.icarto.gvsig.commons.gui.AbstractIWindow;
 import es.icarto.gvsig.commons.gui.OkCancelPanel;
@@ -22,13 +23,6 @@ public class FileToImport extends AbstractIWindow implements ActionListener {
 	selectFile = new SelectFileWidget(this, "Seleccione hoja de cálculo",
 		initFile, false);
 	selectFile.setFilter("Fichero excel", "xlsx");
-	WidgetFactory.okCancelPanel(this, this, this);
-    }
-
-    public FileToImport(String initFile, String desc, String ext) {
-	selectFile = new SelectFileWidget(this, "Seleccione hoja de cálculo",
-		initFile, false);
-	selectFile.setFilter(desc, ext);
 	WidgetFactory.okCancelPanel(this, this, this);
     }
 
@@ -54,6 +48,10 @@ public class FileToImport extends AbstractIWindow implements ActionListener {
 
     public File getFile() {
 	return file;
+    }
+
+    public void addChoosableFileFilter(FileFilter fileFilter) {
+	selectFile.addChoosableFilter(fileFilter);
     }
 
 }
