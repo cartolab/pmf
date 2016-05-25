@@ -7,6 +7,7 @@ import java.util.List;
 import es.icarto.gvsig.commons.AbstractExtension;
 import es.icarto.gvsig.importer.DBF;
 import es.icarto.gvsig.importer.FileToImport;
+import es.icarto.gvsig.importer.GPX;
 import es.icarto.gvsig.importer.Header;
 import es.icarto.gvsig.importer.ImportManager;
 import es.icarto.gvsig.importer.Output;
@@ -29,7 +30,7 @@ public class ImporterExtension extends AbstractExtension {
 
 	XLS xls = new XLS();
 	xls.setHeaderLine(XLS.FIRST_NOT_EMPTY);
-	List<Reader> readers = Arrays.asList(new DBF(), xls);
+	List<Reader> readers = Arrays.asList(new DBF(), new GPX(), xls);
 
 	FileToImport dialog = new FileToImport(initFile);
 	dialog.setReaders(readers);

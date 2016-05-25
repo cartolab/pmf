@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="lib/poi-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-3.13-20150929.jar"/>
+	<classpathentry kind="src" path="/extGPX"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
