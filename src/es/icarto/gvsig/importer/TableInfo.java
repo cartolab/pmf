@@ -56,7 +56,7 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
 	for (int i = 0; i < table.getColumnCount(); i++) {
 	    int m = (table.getColumnName(i).length() > maxLengths[i]) ? table
 		    .getColumnName(i).length() : maxLengths[i];
-		    needed += m;
+	    needed += m;
 	}
 
 	for (int i = 0; i < table.getModel().getColumnCount(); i++) {
@@ -64,7 +64,7 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
 
 	    preferredWidth = 150;
 	    table.getColumnModel().getColumn(i)
-		    .setPreferredWidth((int) preferredWidth);
+	    .setPreferredWidth((int) preferredWidth);
 	}
     }
 
@@ -97,7 +97,7 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 	if (e.getActionCommand().equals(OkCancelPanel.OK_ACTION_COMMAND)) {
-	    good = true;
+	    good = errors();
 	} else {
 	    good = false;
 	}
@@ -105,8 +105,21 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
 	closeDialog();
     }
 
+    /**
+     * @return true when there is no error and the user press ok
+     */
     public boolean isGood() {
 	return good;
+    }
+
+    private boolean errors() {
+	for (int i = 0; i < table.getRowCount(); i++) {
+	    Object error = table.getValueAt(i, 5);
+	    if (error != null) {
+		return true;
+	    }
+	}
+	return false;
     }
 
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
@@ -19,22 +20,11 @@ public class Output {
 
     private static final Logger logger = Logger.getLogger(Output.class);
 
-    private boolean errors(DefaultTableModel table) {
-	for (int i = 0; i < table.getRowCount(); i++) {
-	    Object error = table.getValueAt(i, 5);
-	    if (error != null) {
-		return true;
-	    }
-	}
-	return false;
-    }
-
     public void process(DefaultTableModel table) {
 	reorder(table);
 	TableInfo dialog = new TableInfo(table);
 	dialog.openDialog();
-	if (!dialog.isGood() || errors(table)) {
-	    System.out.println("Saliendo");
+	if (!dialog.isGood()) {
 	    return;
 	}
 
@@ -108,6 +98,7 @@ public class Output {
 		    logger.error(e.getStackTrace(), e);
 		}
 	    }
+	    JOptionPane.showMessageDialog(null, "Añadidos correctamete");
 	} catch (SQLException e) {
 	    logger.error(e.getStackTrace(), e);
 	    try {
