@@ -39,8 +39,7 @@ public class ImportManager {
 	    ruler.processValue(id, table, i);
 	}
 
-	output.process(table);
-
+	output.process(table, ruler);
     }
 
 }

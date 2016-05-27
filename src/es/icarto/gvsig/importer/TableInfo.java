@@ -3,7 +3,6 @@ package es.icarto.gvsig.importer;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -25,63 +24,16 @@ public class TableInfo extends AbstractIWindow implements ActionListener {
     private final JTable table;
     private boolean good = false;
 
-    public TableInfo(DefaultTableModel tableModel) {
+    public TableInfo(DefaultTableModel tableModel, Ruler ruler) {
 	super(new MigLayout("fill, insets 10"));
 	setWindowTitle("Información procesada");
 	setWindowInfoProperties(WindowInfo.MODALDIALOG | WindowInfo.RESIZABLE);
 	btPanel = WidgetFactory.okCancelPanel(this, this, this);
 
-	table = new JTable(tableModel);
-	// table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-	table.getTableHeader().setReorderingAllowed(false);
-	autoFit();
-	table.setPreferredScrollableViewportSize(table.getPreferredSize());
-	table.setFillsViewportHeight(true);
-
+	table = new IJTable(tableModel, ruler);
 	JScrollPane scrollPane = new JScrollPane(table);
 
 	this.add(scrollPane, "push, grow");
-    }
-
-    private void autoFit() {
-	// TODO. Review:
-	// http://stackoverflow.com/a/8478299/930271
-	// https://tips4java.wordpress.com/2008/11/10/table-column-adjuster/
-	// http://www.java2s.com/Code/Java/Swing-Components/CalculatedColumnTable.htm
-	table.repaint();
-	int avaliable = table.getColumnModel().getTotalColumnWidth();
-
-	int[] maxLengths = getMaxLengths();
-	double needed = 0.0;
-	for (int i = 0; i < table.getColumnCount(); i++) {
-	    int m = (table.getColumnName(i).length() > maxLengths[i]) ? table
-		    .getColumnName(i).length() : maxLengths[i];
-		    needed += m;
-	}
-
-	for (int i = 0; i < table.getModel().getColumnCount(); i++) {
-	    double preferredWidth = avaliable * (maxLengths[i] / needed);
-
-	    preferredWidth = 150;
-	    table.getColumnModel().getColumn(i)
-		    .setPreferredWidth((int) preferredWidth);
-	}
-    }
-
-    public int[] getMaxLengths() {
-	int[] maxLengths = new int[table.getColumnCount()];
-	Arrays.fill(maxLengths, 50);
-
-	for (int i = 0; i < table.getRowCount(); i++) {
-	    for (int j = 0; j < table.getColumnCount(); j++) {
-		final Object o = table.getValueAt(i, j);
-		int l = (o == null) ? 0 : o.toString().length();
-		if (l > maxLengths[j]) {
-		    maxLengths[j] = l;
-		}
-	    }
-	}
-	return maxLengths;
     }
 
     @Override

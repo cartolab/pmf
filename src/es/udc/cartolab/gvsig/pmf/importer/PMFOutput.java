@@ -14,6 +14,7 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.importer.Output;
+import es.icarto.gvsig.importer.Ruler;
 import es.icarto.gvsig.importer.TableInfo;
 import es.icarto.gvsig.navtableforms.utils.TOCLayerManager;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
@@ -26,13 +27,13 @@ public class PMFOutput implements Output {
 	return table.findColumn(columnName);
     }
 
-    public void process(DefaultTableModel table) {
+    public void process(DefaultTableModel table, Ruler ruler) {
 	int tablenameIdx = indexForColumnName(table, "tablename");
 	int geomIdx = indexForColumnName(table, "geom");
 	int errorIdx = indexForColumnName(table, "Errores");
 
 	reorder(table);
-	TableInfo dialog = new TableInfo(table);
+	TableInfo dialog = new TableInfo(table, ruler);
 	dialog.openDialog();
 	if (!dialog.isGood()) {
 	    return;
