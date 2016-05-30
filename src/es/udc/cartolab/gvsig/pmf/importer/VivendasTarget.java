@@ -3,11 +3,10 @@ package es.udc.cartolab.gvsig.pmf.importer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.table.DefaultTableModel;
-
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
 
 public class VivendasTarget extends JDBCTarget {
@@ -25,7 +24,7 @@ public class VivendasTarget extends JDBCTarget {
     }
 
     @Override
-    public boolean process(String value, DefaultTableModel table, int i) {
+    public boolean process(String value, ImporterTM table, int i) {
 	Matcher matcher = pattern.matcher(value);
 	if (!matcher.find()) {
 	    return false;

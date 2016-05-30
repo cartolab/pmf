@@ -46,25 +46,25 @@ public class PMFRuler implements Ruler {
 
     /*
      * Código de comunidad: 8 dígitos. Por ejemplo: 17090401.
-     *
+     * 
      * Código de vivienda (información general): 13 dígitos. Código de Comunidad
      * + VI + XXX. Por ejemplo: 17090401vi001.
-     *
+     * 
      * Código de parcela: 16 dígitos. Código de vivienda + P + XX. Por ejemplo
      * 17090401vi001p01
-     *
+     * 
      * Código de vértices de parcelas: 19 dígitos. Código de Parcela + V + XX.
      * Por ejemplo 17090401vi001p01v01.
-     *
+     * 
      * Centro educativo: Codigo Comunidad + CE + XX
-     *
+     * 
      * Centro reuniones: Codigo Comunidad + CR + XX
-     *
+     * 
      * Centro salud: Codigo Comunidad + CS + XX
-     *
+     * 
      * Fuente comunitaria: Codigo Comunidad + FC + XX
-     *
-     *
+     * 
+     * 
      * Comprador
      */
 
@@ -77,7 +77,7 @@ public class PMFRuler implements Ruler {
     private final static Pattern parcelaPattern = Pattern.compile(
 	    "^((\\d{8})vi\\d{3})p\\d{2}$", Pattern.CASE_INSENSITIVE);
 
-    public void processValue(String value, DefaultTableModel table, int i) {
+    public void processValue(String value, ImporterTM table, int i) {
 
 	boolean anyMatch = false;
 	for (Target target : targets) {

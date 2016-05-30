@@ -30,16 +30,29 @@ public class ImportManager {
 
     public void processFile() {
 	DefaultTableModel table = reader.getValues();
-	table.addColumn("tablename");
-	table.addColumn("geom");
-	table.addColumn("Errores");
+	ImporterTM importerTM = new ImporterTM();
+	int initColumn = importerTM.getColumnCount();
+	for (int i = 0; i < table.getColumnCount(); i++) {
+	    importerTM.addColumn(table.getColumnName(i));
+	}
 	for (int i = 0; i < table.getRowCount(); i++) {
-	    String id = table.getValueAt(i, 0).toString();
+	    importerTM.addRow(new Object[importerTM.getColumnCount()]);
+	    for (int j = 0; j < table.getColumnCount(); j++) {
+		final Object o = table.getValueAt(i, j);
+		importerTM.setValueAt(o, i, initColumn + j);
+	    }
+	}
+	importerTM.addColumn("tablename");
+	importerTM.addColumn("geom");
+	importerTM.addColumn("Errores");
+	int idIdx = importerTM.findColumn("id");
+	for (int i = 0; i < importerTM.getRowCount(); i++) {
+	    String id = importerTM.getValueAt(i, idIdx).toString();
 	    HeaderField field = header.getField("id");
-	    ruler.processValue(id, table, i);
+	    ruler.processValue(id, importerTM, i);
 	}
 
-	output.process(table, ruler);
+	output.process(importerTM, ruler);
     }
 
 }

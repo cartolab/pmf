@@ -26,7 +26,7 @@ public class ComunidadTarget extends JDBCTarget {
     }
 
     @Override
-    public boolean process(String value, DefaultTableModel table, int i) {
+    public boolean process(String value, ImporterTM table, int i) {
 	Matcher matcher = pattern.matcher(value);
 	if (!matcher.find()) {
 	    return false;

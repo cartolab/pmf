@@ -70,10 +70,12 @@ public abstract class JDBCTarget implements Target {
     protected boolean existsInProcessed(DefaultTableModel table,
 	    String tablename, String code) {
 	int tablenameIdx = table.findColumn("tablename");
+	int idIdx = table.findColumn("id");
 	for (int row = 0; row < table.getRowCount(); row++) {
 	    Object c = table.getValueAt(row, tablenameIdx);
 	    if ((c != null) && c.toString().equalsIgnoreCase(tablename)) {
-		if (code.equalsIgnoreCase(table.getValueAt(row, 0).toString())) {
+		if (code.equalsIgnoreCase(table.getValueAt(row, idIdx)
+			.toString())) {
 		    return true;
 		}
 	    }
