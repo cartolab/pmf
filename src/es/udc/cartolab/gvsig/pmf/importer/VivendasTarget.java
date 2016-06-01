@@ -29,17 +29,14 @@ public class VivendasTarget extends JDBCTarget {
 	if (!matcher.find()) {
 	    return false;
 	}
-	if (existsInProcessed(table, "informacion_general", matcher.group())) {
+	final String code = matcher.group();
+	if (existsInProcessed(table, "informacion_general", code)) {
 	    addWarning(table, i, String.format(
-		    "Vivienda %s duplicada en el fichero de entrada",
-		    matcher.group()));
+		    "Vivienda %s duplicada en el fichero de entrada", code));
 	}
-	if (existsInDB("informacion_general", "cod_viv", matcher.group())) {
-	    addWarning(
-		    table,
-		    i,
-		    String.format("Vivienda %s ya existe en la tabla",
-			    matcher.group()));
+	if (existsInDB("informacion_general", "cod_viv", code)) {
+	    addWarning(table, i,
+		    String.format("Vivienda %s ya existe en la tabla", code));
 	}
 
 	if (!existsInProcessed(table, "comunidades", matcher.group(1))

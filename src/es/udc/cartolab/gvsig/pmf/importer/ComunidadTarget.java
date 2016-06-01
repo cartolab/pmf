@@ -31,17 +31,14 @@ public class ComunidadTarget extends JDBCTarget {
 	if (!matcher.find()) {
 	    return false;
 	}
-	if (existsInProcessed(table, "comunidades", matcher.group())) {
+	final String code = matcher.group();
+	if (existsInProcessed(table, "comunidades", code)) {
 	    addWarning(table, i, String.format(
-		    "Comunidad %s duplicada en el fichero de entrada",
-		    matcher.group()));
+		    "Comunidad %s duplicada en el fichero de entrada", code));
 	}
-	if (existsInDB("comunidades", "cod_com", matcher.group())) {
-	    addWarning(
-		    table,
-		    i,
-		    String.format("Comunidad %s ya existe en la tabla",
-			    matcher.group()));
+	if (existsInDB("comunidades", "cod_com", code)) {
+	    addWarning(table, i,
+		    String.format("Comunidad %s ya existe en la tabla", code));
 	}
 
 	int tablenameIdx = table.findColumn("tablename");

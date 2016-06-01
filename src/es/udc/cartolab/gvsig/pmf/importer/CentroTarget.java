@@ -39,20 +39,20 @@ public class CentroTarget extends JDBCTarget {
 	if (!matcher.find()) {
 	    return false;
 	}
-	if (existsInProcessed(table, tablename, matcher.group())) {
+	final String code = matcher.group();
+	if (existsInProcessed(table, tablename, code)) {
 	    addWarning(
 		    table,
 		    i,
 		    String.format(tablename
-			    + " %s duplicado en el fichero de entrada",
-			    matcher.group()));
+			    + " %s duplicado en el fichero de entrada", code));
 	}
-	if (existsInDB(tablename, pkname, matcher.group())) {
+	if (existsInDB(tablename, pkname, code)) {
 	    addWarning(
 		    table,
 		    i,
 		    String.format("El " + tablename
-			    + " %s ya existe en la tabla", matcher.group()));
+			    + " %s ya existe en la tabla", code));
 	}
 
 	if (!existsInProcessed(table, "comunidades", matcher.group(1))
