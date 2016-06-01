@@ -29,6 +29,11 @@ public class ImporterTM extends DefaultTableModel {
 	super.setValueAt(aValue, row, tablenameIdx);
     }
 
+    public void setGeom(IGeometry aValue, int row) {
+	int geomIdx = findColumn("geom");
+	super.setValueAt(aValue, row, geomIdx);
+    }
+
     public IGeometry getGeom(int row) {
 	int geomIdx = findColumn("geom");
 	return (IGeometry) getValueAt(row, geomIdx);

@@ -22,14 +22,15 @@ public class NoTarget extends JDBCTarget {
 
     @Override
     public boolean process(String value, ImporterTM table, int i) {
-	int geomIdx = table.findColumn("geom");
+
 	int xIdx = table.findColumn("x");
 	int yIdx = table.findColumn("y");
-	table.setTarget(null, i);
 	String xStr = table.getValueAt(i, xIdx).toString();
 	String yStr = table.getValueAt(i, yIdx).toString();
 	IGeometry geom = getGeometry(xStr, yStr);
-	table.setValueAt(geom, i, geomIdx);
+	table.setGeom(geom, i);
+
+	table.setTarget(null, i);
 	table.setCode(null, i);
 	addWarning(table, i, "Identificador no reconocido");
 

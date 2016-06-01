@@ -62,14 +62,14 @@ public class CentroTarget extends JDBCTarget {
 		    matcher.group(1)));
 	}
 
-	int geomIdx = table.findColumn("geom");
 	int xIdx = table.findColumn("x");
 	int yIdx = table.findColumn("y");
-	table.setTarget(field, i);
 	String xStr = table.getValueAt(i, xIdx).toString();
 	String yStr = table.getValueAt(i, yIdx).toString();
 	IGeometry geom = getGeometry(xStr, yStr);
-	table.setValueAt(geom, i, geomIdx);
+	table.setGeom(geom, i);
+
+	table.setTarget(field, i);
 	table.setCode(code, i);
 
 	// Comprobar que la geometría está dentro de la zona de interés
