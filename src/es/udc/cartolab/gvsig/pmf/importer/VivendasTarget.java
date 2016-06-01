@@ -15,6 +15,7 @@ public class VivendasTarget extends JDBCTarget {
 
     public VivendasTarget() {
 	field = new Field("informacion_general");
+	field.setValue(this);
     }
 
     @Override
@@ -45,13 +46,15 @@ public class VivendasTarget extends JDBCTarget {
 		    matcher.group(1)));
 	}
 
-	int tablenameIdx = table.findColumn("tablename");
 	int geomIdx = table.findColumn("geom");
-	table.setValueAt(field, i, tablenameIdx);
-	String xStr = table.getValueAt(i, 1).toString();
-	String yStr = table.getValueAt(i, 2).toString();
+	int xIdx = table.findColumn("x");
+	int yIdx = table.findColumn("y");
+	table.setTarget(field, i);
+	String xStr = table.getValueAt(i, xIdx).toString();
+	String yStr = table.getValueAt(i, yIdx).toString();
 	IGeometry geom = getGeometry(xStr, yStr);
 	table.setValueAt(geom, i, geomIdx);
+	table.setCode(code, i);
 
 	// Comprobar que la geometría está dentro de la zona de interés
 	// Double bbox = new Rectangle2D.Double(x, y, w, h);

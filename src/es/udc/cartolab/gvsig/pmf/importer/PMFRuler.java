@@ -7,12 +7,14 @@ import java.util.regex.Pattern;
 import javax.swing.table.DefaultTableModel;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.Ruler;
 import es.icarto.gvsig.importer.Target;
 
 public class PMFRuler implements Ruler {
 
-    private List<Target> targets;
+    private final List<Target> targets;
+    private final NoTarget noTarget;
 
     public PMFRuler() {
 	targets = new ArrayList<Target>();
@@ -42,6 +44,8 @@ public class PMFRuler implements Ruler {
 	Target saludTarget = new CentroTarget("centros_salud", "cod_csalud",
 		saludPattern);
 	targets.add(saludTarget);
+
+	noTarget = new NoTarget();
     }
 
     /*
@@ -86,8 +90,7 @@ public class PMFRuler implements Ruler {
 	}
 
 	if (!anyMatch) {
-	    int tablenameIdx = table.findColumn("tablename");
-	    table.setValueAt("", i, tablenameIdx);
+	    noTarget.process(value, table, i);
 	    addWarning(table, i, "Identificador no reconocido");
 	}
 
