@@ -31,6 +31,7 @@ public class NoTarget extends JDBCTarget {
 	IGeometry geom = getGeometry(xStr, yStr);
 	table.setValueAt(geom, i, geomIdx);
 	table.setCode(null, i);
+	addWarning(table, i, "Identificador no reconocido");
 
 	return true;
     }

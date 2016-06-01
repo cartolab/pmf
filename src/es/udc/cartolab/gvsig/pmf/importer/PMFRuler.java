@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.swing.table.DefaultTableModel;
-
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.Ruler;
@@ -91,22 +89,8 @@ public class PMFRuler implements Ruler {
 
 	if (!anyMatch) {
 	    noTarget.process(value, table, i);
-	    addWarning(table, i, "Identificador no reconocido");
 	}
 
-    }
-
-    @SuppressWarnings("unchecked")
-    // TODO. To be moved to another object
-    protected void addWarning(DefaultTableModel table, int row, String msg) {
-	int errorIdx = table.findColumn("Errores");
-	List<String> l = (List<String>) table.getValueAt(row, errorIdx);
-	if (l == null) {
-	    l = new ArrayList<String>();
-	    table.setValueAt(l, row, errorIdx);
-
-	}
-	l.add(msg);
     }
 
     @Override
