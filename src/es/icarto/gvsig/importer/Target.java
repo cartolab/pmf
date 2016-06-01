@@ -10,4 +10,6 @@ public interface Target {
 
     Field getField();
 
+    String calculateCode(ImporterTM table, int i);
+
 }

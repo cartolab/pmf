@@ -60,4 +60,55 @@ public class ComunidadTarget extends JDBCTarget {
 
     }
 
+    @Override
+    /**
+     * Si hay un caserio en la aldea donde está el nuevo punto a menos de 1km
+     * se coge ese caserio como el código de la comunidad. En caso contrario se
+     * coge el código de máximo valor entre los que ya existan (para esa aldea)
+     * en la tabla o en comunidades o en caserios y se le suma 1
+     */
+    public String calculateCode(ImporterTM table, int i) {
+	String code = null;
+	String nombreComunidad = null;
+	Geometry geom = table.getGeom(i).toJTSGeometry();
+	String point = "ST_GeomFromText( '" + geom.toText() + "' )";
+
+	DefaultTableModel aldea = intersects("aldeas_pmf", point, "cod_aldea",
+		"nombre");
+	String codAldea = aldea.getValueAt(0, 0).toString();
+
+	String closestWhere = String.format(
+		" WHERE substr(cod_caseri, 1, 6) = '%s'", codAldea);
+	DefaultTableModel closest = closest("caserios_comunidades_pmf", point,
+		closestWhere, "cod_caseri", "caserio");
+	if (closest.getRowCount() > 0) {
+	    Double d = (Double) closest.getValueAt(0, 2);
+	    if (d < 1000) {
+		code = closest.getValueAt(0, 0).toString();
+		nombreComunidad = closest.getValueAt(0, 1).toString();
+		return code;
+	    }
+	}
+
+	DefaultTableModel results2 = maxCode("caserios_comunidades_pmf",
+		"cod_caseri", 6, codAldea);
+	DefaultTableModel results3 = maxCode("comunidades", "cod_com", 6,
+		codAldea);
+
+	String maxCodeInDB = results2.getValueAt(0, 0).toString();
+	String maxCodeInData = results3.getValueAt(0, 0).toString();
+	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
+
+	String maxCode = maxCodeInTable;
+	if (maxCode.compareTo(maxCodeInDB) < 0) {
+	    maxCode = maxCodeInDB;
+	}
+	if (maxCode.compareTo(maxCodeInData) < 0) {
+	    maxCode = maxCodeInData;
+	}
+	int parseInt = Integer.parseInt(maxCode) + 1;
+	code = parseInt + "";
+
+	return code;
+    }
 }

@@ -1,5 +1,6 @@
 package es.icarto.gvsig.importer;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -14,7 +15,9 @@ import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 
+import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.commons.utils.StrUtils;
 import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -102,6 +105,96 @@ public abstract class JDBCTarget implements Target {
 	}
 
 	return true;
+    }
+
+    protected DefaultTableModel intersects(String tablename, String point,
+	    String... fields) {
+	DBSession session = DBSession.getCurrentSession();
+	Connection javaCon = session.getJavaConnection();
+	ConnectionWrapper con = new ConnectionWrapper(javaCon);
+	String fieldStr = StrUtils.join(", ", (Object[]) fields);
+	String query = String.format(
+		"SELECT %s FROM %s WHERE ST_Intersects(geometry, %s)",
+		fieldStr, tablename, point);
+	DefaultTableModel table = con.execute(query);
+	if (table == null) {
+	    throw new RuntimeException("Error desconocido");
+	}
+	if (table.getRowCount() < 1) {
+	    throw new RuntimeException("Sin resultados");
+	}
+	if (table.getRowCount() > 1) {
+	    throw new RuntimeException("Más de un resultado");
+	}
+	return table;
+    }
+
+    protected DefaultTableModel closest(String tablename, String point,
+	    String where, String... fields) {
+	where = where == null ? "" : where;
+	DBSession session = DBSession.getCurrentSession();
+	Connection javaCon = session.getJavaConnection();
+	ConnectionWrapper con = new ConnectionWrapper(javaCon);
+	String fieldStr = StrUtils.join(", ", (Object[]) fields);
+
+	String query = String
+		.format("SELECT %s,  ST_Distance(%s, geometry) from %s %s ORDER BY ST_Distance(%s, geometry) LIMIT 1;",
+			fieldStr, point, tablename, where, point);
+
+	DefaultTableModel table = con.execute(query);
+	if (table == null) {
+	    throw new RuntimeException("Error desconocido");
+	}
+	return table;
+    }
+
+    protected DefaultTableModel maxCode(String tablename, String codeFieldName,
+	    String fkName, String fkValue) {
+	DBSession session = DBSession.getCurrentSession();
+	Connection javaCon = session.getJavaConnection();
+	ConnectionWrapper con = new ConnectionWrapper(javaCon);
+
+	String query = String.format(
+		"SELECT %s from %s WHERE %s = '%s' ORDER BY %s DESC LIMIT 1;",
+		codeFieldName, tablename, fkName, fkValue, codeFieldName);
+
+	DefaultTableModel table = con.execute(query);
+	if (table == null) {
+	    throw new RuntimeException("Error desconocido");
+	}
+	if (table.getRowCount() < 1) {
+	    throw new RuntimeException("Sin resultados");
+	}
+	if (table.getRowCount() > 1) {
+	    throw new RuntimeException("Más de un resultado");
+	}
+	return table;
+    }
+
+    protected DefaultTableModel maxCode(String tablename, String codeFieldName,
+	    int ncharacters, String fkValue) {
+	DBSession session = DBSession.getCurrentSession();
+	Connection javaCon = session.getJavaConnection();
+	ConnectionWrapper con = new ConnectionWrapper(javaCon);
+
+	String where = String.format("WHERE substr(%s, 1, %d) = '%s'",
+		codeFieldName, ncharacters, fkValue);
+	String query = String.format(
+		"SELECT %s from %s %s ORDER BY %s DESC LIMIT 1;",
+		codeFieldName, tablename, where, codeFieldName);
+
+	DefaultTableModel table = con.execute(query);
+	if (table == null) {
+	    throw new RuntimeException("Error desconocido");
+	}
+	if (table.getRowCount() < 1) {
+	    throw new RuntimeException("Sin resultados");
+	}
+	if (table.getRowCount() > 1) {
+	    throw new RuntimeException("Más de un resultado");
+	}
+	return table;
+
     }
 
     @Override

@@ -79,4 +79,9 @@ public class CentroTarget extends JDBCTarget {
 	// Comprobar que el punto está cerca de la comunidad
 	return true;
     }
+
+    @Override
+    public String calculateCode(ImporterTM table, int i) {
+	return null;
+    }
 }

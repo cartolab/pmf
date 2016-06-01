@@ -65,4 +65,8 @@ public class VivendasTarget extends JDBCTarget {
 
     }
 
+    @Override
+    public String calculateCode(ImporterTM table, int i) {
+	return null;
+    }
 }
