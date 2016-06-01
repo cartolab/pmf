@@ -19,25 +19,25 @@ public class PMFRuler implements Ruler {
 	targets.add(new ComunidadTarget());
 	targets.add(new VivendasTarget());
 
-	Pattern patternFuentes = Pattern.compile("^(\\d{8})fc\\d{2}$",
+	Pattern patternFuentes = Pattern.compile("^(\\d{9})fc\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target fuentesTarget = new CentroTarget("fuentes_comunitarias",
 		"codigo_fc", patternFuentes);
 	targets.add(fuentesTarget);
 
-	Pattern eduPattern = Pattern.compile("^(\\d{8})ce\\d{2}$",
+	Pattern eduPattern = Pattern.compile("^(\\d{9})ce\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target eduTarget = new CentroTarget("centros_educativos", "cod_cedu",
 		eduPattern);
 	targets.add(eduTarget);
 
-	Pattern reuPattern = Pattern.compile("^(\\d{8})cr\\d{2}$",
+	Pattern reuPattern = Pattern.compile("^(\\d{9})cr\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target reuTarget = new CentroTarget("centros_reuniones", "cod_creu",
 		reuPattern);
 	targets.add(reuTarget);
 
-	Pattern saludPattern = Pattern.compile("^(\\d{8})cs\\d{2}$",
+	Pattern saludPattern = Pattern.compile("^(\\d{9})cs\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target saludTarget = new CentroTarget("centros_salud", "cod_csalud",
 		saludPattern);
@@ -72,10 +72,10 @@ public class PMFRuler implements Ruler {
     // {1,3} o {2,3} o *
 
     private final static Pattern verticePattern = Pattern.compile(
-	    "^(((\\d{8})vi\\d{3})p\\d{2})v\\d{2}$", Pattern.CASE_INSENSITIVE);
+	    "^(((\\d{9})vi\\d{3})p\\d{2})v\\d{2}$", Pattern.CASE_INSENSITIVE);
 
     private final static Pattern parcelaPattern = Pattern.compile(
-	    "^((\\d{8})vi\\d{3})p\\d{2}$", Pattern.CASE_INSENSITIVE);
+	    "^((\\d{9})vi\\d{3})p\\d{2}$", Pattern.CASE_INSENSITIVE);
 
     public void processValue(String value, ImporterTM table, int i) {
 

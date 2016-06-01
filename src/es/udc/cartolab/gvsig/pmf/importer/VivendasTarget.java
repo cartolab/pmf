@@ -11,7 +11,7 @@ import es.icarto.gvsig.importer.JDBCTarget;
 
 public class VivendasTarget extends JDBCTarget {
     private final static Pattern pattern = Pattern.compile(
-	    "^(\\d{8})vi\\d{3}$", Pattern.CASE_INSENSITIVE);
+	    "^(\\d{9})vi\\d{3}$", Pattern.CASE_INSENSITIVE);
 
     public VivendasTarget() {
 	field = new Field("informacion_general");

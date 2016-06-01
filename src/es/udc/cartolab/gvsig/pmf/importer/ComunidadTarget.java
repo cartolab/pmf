@@ -12,7 +12,7 @@ import es.icarto.gvsig.importer.JDBCTarget;
 
 public class ComunidadTarget extends JDBCTarget {
 
-    private final static Pattern pattern = Pattern.compile("^\\d{8}$",
+    private final static Pattern pattern = Pattern.compile("^\\d{9}$",
 	    Pattern.CASE_INSENSITIVE);
 
     public ComunidadTarget() {
