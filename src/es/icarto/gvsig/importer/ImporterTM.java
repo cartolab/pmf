@@ -14,10 +14,12 @@ public class ImporterTM extends DefaultTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-	if (column == 0) {
-	    return false;
+	int tablenameIdx = findColumn("tablename");
+	int codeIdx = findColumn("Código");
+	if ((column == tablenameIdx) || (column == codeIdx)) {
+	    return true;
 	}
-	return super.isCellEditable(row, column);
+	return false;
     }
 
     public void setCode(Object aValue, int row) {
