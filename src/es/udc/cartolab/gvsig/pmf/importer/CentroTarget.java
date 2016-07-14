@@ -15,22 +15,25 @@ import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
+import es.icarto.gvsig.importer.RegionI;
 
 public class CentroTarget extends JDBCTarget {
 
     private final Pattern pattern;
     private final String tablename;
     private final String pkname;
-    protected final String idDiff;
+    private final String idDiff;
+    private final String digitsDiff;
 
     public CentroTarget(String tablename, String pkname, Pattern pattern,
-	    String idDiff) {
+	    String idDiff, String digitsDiff) {
 	this.tablename = tablename;
 	field = new Field(tablename);
 	field.setValue(this);
 	this.pattern = pattern;
 	this.pkname = pkname;
 	this.idDiff = idDiff;
+	this.digitsDiff = digitsDiff;
     }
 
     @Override
@@ -57,24 +60,16 @@ public class CentroTarget extends JDBCTarget {
 
     @Override
     public String calculateCode(ImporterTM table, int i) {
-	String codComunidad = null;
-	String nombreComunidad = null;
 	double minDistance = Double.MAX_VALUE;
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
 	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-
-	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
-		"cod_com", aldea.pk);
-	DefaultTableModel closest = closest("comunidades", pointStr,
-		closestWhere, "cod_com", "nombre");
-	if (closest.getRowCount() > 0) {
-	    Double d = (Double) closest.getValueAt(0, 2);
+	Comunidad parent = Comunidad.closestTo(pointStr, aldea);
+	if (parent != null) {
+	    double d = parent.distanceTo(point);
 	    if (d < 2000) {
 		minDistance = d;
-		codComunidad = closest.getValueAt(0, 0).toString();
-		nombreComunidad = closest.getValueAt(0, 1).toString();
 	    }
 	}
 
@@ -82,31 +77,43 @@ public class CentroTarget extends JDBCTarget {
 	    Object o = table.getTarget(row);
 	    String tablename = o != null ? o.toString() : "";
 	    if (tablename.equals("comunidades")) {
-		Geometry tmpGeom = table.getGeom(row).toJTSGeometry();
-		if (tmpGeom.distance(point) < minDistance) {
-		    codComunidad = table.getCode(row);
-		    nombreComunidad = "";
-		    minDistance = tmpGeom.distance(point);
+		String codCom = table.getCode(row);
+		IGeometry geomCom = table.getGeom(row);
+		Comunidad c = Comunidad.from(codCom, geomCom);
+		if (c.distanceTo(point) < minDistance) {
+		    parent = c;
+		    minDistance = parent.distanceTo(point);
 		}
 	    }
 	}
 
-	if (codComunidad == null) {
+	if (parent == null) {
 	    return null;
 	}
 
-	DefaultTableModel results3 = maxCode("informacion_general", "cod_viv",
-		8, codComunidad);
+	DefaultTableModel results3 = maxCode(tablename, pkname, 8,
+		parent.getPKValue());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
 	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
 
-	String maxCode = maxCodeInTable;
+	String code = codeIt(parent, maxCodeInData, maxCodeInTable);
+
+	return code;
+    }
+
+    protected String codeIt(RegionI parent, String maxCodeInData,
+	    String maxCodeInTable) {
+	String maxCode = "00000000" + idDiff + "00";
+	if (maxCode.compareTo(maxCodeInTable) < 0) {
+	    maxCode = maxCodeInTable;
+	}
+
 	if (maxCode.compareTo(maxCodeInData) < 0) {
 	    maxCode = maxCodeInData;
 	}
 	int parseInt = Integer.parseInt(maxCode.substring(10)) + 1;
-	String code = codComunidad + idDiff + parseInt;
-
+	String code = parent.getPKValue() + idDiff
+		+ String.format(digitsDiff, parseInt);
 	return code;
     }
 
@@ -120,6 +127,7 @@ public class CentroTarget extends JDBCTarget {
 	error = checkCode(table, code, row);
 	if (error != null) {
 	    l.add(error);
+	    table.setError(l, row);
 	    return l;
 	}
 
@@ -183,6 +191,7 @@ public class CentroTarget extends JDBCTarget {
 	// debería tener un nombre "Comunidad", "Vivienda" con el que referirse
 	// a él, y no el nombre de la tabla (tablename") Y también debería
 	// definir el género duplicado/duplicada
+	// "Vivienda %s duplicada en el fichero de entrada"
 	if (existsInProcessed(table, tablename, code, row)) {
 	    String errorMsg = String.format(tablename
 		    + " %s duplicado en el fichero de entrada", code);
@@ -193,6 +202,7 @@ public class CentroTarget extends JDBCTarget {
 
     private ImportError checkDBUnique(String tablename, String pkName,
 	    String code, int row) {
+	// "Vivienda %s ya existe en la base de datos"
 	if (existsInDB(tablename, pkName, code)) {
 	    String errorMsg = String.format("El " + tablename
 		    + " %s ya existe en la base de datos", code);

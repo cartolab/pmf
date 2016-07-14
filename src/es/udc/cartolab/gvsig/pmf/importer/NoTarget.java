@@ -45,6 +45,7 @@ public class NoTarget extends JDBCTarget {
 	ArrayList<ImportError> l = new ArrayList<ImportError>();
 	l.add(new ImportError("Código no válido", row));
 	l.add(new ImportError("Tabla destino no válida", row));
+	table.setError(l, row);
 	return l;
     }
 }

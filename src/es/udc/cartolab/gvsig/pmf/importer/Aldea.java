@@ -3,8 +3,9 @@ package es.udc.cartolab.gvsig.pmf.importer;
 import javax.swing.table.DefaultTableModel;
 
 import es.icarto.gvsig.importer.JDBCUtils;
+import es.icarto.gvsig.importer.RegionI;
 
-public class Aldea {
+public class Aldea implements RegionI {
 
     public final static String tablename = "cantones";
     public final static String pkName = "cod_canton";
@@ -28,6 +29,16 @@ public class Aldea {
 	String pk = result.getValueAt(0, 0).toString();
 	String name = result.getValueAt(0, 1).toString();
 	return new Aldea(pk, name);
+    }
+
+    @Override
+    public String getPKField() {
+	return pkName;
+    }
+
+    @Override
+    public String getPKValue() {
+	return pk;
     }
 
 }

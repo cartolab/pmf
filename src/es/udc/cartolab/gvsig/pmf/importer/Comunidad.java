@@ -8,8 +8,9 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import es.icarto.gvsig.importer.JDBCUtils;
+import es.icarto.gvsig.importer.RegionI;
 
-public class Comunidad {
+public class Comunidad implements RegionI {
 
     public final static String tablename = "comunidades";
     public final static String pkName = "cod_com";
@@ -28,7 +29,7 @@ public class Comunidad {
 	this.name = name;
     }
 
-    public Comunidad(String code, IGeometry geom) {
+    private Comunidad(String code, IGeometry geom) {
 	this.pk = code;
 	this.name = "";
 	this.geom = geom.toJTSGeometry();
@@ -54,6 +55,41 @@ public class Comunidad {
 
     public double distanceTo(IGeometry geom) {
 	return this.geom.distance(geom.toJTSGeometry());
+    }
+
+    public double distanceTo(Geometry geom) {
+	return this.geom.distance(geom);
+    }
+
+    public static Comunidad closestTo(String pointStr, RegionI region) {
+	JDBCUtils jdbcUtils = new JDBCUtils();
+	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
+		pkName, region.getPKValue());
+	DefaultTableModel closest = jdbcUtils.closest(tablename, pointStr,
+		closestWhere, pkName, nameName, "st_x(geom)", "st_y(geom)");
+
+	if (closest.getRowCount() == 1) {
+	    String pk = closest.getValueAt(0, 0).toString();
+	    String name = closest.getValueAt(0, 1).toString();
+	    String xStr = closest.getValueAt(0, 2).toString();
+	    String yStr = closest.getValueAt(0, 3).toString();
+	    return new Comunidad(pk, xStr, yStr);
+	}
+	return null;
+    }
+
+    @Override
+    public String getPKField() {
+	return pkName;
+    }
+
+    @Override
+    public String getPKValue() {
+	return pk;
+    }
+
+    public static Comunidad from(String pk, IGeometry geom) {
+	return new Comunidad(pk, geom);
     }
 
 }

@@ -32,4 +32,23 @@ public class JDBCUtils {
 	return table;
     }
 
+    public DefaultTableModel closest(String tablename, String point,
+	    String where, String... fields) {
+	where = where == null ? "" : where;
+	DBSession session = DBSession.getCurrentSession();
+	Connection javaCon = session.getJavaConnection();
+	ConnectionWrapper con = new ConnectionWrapper(javaCon);
+	String fieldStr = StrUtils.join(", ", (Object[]) fields);
+
+	String query = String
+		.format("SELECT %s,  ST_Distance(%s, geom) from %s %s ORDER BY ST_Distance(%s, geom) LIMIT 1;",
+			fieldStr, point, tablename, where, point);
+
+	DefaultTableModel table = con.execute(query);
+	if (table == null) {
+	    throw new RuntimeException("Error desconocido");
+	}
+	return table;
+    }
+
 }

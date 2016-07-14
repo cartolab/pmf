@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.Field;
-import es.icarto.gvsig.commons.utils.StrUtils;
 import es.udc.cartolab.gvsig.pmf.importer.Comunidad;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
@@ -64,10 +63,9 @@ public abstract class JDBCTarget implements Target {
 	for (int row = 0; row < table.getRowCount(); row++) {
 	    Object c = table.getValueAt(row, tablenameIdx);
 	    if ((c != null) && c.toString().equalsIgnoreCase(tablename)) {
-		if (code.equalsIgnoreCase(table.getValueAt(row, idIdx)
-			.toString())) {
-		    return new Comunidad(table.getValueAt(row, idIdx)
-			    .toString(), table.getGeom(row));
+		final String codCom = table.getValueAt(row, idIdx).toString();
+		if (code.equalsIgnoreCase(codCom)) {
+		    return Comunidad.from(codCom, table.getGeom(row));
 		}
 	    }
 	}
@@ -119,21 +117,8 @@ public abstract class JDBCTarget implements Target {
 
     protected DefaultTableModel closest(String tablename, String point,
 	    String where, String... fields) {
-	where = where == null ? "" : where;
-	DBSession session = DBSession.getCurrentSession();
-	Connection javaCon = session.getJavaConnection();
-	ConnectionWrapper con = new ConnectionWrapper(javaCon);
-	String fieldStr = StrUtils.join(", ", (Object[]) fields);
-
-	String query = String
-		.format("SELECT %s,  ST_Distance(%s, geom) from %s %s ORDER BY ST_Distance(%s, geom) LIMIT 1;",
-			fieldStr, point, tablename, where, point);
-
-	DefaultTableModel table = con.execute(query);
-	if (table == null) {
-	    throw new RuntimeException("Error desconocido");
-	}
-	return table;
+	JDBCUtils jdbcUtils = new JDBCUtils();
+	return jdbcUtils.closest(tablename, point, where, fields);
     }
 
     protected DefaultTableModel closestInTable(String tablename, String point,
@@ -181,7 +166,8 @@ public abstract class JDBCTarget implements Target {
 	    throw new RuntimeException("Error desconocido");
 	}
 	if (table.getRowCount() < 1) {
-	    throw new RuntimeException("Sin resultados");
+	    table = new DefaultTableModel(1, 1);
+	    table.setValueAt("", 0, 0);
 	}
 	if (table.getRowCount() > 1) {
 	    throw new RuntimeException("Más de un resultado");

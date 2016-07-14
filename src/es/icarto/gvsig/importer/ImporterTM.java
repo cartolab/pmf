@@ -55,6 +55,7 @@ public class ImporterTM extends DefaultTableModel {
 
     @Override
     public void setValueAt(Object aValue, int row, int column) {
+	super.setValueAt(aValue, row, column);
 	int tablenameIdx = findColumn("tablename");
 	if (column == tablenameIdx) {
 	    if (aValue == null) {
@@ -72,7 +73,6 @@ public class ImporterTM extends DefaultTableModel {
 	    Target target = (Target) field.getValue();
 	    target.checkErrors(this, row);
 	}
-	super.setValueAt(aValue, row, column);
     }
 
     /**
