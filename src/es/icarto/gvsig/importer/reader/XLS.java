@@ -1,4 +1,4 @@
-package es.icarto.gvsig.importer;
+package es.icarto.gvsig.importer.reader;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import es.icarto.gvsig.importer.Header;
+import es.icarto.gvsig.importer.SimpleHeaderField;
+import es.icarto.gvsig.importer.XLSFormatUtils;
 
 public class XLS implements Reader {
 
@@ -142,7 +146,7 @@ public class XLS implements Reader {
 	    Object rowData[] = new Object[3];
 	    for (Cell cell : row) {
 		int pos = cell.getColumnIndex();
-		String val = XLSUtils.getValueAsString(cell);
+		String val = XLSFormatUtils.getValueAsString(cell);
 		rowData[pos] = val;
 	    }
 	    table.addRow(rowData);

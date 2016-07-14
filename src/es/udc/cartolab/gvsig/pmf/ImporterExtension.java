@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.icarto.gvsig.commons.AbstractExtension;
-import es.icarto.gvsig.importer.DBF;
 import es.icarto.gvsig.importer.FileToImport;
-import es.icarto.gvsig.importer.GPX;
 import es.icarto.gvsig.importer.Header;
 import es.icarto.gvsig.importer.ImportManager;
 import es.icarto.gvsig.importer.Output;
-import es.icarto.gvsig.importer.Reader;
 import es.icarto.gvsig.importer.Ruler;
-import es.icarto.gvsig.importer.XLS;
+import es.icarto.gvsig.importer.reader.DBF;
+import es.icarto.gvsig.importer.reader.GPX;
+import es.icarto.gvsig.importer.reader.Reader;
+import es.icarto.gvsig.importer.reader.XLS;
 import es.udc.cartolab.gvsig.pmf.importer.PMFHeader;
 import es.udc.cartolab.gvsig.pmf.importer.PMFOutput;
 import es.udc.cartolab.gvsig.pmf.importer.PMFRuler;
@@ -20,7 +20,6 @@ import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 // Autodetectar cuando son UTM y cuando GEO
 // Mejorar como se muestran errores y warnings
-// Comparar código y ST_Contains con aldeas_pmf y distancia a caserios_comunidades_pmf
 // Separar errores de warnings
 public class ImporterExtension extends AbstractExtension {
 

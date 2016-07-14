@@ -1,10 +1,12 @@
-package es.icarto.gvsig.importer;
+package es.icarto.gvsig.importer.reader;
 
 import java.io.File;
 import java.util.List;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
+
+import es.icarto.gvsig.importer.SimpleHeaderField;
 
 public interface Reader {
 

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import es.icarto.gvsig.importer.reader.Reader;
+
 public class ImportManager {
 
     private final Reader reader;

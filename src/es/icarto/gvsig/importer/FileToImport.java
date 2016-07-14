@@ -15,6 +15,7 @@ import es.icarto.gvsig.commons.gui.AbstractIWindow;
 import es.icarto.gvsig.commons.gui.OkCancelPanel;
 import es.icarto.gvsig.commons.gui.SelectFileWidget;
 import es.icarto.gvsig.commons.gui.WidgetFactory;
+import es.icarto.gvsig.importer.reader.Reader;
 
 @SuppressWarnings("serial")
 public class FileToImport extends AbstractIWindow implements ActionListener {
