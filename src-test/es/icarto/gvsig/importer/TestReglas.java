@@ -10,6 +10,10 @@ import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.udc.cartolab.gvsig.pmf.importer.ComunidadTarget;
+import es.udc.cartolab.gvsig.pmf.importer.PMFRuler;
+import es.udc.cartolab.gvsig.pmf.importer.VivendasTarget;
+
 public class TestReglas {
 
     @Before
@@ -18,36 +22,26 @@ public class TestReglas {
 
     @Test
     public void testComunidad() {
-	Matcher matcher = null;
-	Pattern pattern = Ruler.comunidadPattern;
+	Target target = new ComunidadTarget();
 
-	matcher = pattern.matcher("12345678");
-	assertTrue(matcher.find());
-
-	matcher = pattern.matcher("1234567812345678");
-	assertFalse(matcher.find());
-
-	matcher = pattern.matcher(" 1234567");
-	assertFalse(matcher.find());
+	assertTrue(target.matches("12345678"));
+	assertFalse(target.matches("1234567812345678"));
+	assertFalse(target.matches(" 1234567"));
     }
 
     @Test
     public void testVivienda() {
-	Matcher matcher = null;
-	Pattern pattern = Ruler.viviendaPattern;
+	Target target = new VivendasTarget();
+	assertFalse(target.matches("12345678"));
+	assertTrue(target.matches("12345678vI123"));
 
-	matcher = pattern.matcher("12345678");
-	assertFalse(matcher.find());
-
-	matcher = pattern.matcher("12345678vI123");
-	assertTrue(matcher.find());
 	assertEquals("12345678", matcher.group(1));
     }
 
     @Test
     public void testParcela() {
 	Matcher matcher = null;
-	Pattern pattern = Ruler.parcelaPattern;
+	Pattern pattern = PMFRuler.parcelaPattern;
 
 	matcher = pattern.matcher("12345678");
 	assertFalse(matcher.find());
@@ -64,7 +58,7 @@ public class TestReglas {
     public void testVertice() {
 
 	Matcher matcher = null;
-	Pattern pattern = Ruler.verticePattern;
+	Pattern pattern = PMFRuler.verticePattern;
 
 	matcher = pattern.matcher("12345678");
 	assertFalse(matcher.find());

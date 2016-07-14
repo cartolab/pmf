@@ -12,6 +12,8 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.icarto.gvsig.importer.reader.XLS;
+
 public class TestXLS {
 
     private XLS xls;
@@ -19,7 +21,8 @@ public class TestXLS {
     @Before
     public void setUp() throws InvalidFormatException, IOException {
 	final File file = new File("/tmp/ejemplo.xlsx");
-	xls = new XLS(file);
+	xls = new XLS();
+	xls.initReader(file);
     }
 
     @Test(expected = IllegalArgumentException.class)

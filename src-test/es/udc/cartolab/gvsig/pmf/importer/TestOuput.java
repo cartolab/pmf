@@ -1,4 +1,4 @@
-package es.icarto.gvsig.importer;
+package es.udc.cartolab.gvsig.pmf.importer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,13 +7,16 @@ import javax.swing.table.DefaultTableModel;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.icarto.gvsig.importer.Output;
+import es.icarto.gvsig.importer.Ruler;
+
 public class TestOuput {
 
-    private Output output;
+    private PMFOutput output;
 
     @Before
     public void setUp() throws Exception {
-	output = new Output();
+	output = new PMFOutput();
     }
 
     @Test
@@ -116,7 +119,8 @@ public class TestOuput {
 
     public static void main(String[] args) {
 	DefaultTableModel table = new DefaultTableModel(6, 4);
-	Output output = new Output();
+	Output output = new PMFOutput();
+	Ruler ruler = new PMFRuler();
 
 	table = new DefaultTableModel(7, 4);
 	table.setValueAt("foo1", 0, 3);
@@ -127,7 +131,7 @@ public class TestOuput {
 	table.setValueAt("comunidades", 5, 3);
 	table.setValueAt("foo3", 6, 3);
 
-	output.process(table);
+	output.process(table, ruler);
     }
 
 }
