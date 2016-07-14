@@ -1,13 +1,21 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
+import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.importer.Foo;
+import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
 
 public class NoTarget extends JDBCTarget {
 
     public NoTarget() {
+	field = new Field("");
+	field.setValue(this);
     }
 
     @Override
@@ -15,24 +23,14 @@ public class NoTarget extends JDBCTarget {
 	return false;
     }
 
-    // TODO
-    // select a.nombre, a.cod_aldea, c.cod_com from comunidades c join
-    // aldeas_pmf a on substring(c.cod_com, 0, 6) = cod_aldea and
-    // st_contains(a.geom, c.geom)
-
     @Override
     public boolean process(String value, ImporterTM table, int i) {
 
-	int xIdx = table.findColumn("x");
-	int yIdx = table.findColumn("y");
-	String xStr = table.getValueAt(i, xIdx).toString();
-	String yStr = table.getValueAt(i, yIdx).toString();
-	IGeometry geom = getGeometry(xStr, yStr);
+	IGeometry geom = new Foo().getGeometry(table, i);
 	table.setGeom(geom, i);
 
-	table.setTarget(null, i);
-	table.setCode(null, i);
-	addWarning(table, i, "Identificador no reconocido");
+	table.setTarget(field, i);
+	table.setCode("", i);
 
 	return true;
     }
@@ -40,5 +38,13 @@ public class NoTarget extends JDBCTarget {
     @Override
     public String calculateCode(ImporterTM table, int i) {
 	return null;
+    }
+
+    @Override
+    public List<ImportError> checkErrors(ImporterTM table, int row) {
+	ArrayList<ImportError> l = new ArrayList<ImportError>();
+	l.add(new ImportError("Código no válido", row));
+	l.add(new ImportError("Tabla destino no válida", row));
+	return l;
     }
 }

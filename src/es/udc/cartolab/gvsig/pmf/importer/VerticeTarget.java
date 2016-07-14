@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.table.DefaultTableModel;
-
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -15,21 +13,20 @@ import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
+import es.icarto.gvsig.importer.Target;
 
-public class VivendasTarget extends JDBCTarget {
+public class VerticeTarget extends JDBCTarget implements Target {
+
     private final Pattern pattern;
     private final String tablename;
     private final String pkname;
-    private final String idDiff;
 
-    public VivendasTarget() {
-	this.tablename = "informacion_general";
+    public VerticeTarget(String tablename, String pkname, Pattern pattern) {
+	this.tablename = tablename;
 	field = new Field(tablename);
 	field.setValue(this);
-	this.pattern = Pattern.compile("^(\\d{8})vi\\d{3}$",
-		Pattern.CASE_INSENSITIVE);
-	this.pkname = "cod_viv";
-	this.idDiff = "vi";
+	this.pattern = pattern;
+	this.pkname = pkname;
     }
 
     @Override
@@ -45,6 +42,7 @@ public class VivendasTarget extends JDBCTarget {
 	    return false;
 	}
 	final String code = matcher.group();
+
 	IGeometry geom = new Foo().getGeometry(table, i);
 	table.setGeom(geom, i);
 
@@ -52,66 +50,17 @@ public class VivendasTarget extends JDBCTarget {
 	table.setCode(code, i);
 
 	return true;
-
     }
 
     @Override
     public String calculateCode(ImporterTM table, int i) {
-	String codComunidad = null;
-	String nombreComunidad = null;
-	double minDistance = Double.MAX_VALUE;
-	Geometry point = table.getGeom(i).toJTSGeometry();
-	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
-
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-
-	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
-		"cod_com", aldea.pk);
-	DefaultTableModel closest = closest("comunidades", pointStr,
-		closestWhere, "cod_com", "nombre");
-	if (closest.getRowCount() > 0) {
-	    Double d = (Double) closest.getValueAt(0, 2);
-	    if (d < 2000) {
-		minDistance = d;
-		codComunidad = closest.getValueAt(0, 0).toString();
-		nombreComunidad = closest.getValueAt(0, 1).toString();
-	    }
-	}
-
-	for (int row = 0; row < table.getRowCount(); row++) {
-	    Object o = table.getTarget(row);
-	    String tablename = o != null ? o.toString() : "";
-	    if (tablename.equals("comunidades")) {
-		Geometry tmpGeom = table.getGeom(row).toJTSGeometry();
-		if (tmpGeom.distance(point) < minDistance) {
-		    codComunidad = table.getCode(row);
-		    nombreComunidad = "";
-		    minDistance = tmpGeom.distance(point);
-		}
-	    }
-	}
-
-	if (codComunidad == null) {
-	    return null;
-	}
-
-	DefaultTableModel results3 = maxCode("informacion_general", "cod_viv",
-		8, codComunidad);
-	String maxCodeInData = results3.getValueAt(0, 0).toString();
-	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
-
-	String maxCode = maxCodeInTable;
-	if (maxCode.compareTo(maxCodeInData) < 0) {
-	    maxCode = maxCodeInData;
-	}
-	int parseInt = Integer.parseInt(maxCode.substring(10)) + 1;
-	String code = codComunidad + "vi" + parseInt;
-
-	return code;
+	return null;
+	// substring(16)
     }
 
     @Override
     public List<ImportError> checkErrors(ImporterTM table, int row) {
+
 	List<ImportError> l = new ArrayList<ImportError>();
 	ImportError error = null;
 
@@ -125,7 +74,8 @@ public class VivendasTarget extends JDBCTarget {
 
 	Matcher matcher = pattern.matcher(code);
 	matcher.matches();
-	final String parentPKValue = matcher.group(1);
+	// Es la vivienda no la parcela
+	final String parentPKValue = matcher.group(2);
 
 	error = checkParentExists(table, parentPKValue, row);
 	if (error != null) {
@@ -166,10 +116,9 @@ public class VivendasTarget extends JDBCTarget {
 
     private ImportError checkParentExists(ImporterTM table,
 	    String parentPKValue, int row) {
-	if (!existsInProcessed(table, Comunidad.tablename, parentPKValue, row)
-		&& !existsInDB(Comunidad.tablename, Comunidad.pkName,
-			parentPKValue)) {
-	    String errorMsg = String.format("La comunidad %s no existe",
+	if (!existsInProcessed(table, "informacion_general", parentPKValue, row)
+		&& !existsInDB("informacion_general", "cod_viv", parentPKValue)) {
+	    String errorMsg = String.format("La vivienda %s no existe",
 		    parentPKValue);
 	    return new ImportError(errorMsg, row);
 	}
@@ -189,6 +138,7 @@ public class VivendasTarget extends JDBCTarget {
 		    + " %s duplicado en el fichero de entrada", code);
 	    return new ImportError(errorMsg, row);
 	}
+
 	return null;
     }
 
@@ -220,9 +170,14 @@ public class VivendasTarget extends JDBCTarget {
 
     private ImportError checkDistanceToParent(ImporterTM table, String code,
 	    String parentPKValue, IGeometry geom, int row) {
-
+	// TODO: Habría que referirlo a la vivienda y sería menos de 5km
 	Comunidad comunidad = getComunidad(table, "comunidades", "cod_com",
 		parentPKValue);
+	if (comunidad == null) {
+	    // en ciertos errores tendría más lógica parar en cuando hay un
+	    // error
+	    return null;
+	}
 	double distance = comunidad.distanceTo(geom);
 	if (distance > 5000) {
 	    return new ImportError("Elemento a más de 5km de la comunidad", row);
@@ -230,4 +185,5 @@ public class VivendasTarget extends JDBCTarget {
 
 	return null;
     }
+
 }

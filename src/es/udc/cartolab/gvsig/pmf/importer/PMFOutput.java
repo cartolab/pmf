@@ -90,6 +90,10 @@ public class PMFOutput implements Output {
 		    sql = String
 			    .format("INSERT INTO fuentes_comunitarias (cod_com, codigo_fc, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
 				    codCom, id, geomAsWKT);
+		} else if (tablename.equals("limites_parcela")) {
+		    sql = String
+			    .format("INSERT INTO limites_parcela (cod_parcela, cod_lim_p, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
+				    codCom, id, geomAsWKT);
 		} else {
 		    continue;
 		}
@@ -121,7 +125,7 @@ public class PMFOutput implements Output {
 	}
     }
 
-    private void reorder(DefaultTableModel table) {
+    protected void reorder(DefaultTableModel table) {
 	int lastComunidadesRow = -1;
 	for (int i = 0; i < table.getRowCount(); i++) {
 	    String tablename = table.getValueAt(i, 3).toString();

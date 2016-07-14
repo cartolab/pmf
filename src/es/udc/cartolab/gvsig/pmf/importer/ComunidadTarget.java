@@ -1,5 +1,7 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,53 +11,47 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.importer.Foo;
+import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
 
 public class ComunidadTarget extends JDBCTarget {
 
-    private final static Pattern pattern = Pattern.compile("^\\d{9}$",
-	    Pattern.CASE_INSENSITIVE);
+    private final Pattern pattern;
+    private final String tablename;
+    private final String pkname;
+    private final String idDiff;
 
     public ComunidadTarget() {
+	this.tablename = "comunidades";
 	field = new Field("comunidades");
 	field.setValue(this);
+	this.pattern = Pattern.compile("^\\d{8}$", Pattern.CASE_INSENSITIVE);
+	this.pkname = "cod_com";
+	this.idDiff = "";
+	// geomBuild = new XYPointBuilder("", "");
     }
 
     @Override
     public boolean matches(String value) {
 	Matcher matcher = pattern.matcher(value);
-	return matcher.find();
+	return matcher.matches();
     }
 
     @Override
     public boolean process(String value, ImporterTM table, int i) {
 	Matcher matcher = pattern.matcher(value);
-	if (!matcher.find()) {
+	if (!matcher.matches()) {
 	    return false;
 	}
 	final String code = matcher.group();
-	if (existsInProcessed(table, "comunidades", code)) {
-	    addWarning(table, i, String.format(
-		    "Comunidad %s duplicada en el fichero de entrada", code));
-	}
-	if (existsInDB("comunidades", "cod_com", code)) {
-	    addWarning(table, i,
-		    String.format("Comunidad %s ya existe en la tabla", code));
-	}
 
-	int xIdx = table.findColumn("x");
-	int yIdx = table.findColumn("y");
-	String xStr = table.getValueAt(i, xIdx).toString();
-	String yStr = table.getValueAt(i, yIdx).toString();
-	IGeometry geom = getGeometry(xStr, yStr);
+	IGeometry geom = new Foo().getGeometry(table, i);
 	table.setGeom(geom, i);
-
 	table.setTarget(field, i);
 	table.setCode(code, i);
-	// Comprobar que la geometría está dentro de la zona de interés
-	// Double bbox = new Rectangle2D.Double(x, y, w, h);
-	// bbox.contains(geom);
+
 	return true;
 
     }
@@ -70,17 +66,15 @@ public class ComunidadTarget extends JDBCTarget {
     public String calculateCode(ImporterTM table, int i) {
 	String code = null;
 	String nombreComunidad = null;
-	Geometry geom = table.getGeom(i).toJTSGeometry();
-	String point = "ST_GeomFromText( '" + geom.toText() + "' )";
+	Geometry point = table.getGeom(i).toJTSGeometry();
+	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
-	DefaultTableModel aldea = intersects("aldeas_pmf", point, "cod_aldea",
-		"nombre");
-	String codAldea = aldea.getValueAt(0, 0).toString();
+	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
 
-	String closestWhere = String.format(
-		" WHERE substr(cod_caseri, 1, 6) = '%s'", codAldea);
-	DefaultTableModel closest = closest("caserios_comunidades_pmf", point,
-		closestWhere, "cod_caseri", "caserio");
+	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
+		Caserio.pkName, aldea.pk);
+	DefaultTableModel closest = closest(Caserio.tablename, pointStr,
+		closestWhere, Caserio.pkName, Caserio.nameName);
 	if (closest.getRowCount() > 0) {
 	    Double d = (Double) closest.getValueAt(0, 2);
 	    if (d < 1000) {
@@ -90,10 +84,10 @@ public class ComunidadTarget extends JDBCTarget {
 	    }
 	}
 
-	DefaultTableModel results2 = maxCode("caserios_comunidades_pmf",
-		"cod_caseri", 6, codAldea);
+	DefaultTableModel results2 = maxCode(Caserio.tablename, "cod_caseri",
+		6, aldea.pk);
 	DefaultTableModel results3 = maxCode("comunidades", "cod_com", 6,
-		codAldea);
+		aldea.pk);
 
 	String maxCodeInDB = results2.getValueAt(0, 0).toString();
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
@@ -111,4 +105,107 @@ public class ComunidadTarget extends JDBCTarget {
 
 	return code;
     }
+
+    @Override
+    public List<ImportError> checkErrors(ImporterTM table, int row) {
+	List<ImportError> l = new ArrayList<ImportError>();
+	ImportError error = null;
+
+	String code = table.getCode(row);
+
+	error = checkCode(table, code, row);
+	if (error != null) {
+	    l.add(error);
+	    return l;
+	}
+
+	error = checkTableUnique(table, tablename, code, row);
+	if (error != null) {
+	    l.add(error);
+	}
+	error = checkDBUnique(tablename, pkname, code, row);
+	if (error != null) {
+	    l.add(error);
+	}
+
+	error = checkPointInCorrectAldea(table, tablename, code, row);
+	if (error != null) {
+	    l.add(error);
+	}
+
+	error = checkDistanceToCaserio(table, code, table.getGeom(row), row);
+	if (error != null) {
+	    l.add(error);
+	}
+
+	table.setError(l, row);
+	return l;
+    }
+
+    private ImportError checkCode(ImporterTM table, String code, int row) {
+	Matcher matcher = pattern.matcher(code);
+	if (!matcher.matches()) {
+	    return new ImportError("Código no válido", row);
+	}
+	return null;
+    }
+
+    // "Comunidad %s duplicada en el fichero de entrada"
+    private ImportError checkTableUnique(ImporterTM table, String tablename,
+	    String code, int row) {
+
+	// TODO. Ver como personalizar el msg para el elemento. Cada target
+	// debería tener un nombre "Comunidad", "Vivienda" con el que referirse
+	// a él, y no el nombre de la tabla (tablename") Y también debería
+	// definir el género duplicado/duplicada
+	if (existsInProcessed(table, tablename, code, row)) {
+	    String errorMsg = String.format(tablename
+		    + " %s duplicado en el fichero de entrada", code);
+	    return new ImportError(errorMsg, row);
+	}
+	return null;
+    }
+
+    // "La comunidad %s ya existe en la base de datos"
+    private ImportError checkDBUnique(String tablename, String pkName,
+	    String code, int row) {
+	if (existsInDB(tablename, pkName, code)) {
+	    String errorMsg = String.format("El " + tablename
+		    + " %s ya existe en la base de datos", code);
+	    return new ImportError(errorMsg, row);
+	}
+
+	return null;
+    }
+
+    private ImportError checkPointInCorrectAldea(ImporterTM table,
+	    String tablename, String code, int row) {
+	Geometry point = table.getGeom(row).toJTSGeometry();
+	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
+	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
+	if (!code.startsWith(aldea.pk)) {
+	    String errorMsg = String
+		    .format("El %s no está en la aldea que indica su código",
+			    tablename);
+	    return new ImportError(errorMsg, row);
+	}
+	return null;
+    }
+
+    private ImportError checkDistanceToCaserio(ImporterTM table, String code,
+	    IGeometry geom, int row) {
+	Caserio caserio = Caserio.fromDB(code);
+	if (caserio != null) {
+	    double distance = caserio.distanceTo(geom);
+	    if (distance > 5000) {
+		return new ImportError(
+			"Existe un caserío con ese código a más de 5km de esta comunidad",
+			row);
+	    }
+
+	}
+
+	return null;
+    }
+
 }

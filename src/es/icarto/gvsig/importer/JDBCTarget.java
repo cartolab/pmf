@@ -2,8 +2,6 @@ package es.icarto.gvsig.importer;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +9,10 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-
 import es.icarto.gvsig.commons.db.ConnectionWrapper;
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.commons.utils.StrUtils;
-import es.udc.cartolab.gvsig.navtable.format.DoubleFormatNT;
+import es.udc.cartolab.gvsig.pmf.importer.Comunidad;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public abstract class JDBCTarget implements Target {
@@ -44,37 +38,14 @@ public abstract class JDBCTarget implements Target {
 	l.add(msg);
     }
 
-    protected IGeometry getGeometry(String xStr, String yStr) {
-	Number x = toNumeric(xStr);
-	Number y = toNumeric(yStr);
-
-	FPoint2D fpoint2d = new FPoint2D(x.doubleValue(), y.doubleValue());
-	IGeometry geom = ShapeFactory.createPoint2D(fpoint2d);
-
-	// TODO
-	// IProjection crs4326 = CRSFactory.getCRS("EPSG:4326");
-	// IProjection crs32616 = CRSFactory.getCRS("EPSG:32616");
-	// ICoordTrans ct = crs4326.getCT(crs32616);
-	// geom.reProject(ct);
-
-	return geom;
-    }
-
-    private Number toNumeric(String v) {
-	NumberFormat formatter = DoubleFormatNT.getEditingFormat();
-	try {
-	    return formatter.parse(v);
-	} catch (ParseException e) {
-	    logger.error(e.getStackTrace(), e);
-	}
-	return null;
-    }
-
     protected boolean existsInProcessed(DefaultTableModel table,
-	    String tablename, String code) {
+	    String tablename, String code, int rowToIgnore) {
 	int tablenameIdx = table.findColumn("tablename");
 	int idIdx = table.findColumn("id");
 	for (int row = 0; row < table.getRowCount(); row++) {
+	    if (row == rowToIgnore) {
+		continue;
+	    }
 	    Object c = table.getValueAt(row, tablenameIdx);
 	    if ((c != null) && c.toString().equalsIgnoreCase(tablename)) {
 		if (code.equalsIgnoreCase(table.getValueAt(row, idIdx)
@@ -84,6 +55,39 @@ public abstract class JDBCTarget implements Target {
 	    }
 	}
 	return false;
+    }
+
+    protected Comunidad getComunidad(ImporterTM table, String tablename,
+	    String fieldname, String code) {
+	int tablenameIdx = table.findColumn("tablename");
+	int idIdx = table.findColumn("id");
+	for (int row = 0; row < table.getRowCount(); row++) {
+	    Object c = table.getValueAt(row, tablenameIdx);
+	    if ((c != null) && c.toString().equalsIgnoreCase(tablename)) {
+		if (code.equalsIgnoreCase(table.getValueAt(row, idIdx)
+			.toString())) {
+		    return new Comunidad(table.getValueAt(row, idIdx)
+			    .toString(), table.getGeom(row));
+		}
+	    }
+	}
+
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	ConnectionWrapper conW = new ConnectionWrapper(con);
+	final String whereClause = String.format("WHERE %s = '%s'", fieldname,
+		code);
+	String sql = String.format(
+		"SELECT cod_com, st_x(geom), st_y(geom) FROM comunidades %s",
+		whereClause);
+	DefaultTableModel r = conW.execute(sql);
+	if (r.getRowCount() > 0) {
+	    final String codCom = r.getValueAt(0, 0).toString();
+	    final String xStr = r.getValueAt(0, 1).toString();
+	    final String yStr = r.getValueAt(0, 2).toString();
+	    return new Comunidad(codCom, xStr, yStr);
+	}
+
+	return null;
     }
 
     protected boolean existsInDB(String tablename, String fieldname, String code) {
@@ -109,24 +113,8 @@ public abstract class JDBCTarget implements Target {
 
     protected DefaultTableModel intersects(String tablename, String point,
 	    String... fields) {
-	DBSession session = DBSession.getCurrentSession();
-	Connection javaCon = session.getJavaConnection();
-	ConnectionWrapper con = new ConnectionWrapper(javaCon);
-	String fieldStr = StrUtils.join(", ", (Object[]) fields);
-	String query = String.format(
-		"SELECT %s FROM %s WHERE ST_Intersects(geometry, %s)",
-		fieldStr, tablename, point);
-	DefaultTableModel table = con.execute(query);
-	if (table == null) {
-	    throw new RuntimeException("Error desconocido");
-	}
-	if (table.getRowCount() < 1) {
-	    throw new RuntimeException("Sin resultados");
-	}
-	if (table.getRowCount() > 1) {
-	    throw new RuntimeException("Más de un resultado");
-	}
-	return table;
+	JDBCUtils jdbcUtils = new JDBCUtils();
+	return jdbcUtils.intersects(tablename, point, fields);
     }
 
     protected DefaultTableModel closest(String tablename, String point,
@@ -138,7 +126,7 @@ public abstract class JDBCTarget implements Target {
 	String fieldStr = StrUtils.join(", ", (Object[]) fields);
 
 	String query = String
-		.format("SELECT %s,  ST_Distance(%s, geometry) from %s %s ORDER BY ST_Distance(%s, geometry) LIMIT 1;",
+		.format("SELECT %s,  ST_Distance(%s, geom) from %s %s ORDER BY ST_Distance(%s, geom) LIMIT 1;",
 			fieldStr, point, tablename, where, point);
 
 	DefaultTableModel table = con.execute(query);
@@ -146,6 +134,11 @@ public abstract class JDBCTarget implements Target {
 	    throw new RuntimeException("Error desconocido");
 	}
 	return table;
+    }
+
+    protected DefaultTableModel closestInTable(String tablename, String point,
+	    String where, String... fields) {
+	return null;
     }
 
     protected DefaultTableModel maxCode(String tablename, String codeFieldName,

@@ -1,5 +1,7 @@
 package es.icarto.gvsig.importer;
 
+import java.util.List;
+
 import javax.swing.table.DefaultTableModel;
 
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -26,9 +28,19 @@ public class ImporterTM extends DefaultTableModel {
 	super.setValueAt(aValue, row, 0);
     }
 
+    public String getCode(int row) {
+	Object code = super.getValueAt(row, 0);
+	return code != null ? code.toString() : "";
+    }
+
     public void setTarget(Object aValue, int row) {
 	int tablenameIdx = findColumn("tablename");
 	super.setValueAt(aValue, row, tablenameIdx);
+    }
+
+    public Field getTarget(int row) {
+	int tablenameIdx = findColumn("tablename");
+	return (Field) super.getValueAt(row, tablenameIdx);
     }
 
     public void setGeom(IGeometry aValue, int row) {
@@ -51,6 +63,14 @@ public class ImporterTM extends DefaultTableModel {
 	    Target target = (Target) ((Field) aValue).getValue();
 	    String code = target.calculateCode(this, row);
 	    setCode(code, row);
+	    target.checkErrors(this, row);
+	}
+
+	int codeIdx = findColumn("Código");
+	if (column == codeIdx) {
+	    Field field = getTarget(row);
+	    Target target = (Target) field.getValue();
+	    target.checkErrors(this, row);
 	}
 	super.setValueAt(aValue, row, column);
     }
@@ -81,6 +101,11 @@ public class ImporterTM extends DefaultTableModel {
 		}
 	    }
 	}
-	return maxValue;
+	return maxValue == null ? "" : maxValue;
+    }
+
+    public void setError(List<ImportError> l, int row) {
+	int errorsIdx = findColumn("Errores");
+	super.setValueAt(l, row, errorsIdx);
     }
 }
