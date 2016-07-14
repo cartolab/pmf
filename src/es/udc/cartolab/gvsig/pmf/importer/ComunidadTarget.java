@@ -65,22 +65,17 @@ public class ComunidadTarget extends JDBCTarget {
      */
     public String calculateCode(ImporterTM table, int i) {
 	String code = null;
-	String nombreComunidad = null;
+	double minDistance = Double.MAX_VALUE;
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
 	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-
-	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
-		Caserio.pkName, aldea.pk);
-	DefaultTableModel closest = closest(Caserio.tablename, pointStr,
-		closestWhere, Caserio.pkName, Caserio.nameName);
-	if (closest.getRowCount() > 0) {
-	    Double d = (Double) closest.getValueAt(0, 2);
-	    if (d < 1000) {
-		code = closest.getValueAt(0, 0).toString();
-		nombreComunidad = closest.getValueAt(0, 1).toString();
-		return code;
+	Caserio parent = Caserio.closestTo(pointStr, aldea);
+	if (parent != null) {
+	    double d = parent.distanceTo(point);
+	    if (d < 2000) {
+		minDistance = d;
+		code = parent.getPKValue();
 	    }
 	}
 
@@ -116,6 +111,7 @@ public class ComunidadTarget extends JDBCTarget {
 	error = checkCode(table, code, row);
 	if (error != null) {
 	    l.add(error);
+	    table.setError(l, row);
 	    return l;
 	}
 

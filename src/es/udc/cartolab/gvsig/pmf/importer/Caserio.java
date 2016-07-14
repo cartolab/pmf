@@ -12,10 +12,11 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import es.icarto.gvsig.importer.JDBCUtils;
+import es.icarto.gvsig.importer.RegionI;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 // Un caserío es una comunidad pero que proviene de la capa de cartografía base
-public class Caserio {
+public class Caserio implements RegionI {
 
     private static final Logger logger = Logger.getLogger(Caserio.class);
 
@@ -87,6 +88,37 @@ public class Caserio {
 
     public double distanceTo(IGeometry geom) {
 	return this.geom.distance(geom.toJTSGeometry());
+    }
+
+    public double distanceTo(Geometry geom) {
+	return this.geom.distance(geom);
+    }
+
+    public static Caserio closestTo(String pointStr, RegionI region) {
+	JDBCUtils jdbcUtils = new JDBCUtils();
+	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
+		pkName, region.getPKValue());
+	DefaultTableModel closest = jdbcUtils.closest(tablename, pointStr,
+		closestWhere, pkName, nameName, "st_x(geom)", "st_y(geom)");
+
+	if (closest.getRowCount() == 1) {
+	    String pk = closest.getValueAt(0, 0).toString();
+	    String name = closest.getValueAt(0, 1).toString();
+	    String xStr = closest.getValueAt(0, 2).toString();
+	    String yStr = closest.getValueAt(0, 3).toString();
+	    return new Caserio(pk, xStr, yStr);
+	}
+	return null;
+    }
+
+    @Override
+    public String getPKField() {
+	return pkName;
+    }
+
+    @Override
+    public String getPKValue() {
+	return pk;
     }
 
 }
