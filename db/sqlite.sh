@@ -6,22 +6,22 @@ if [ -f "$DB_PATH" ] ; then
     rm $DB_PATH
 fi
 
-DEBUG=0
-[[ -n $1 && $1 = "--debug" ]] && DEBUG=1
-
-# Al usar el comando spatialite en lugar de sqlite no es necesario inicializar a mano el metadata
-# spatialite -bail $DB_PATH "SELECT InitSpatialMetaData();"
-
+echo "BEGIN TRANSACTION;" > /tmp/foo.sql
 for file in `ls ./sqlite/*.sql` ; do
     echo $file
-    spatialite -bail $DB_PATH < $file
+    cat $file >> /tmp/foo.sql
 done
+echo "COMMIT;" >> /tmp/foo.sql
 
-if [ $DEBUG -eq 1 ] ; then
-    spatialite -bail $DB_PATH < ../data-test/99-data-elle.sql
-    spatialite -bail $DB_PATH < ../data-test/99-test-data.sql
-fi
+spatialite -bail $DB_PATH < /tmp/foo.sql
 
+spatialite -bail $DB_PATH < ./data_pmf/97-limites-administrativos-data-pmf.sql
+spatialite -bail $DB_PATH < ./data_pmf/98-base-data-pmf.sql
+
+sqlite3 $DB_PATH "VACUUM;"
+
+
+cartografia_base_base() {
 data=./C_Base/
 
 layer=aldeas_PMF
@@ -87,5 +87,6 @@ ogr2ogr -append -progress -s_srs EPSG:32616 -t_srs EPSG:32616 -f SQLite -dialect
 layer=aldeas_PMF
 echo -e "\nProcesando $layer"
 ogr2ogr -append -progress -s_srs EPSG:32616 -t_srs EPSG:32616 -f SQLite -dialect sqlite -nln $layer -nlt PROMOTE_TO_MULTI $DB_PATH ${data}${layer}.shp -dsco SPATIALITE=yes -gt 65536 --config OGR_SQLITE_CACHE 512
+}
 
-sqlite3 $DB_PATH "VACUUM;"
+
