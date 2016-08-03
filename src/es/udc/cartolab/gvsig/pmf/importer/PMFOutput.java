@@ -30,7 +30,6 @@ public class PMFOutput implements Output {
     public void process(DefaultTableModel table, Ruler ruler) {
 	int tablenameIdx = indexForColumnName(table, "tablename");
 	int geomIdx = indexForColumnName(table, "geom");
-	int errorIdx = indexForColumnName(table, "Errores");
 
 	reorder(table);
 	TableInfo dialog = new TableInfo(table, ruler);
@@ -50,9 +49,6 @@ public class PMFOutput implements Output {
 	    for (int i = 0; i < table.getRowCount(); i++) {
 		String tablename = table.getValueAt(i, tablenameIdx).toString();
 		if (tablename.isEmpty()) {
-		    continue;
-		}
-		if (table.getValueAt(i, errorIdx) != null) {
 		    continue;
 		}
 

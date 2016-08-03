@@ -10,10 +10,12 @@ import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class NoTarget extends JDBCTarget {
 
     public NoTarget() {
+	super(DBSession.getCurrentSession().getJavaConnection());
 	field = new Field("");
 	field.setValue(this);
     }

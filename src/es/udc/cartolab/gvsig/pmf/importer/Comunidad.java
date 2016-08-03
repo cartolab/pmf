@@ -1,5 +1,7 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.sql.Connection;
+
 import javax.swing.table.DefaultTableModel;
 
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -9,6 +11,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 import es.icarto.gvsig.importer.JDBCUtils;
 import es.icarto.gvsig.importer.RegionI;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class Comunidad implements RegionI {
 
@@ -35,7 +38,7 @@ public class Comunidad implements RegionI {
 	this.geom = geom.toJTSGeometry();
     }
 
-    public Comunidad(String codCom, String xStr, String yStr) {
+    private Comunidad(String codCom, String xStr, String yStr) {
 	this.pk = codCom;
 	this.name = "";
 	GeometryFactory factory = new GeometryFactory();
@@ -45,7 +48,8 @@ public class Comunidad implements RegionI {
     }
 
     public static Comunidad thatIntersectsWith(String pointStr) {
-	JDBCUtils jdbcUtils = new JDBCUtils();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	JDBCUtils jdbcUtils = new JDBCUtils(con);
 	DefaultTableModel result = jdbcUtils.intersects(tablename, pointStr,
 		pkName, nameName);
 	String pk = result.getValueAt(0, 0).toString();
@@ -62,7 +66,8 @@ public class Comunidad implements RegionI {
     }
 
     public static Comunidad closestTo(String pointStr, RegionI region) {
-	JDBCUtils jdbcUtils = new JDBCUtils();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	JDBCUtils jdbcUtils = new JDBCUtils(con);
 	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
 		pkName, region.getPKValue());
 	DefaultTableModel closest = jdbcUtils.closest(tablename, pointStr,
@@ -90,6 +95,10 @@ public class Comunidad implements RegionI {
 
     public static Comunidad from(String pk, IGeometry geom) {
 	return new Comunidad(pk, geom);
+    }
+
+    public static Comunidad from(String pk, String xStr, String yStr) {
+	return new Comunidad(pk, xStr, yStr);
     }
 
 }

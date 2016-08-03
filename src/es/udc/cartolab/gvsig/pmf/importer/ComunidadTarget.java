@@ -15,6 +15,7 @@ import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ComunidadTarget extends JDBCTarget {
 
@@ -24,6 +25,7 @@ public class ComunidadTarget extends JDBCTarget {
     private final String idDiff;
 
     public ComunidadTarget() {
+	super(DBSession.getCurrentSession().getJavaConnection());
 	this.tablename = "comunidades";
 	field = new Field("comunidades");
 	field.setValue(this);

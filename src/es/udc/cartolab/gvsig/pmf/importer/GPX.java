@@ -1,4 +1,4 @@
-package es.icarto.gvsig.importer.reader;
+package es.udc.cartolab.gvsig.pmf.importer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.sun.star.uno.RuntimeException;
 
 import es.icarto.gvsig.importer.SimpleHeaderField;
+import es.icarto.gvsig.importer.reader.Reader;
 
 public class GPX implements Reader {
 

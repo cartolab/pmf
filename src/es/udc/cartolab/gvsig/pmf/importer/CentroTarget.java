@@ -16,6 +16,7 @@ import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
 import es.icarto.gvsig.importer.RegionI;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class CentroTarget extends JDBCTarget {
 
@@ -27,6 +28,7 @@ public class CentroTarget extends JDBCTarget {
 
     public CentroTarget(String tablename, String pkname, Pattern pattern,
 	    String idDiff, String digitsDiff) {
+	super(DBSession.getCurrentSession().getJavaConnection());
 	this.tablename = tablename;
 	field = new Field(tablename);
 	field.setValue(this);
@@ -79,9 +81,9 @@ public class CentroTarget extends JDBCTarget {
 	    if (tablename.equals("comunidades")) {
 		String codCom = table.getCode(row);
 		IGeometry geomCom = table.getGeom(row);
-		Comunidad c = Comunidad.from(codCom, geomCom);
-		if (c.distanceTo(point) < minDistance) {
-		    parent = c;
+		Comunidad p = Comunidad.from(codCom, geomCom);
+		if (p.distanceTo(point) < minDistance) {
+		    parent = p;
 		    minDistance = parent.distanceTo(point);
 		}
 	    }
@@ -101,7 +103,7 @@ public class CentroTarget extends JDBCTarget {
 	return code;
     }
 
-    protected String codeIt(RegionI parent, String maxCodeInData,
+    private String codeIt(RegionI parent, String maxCodeInData,
 	    String maxCodeInTable) {
 	String maxCode = "00000000" + idDiff + "00";
 	if (maxCode.compareTo(maxCodeInTable) < 0) {
@@ -229,7 +231,7 @@ public class CentroTarget extends JDBCTarget {
     private ImportError checkDistanceToParent(ImporterTM table, String code,
 	    String parentPKValue, IGeometry geom, int row) {
 
-	Comunidad comunidad = getComunidad(table, "comunidades", "cod_com",
+	RegionI comunidad = getComunidad(table, "comunidades", "cod_com",
 		parentPKValue);
 	double distance = comunidad.distanceTo(geom);
 	if (distance > 5000) {

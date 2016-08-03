@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.udc.cartolab.gvsig.pmf.importer.CentroTarget;
 import es.udc.cartolab.gvsig.pmf.importer.ComunidadTarget;
 import es.udc.cartolab.gvsig.pmf.importer.PMFRuler;
-import es.udc.cartolab.gvsig.pmf.importer.VivendasTarget;
 
 public class TestReglas {
 
@@ -31,11 +31,15 @@ public class TestReglas {
 
     @Test
     public void testVivienda() {
-	Target target = new VivendasTarget();
-	assertFalse(target.matches("12345678"));
-	assertTrue(target.matches("12345678vI123"));
+	Pattern vivPattern = Pattern.compile("^(\\d{8})vi\\d{3}$",
+		Pattern.CASE_INSENSITIVE);
+	Target vivTarget = new CentroTarget("informacion_general", "cod_viv",
+		vivPattern, "vi", "%03d");
 
-	assertEquals("12345678", matcher.group(1));
+	assertFalse(vivTarget.matches("12345678"));
+	assertTrue(vivTarget.matches("12345678vI123"));
+
+	// assertEquals("12345678", matcher.group(1));
     }
 
     @Test

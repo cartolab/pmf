@@ -1,9 +1,14 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.sql.Connection;
+
 import javax.swing.table.DefaultTableModel;
+
+import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 import es.icarto.gvsig.importer.JDBCUtils;
 import es.icarto.gvsig.importer.RegionI;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class Aldea implements RegionI {
 
@@ -23,7 +28,8 @@ public class Aldea implements RegionI {
     }
 
     public static Aldea thatIntersectsWith(String pointStr) {
-	JDBCUtils jdbcUtils = new JDBCUtils();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	JDBCUtils jdbcUtils = new JDBCUtils(con);
 	DefaultTableModel result = jdbcUtils.intersects(tablename, pointStr,
 		pkName, nameName);
 	String pk = result.getValueAt(0, 0).toString();
@@ -41,4 +47,8 @@ public class Aldea implements RegionI {
 	return pk;
     }
 
+    @Override
+    public double distanceTo(IGeometry geom) {
+	throw new RuntimeException("Not implementet yet");
+    }
 }

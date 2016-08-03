@@ -1,5 +1,6 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.table.DefaultTableModel;
@@ -78,7 +79,8 @@ public class Caserio implements RegionI {
     }
 
     public static Caserio thatIntersectsWith(String pointStr) {
-	JDBCUtils jdbcUtils = new JDBCUtils();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	JDBCUtils jdbcUtils = new JDBCUtils(con);
 	DefaultTableModel result = jdbcUtils.intersects(tablename, pointStr,
 		pkName, nameName);
 	String pk = result.getValueAt(0, 0).toString();
@@ -95,7 +97,8 @@ public class Caserio implements RegionI {
     }
 
     public static Caserio closestTo(String pointStr, RegionI region) {
-	JDBCUtils jdbcUtils = new JDBCUtils();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	JDBCUtils jdbcUtils = new JDBCUtils(con);
 	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
 		pkName, region.getPKValue());
 	DefaultTableModel closest = jdbcUtils.closest(tablename, pointStr,

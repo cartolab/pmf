@@ -1,13 +1,17 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.sql.Connection;
+
 import javax.swing.table.DefaultTableModel;
 
+import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import es.icarto.gvsig.importer.JDBCUtils;
 import es.icarto.gvsig.importer.RegionI;
+import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class Vivienda implements RegionI {
 
@@ -30,6 +34,12 @@ public class Vivienda implements RegionI {
 	this.geom = factory.createPoint(c);
     }
 
+    private Vivienda(String pk, IGeometry geom) {
+	this.pk = pk;
+	this.name = "";
+	this.geom = geom.toJTSGeometry();
+    }
+
     @Override
     public String getPKField() {
 	return pkName;
@@ -41,7 +51,8 @@ public class Vivienda implements RegionI {
     }
 
     public static Vivienda closestTo(String pointStr, RegionI region) {
-	JDBCUtils jdbcUtils = new JDBCUtils();
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
+	JDBCUtils jdbcUtils = new JDBCUtils(con);
 	String closestWhere = String.format(" WHERE substr(%s, 1, 6) = '%s'",
 		pkName, region.getPKValue());
 	DefaultTableModel closest = jdbcUtils.closest(tablename, pointStr,
@@ -59,6 +70,14 @@ public class Vivienda implements RegionI {
 
     public double distanceTo(Geometry point) {
 	return this.geom.distance(geom);
+    }
+
+    public double distanceTo(IGeometry geom) {
+	return this.geom.distance(geom.toJTSGeometry());
+    }
+
+    public static Vivienda from(String pk, IGeometry geom) {
+	return new Vivienda(pk, geom);
     }
 
 }
