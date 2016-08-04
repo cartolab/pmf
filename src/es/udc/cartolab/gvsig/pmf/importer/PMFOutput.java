@@ -13,6 +13,7 @@ import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
+import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.Output;
 import es.icarto.gvsig.importer.Ruler;
 import es.icarto.gvsig.importer.TableInfo;
@@ -23,13 +24,7 @@ public class PMFOutput implements Output {
 
     private static final Logger logger = Logger.getLogger(PMFOutput.class);
 
-    private int indexForColumnName(DefaultTableModel table, String columnName) {
-	return table.findColumn(columnName);
-    }
-
-    public void process(DefaultTableModel table, Ruler ruler) {
-	int tablenameIdx = indexForColumnName(table, "tablename");
-	int geomIdx = indexForColumnName(table, "geom");
+    public void process(ImporterTM table, Ruler ruler) {
 
 	reorder(table);
 	TableInfo dialog = new TableInfo(table, ruler);
@@ -47,15 +42,15 @@ public class PMFOutput implements Output {
 	    statement = con.createStatement();
 
 	    for (int i = 0; i < table.getRowCount(); i++) {
-		String tablename = table.getValueAt(i, tablenameIdx).toString();
+		String tablename = table.getTarget(i).toString();
 		if (tablename.isEmpty()) {
 		    continue;
 		}
 
-		IGeometry geom = (IGeometry) table.getValueAt(i, geomIdx);
+		IGeometry geom = table.getGeom(i);
 		String geomAsWKT = geom.toJTSGeometry().toText();
 
-		String id = table.getValueAt(i, 0).toString();
+		String id = table.getCode(i);
 		String codCom = id.substring(0, 8);
 
 		String sql = "";
