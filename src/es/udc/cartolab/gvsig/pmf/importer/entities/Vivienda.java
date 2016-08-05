@@ -1,4 +1,4 @@
-package es.udc.cartolab.gvsig.pmf.importer;
+package es.udc.cartolab.gvsig.pmf.importer.entities;
 
 import java.sql.Connection;
 
