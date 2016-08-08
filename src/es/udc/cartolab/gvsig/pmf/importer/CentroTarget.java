@@ -112,7 +112,7 @@ public class CentroTarget extends JDBCTarget {
 	DefaultTableModel results3 = maxCode(tablename, pkname, 8,
 		parent.getPK());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
-	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
+	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i);
 
 	String code = codeIt(parent, maxCodeInData, maxCodeInTable);
 

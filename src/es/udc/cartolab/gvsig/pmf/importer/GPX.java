@@ -84,13 +84,13 @@ public class GPX implements Reader {
 		    FPoint2D point = (FPoint2D) geom.getInternalShape();
 		    rowData[1] = point.getX() + "";
 		    rowData[2] = point.getY() + "";
-		    rowData[3] = geom;
+		    // rowData[3] = geom;
+		    values.addRow(rowData);
 		}
-		values.addRow(rowData);
 	    }
 	} catch (ReadDriverException e) {
 	    logger.error(e.getStackTrace(), e);
-	    throw new RuntimeException("Error leyendo el fichero dbf", e);
+	    throw new RuntimeException("Error leyendo el fichero gpx", e);
 	}
     }
 

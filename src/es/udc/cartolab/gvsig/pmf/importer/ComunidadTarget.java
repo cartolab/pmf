@@ -105,7 +105,7 @@ public class ComunidadTarget extends JDBCTarget {
 
 	String maxCodeInDB = results2.getValueAt(0, 0).toString();
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
-	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
+	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i);
 
 	String maxCode = maxCodeInTable;
 	if (maxCode.compareTo(maxCodeInDB) < 0) {
