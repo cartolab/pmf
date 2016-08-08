@@ -14,7 +14,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.importer.Entity;
-import es.icarto.gvsig.importer.Foo;
+import es.icarto.gvsig.importer.GFactory;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
@@ -58,7 +58,7 @@ public class CentroTarget extends JDBCTarget {
 	}
 	final String code = matcher.group();
 
-	IGeometry geom = new Foo().getGeometry(table, i);
+	IGeometry geom = new GFactory().getGeometry(table, i);
 	table.setGeom(geom, i);
 	table.setTarget(field, i);
 	table.setCode(code, i);
@@ -77,8 +77,10 @@ public class CentroTarget extends JDBCTarget {
 	return code == null ? "" : code;
     }
 
+    private final static double MIN_DISTANCE_TO_PARENT = 2000;
+
     private String doCalculateCode(ImporterTM table, int i) {
-	double minDistance = Double.MAX_VALUE;
+	double minDistance = MIN_DISTANCE_TO_PARENT;
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
@@ -86,7 +88,7 @@ public class CentroTarget extends JDBCTarget {
 	Comunidad parent = Comunidad.f().closestTo(pointStr, aldea);
 	if (parent != null) {
 	    double d = parent.distanceTo(point);
-	    if (d < 2000) {
+	    if (d < MIN_DISTANCE_TO_PARENT) {
 		minDistance = d;
 	    }
 	}
@@ -112,7 +114,8 @@ public class CentroTarget extends JDBCTarget {
 	DefaultTableModel results3 = maxCode(tablename, pkname, 8,
 		parent.getPK());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
-	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i);
+	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i,
+		parent.getPK());
 
 	String code = codeIt(parent, maxCodeInData, maxCodeInTable);
 
@@ -237,8 +240,8 @@ public class CentroTarget extends JDBCTarget {
 	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
 	if (!code.startsWith(aldea.getPK())) {
 	    String errorMsg = String
-		    .format("El %s no está en la aldea que indica su código",
-			    tablename);
+		    .format("El elemento de %s '%s' no está en la aldea que indica su código",
+			    tablename, code);
 	    return new ImportError(errorMsg, row);
 	}
 	return null;
@@ -249,8 +252,8 @@ public class CentroTarget extends JDBCTarget {
 
 	Entity comunidad = getParent(table, Comunidad.f(), parentPKValue);
 	double distance = comunidad.distanceTo(geom);
-	if (distance > 5000) {
-	    return new ImportError("Elemento a más de 5km de la comunidad", row);
+	if (distance > MIN_DISTANCE_TO_PARENT) {
+	    return new ImportError("Elemento a más de 2km de la comunidad", row);
 	}
 
 	return null;

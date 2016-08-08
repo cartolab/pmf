@@ -14,7 +14,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.utils.Field;
 import es.icarto.gvsig.importer.Entity;
-import es.icarto.gvsig.importer.Foo;
+import es.icarto.gvsig.importer.GFactory;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
@@ -59,7 +59,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	}
 	final String code = matcher.group();
 
-	IGeometry geom = new Foo().getGeometry(table, i);
+	IGeometry geom = new GFactory().getGeometry(table, i);
 	table.setGeom(geom, i);
 
 	table.setTarget(field, i);
@@ -115,7 +115,8 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	DefaultTableModel results3 = maxCode(tablename, pkname, 13,
 		parent.getPK());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
-	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i);
+	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i,
+		parent.getPK());
 
 	String code = codeIt(parent, maxCodeInData, maxCodeInTable);
 

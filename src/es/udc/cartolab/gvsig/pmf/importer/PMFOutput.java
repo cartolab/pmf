@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +27,7 @@ public class PMFOutput implements Output {
 
 	reorder(table);
 	TableInfo dialog = new TableInfo(table, ruler);
+	dialog.setContextMenu(new MyMouseListener(ruler));
 	dialog.openDialog();
 	if (!dialog.isGood()) {
 	    return;
@@ -116,10 +116,10 @@ public class PMFOutput implements Output {
 	}
     }
 
-    protected void reorder(DefaultTableModel table) {
+    protected void reorder(ImporterTM table) {
 	int lastComunidadesRow = -1;
 	for (int i = 0; i < table.getRowCount(); i++) {
-	    String tablename = table.getValueAt(i, 3).toString();
+	    String tablename = table.getTarget(i).toString();
 	    if (tablename.equals("comunidades")
 		    && (lastComunidadesRow + 1) != i) {
 		lastComunidadesRow += 1;
@@ -127,9 +127,9 @@ public class PMFOutput implements Output {
 	    }
 	}
 
-	int lastViviendaRow = lastComunidadesRow;
-	for (int i = lastViviendaRow + 1; i < table.getRowCount(); i++) {
-	    String tablename = table.getValueAt(i, 3).toString();
+	int lastViviendaRow = lastComunidadesRow + 1;
+	for (int i = lastViviendaRow; i < table.getRowCount(); i++) {
+	    String tablename = table.getTarget(i).toString();
 	    if (tablename.equals("informacion_general")
 		    && (lastViviendaRow + 1) != i) {
 		lastViviendaRow += 1;
@@ -137,5 +137,4 @@ public class PMFOutput implements Output {
 	    }
 	}
     }
-
 }

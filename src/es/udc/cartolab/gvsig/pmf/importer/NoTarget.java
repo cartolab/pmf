@@ -6,7 +6,7 @@ import java.util.List;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 
 import es.icarto.gvsig.commons.utils.Field;
-import es.icarto.gvsig.importer.Foo;
+import es.icarto.gvsig.importer.GFactory;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
@@ -28,7 +28,7 @@ public class NoTarget extends JDBCTarget {
     @Override
     public boolean process(String value, ImporterTM table, int i) {
 
-	IGeometry geom = new Foo().getGeometry(table, i);
+	IGeometry geom = new GFactory().getGeometry(table, i);
 	table.setGeom(geom, i);
 
 	table.setTarget(field, i);
@@ -46,7 +46,7 @@ public class NoTarget extends JDBCTarget {
     public List<ImportError> checkErrors(ImporterTM table, int row) {
 	ArrayList<ImportError> l = new ArrayList<ImportError>();
 	l.add(new ImportError("Código no válido", row));
-	l.add(new ImportError("Tabla destino no válida", row));
+	l.add(new ImportError("Capa destino no válida", row));
 	table.setError(l, row);
 	return l;
     }

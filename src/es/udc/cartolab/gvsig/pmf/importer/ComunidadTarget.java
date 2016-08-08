@@ -13,7 +13,7 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.utils.Field;
-import es.icarto.gvsig.importer.Foo;
+import es.icarto.gvsig.importer.GFactory;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
@@ -56,7 +56,7 @@ public class ComunidadTarget extends JDBCTarget {
 	}
 	final String code = matcher.group();
 
-	IGeometry geom = new Foo().getGeometry(table, i);
+	IGeometry geom = new GFactory().getGeometry(table, i);
 	table.setGeom(geom, i);
 	table.setTarget(field, i);
 	table.setCode(code, i);
@@ -84,7 +84,6 @@ public class ComunidadTarget extends JDBCTarget {
      */
     public String doCalculateCode(ImporterTM table, int i) {
 	String code = null;
-	double minDistance = Double.MAX_VALUE;
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
@@ -93,8 +92,8 @@ public class ComunidadTarget extends JDBCTarget {
 	if (parent != null) {
 	    double d = parent.distanceTo(point);
 	    if (d < 2000) {
-		minDistance = d;
 		code = parent.getPK();
+		return code;
 	    }
 	}
 
@@ -105,7 +104,8 @@ public class ComunidadTarget extends JDBCTarget {
 
 	String maxCodeInDB = results2.getValueAt(0, 0).toString();
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
-	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i);
+	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i,
+		aldea.getPK());
 
 	String maxCode = maxCodeInTable;
 	if (maxCode.compareTo(maxCodeInDB) < 0) {
@@ -174,8 +174,9 @@ public class ComunidadTarget extends JDBCTarget {
 	// a él, y no el nombre de la tabla (tablename") Y también debería
 	// definir el género duplicado/duplicada
 	if (existsInProcessed(table, tablename, code, row)) {
-	    String errorMsg = String.format(tablename
-		    + " %s duplicado en el fichero de entrada", code);
+	    String errorMsg = String
+		    .format("La comunidad '%s' está duplicado en el fichero de entrada",
+			    code);
 	    return new ImportError(errorMsg, row);
 	}
 	return null;
@@ -185,8 +186,8 @@ public class ComunidadTarget extends JDBCTarget {
     private ImportError checkDBUnique(String tablename, String pkName,
 	    String code, int row) {
 	if (existsInDB(tablename, pkName, code)) {
-	    String errorMsg = String.format("El " + tablename
-		    + " %s ya existe en la base de datos", code);
+	    String errorMsg = String.format(
+		    "La comunidad '%s' ya existe en la base de datos", code);
 	    return new ImportError(errorMsg, row);
 	}
 
@@ -200,8 +201,8 @@ public class ComunidadTarget extends JDBCTarget {
 	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
 	if (!code.startsWith(aldea.getPK())) {
 	    String errorMsg = String
-		    .format("El %s no está en la aldea que indica su código",
-			    tablename);
+		    .format("La comunidad '%s' no está en la aldea que indica su código",
+			    code);
 	    return new ImportError(errorMsg, row);
 	}
 	return null;
@@ -212,9 +213,9 @@ public class ComunidadTarget extends JDBCTarget {
 	Caserio caserio = Caserio.f().fromDB(code);
 	if (caserio != null) {
 	    double distance = caserio.distanceTo(geom);
-	    if (distance > 5000) {
+	    if (distance > 3000) {
 		return new ImportError(
-			"Existe un caserío con ese código a más de 5km de esta comunidad",
+			"Existe un caserío con ese código a más de 3km de esta comunidad",
 			row);
 	    }
 
