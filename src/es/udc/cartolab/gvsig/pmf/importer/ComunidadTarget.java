@@ -15,6 +15,8 @@ import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Aldea;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Caserio;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ComunidadTarget extends JDBCTarget {
@@ -71,20 +73,20 @@ public class ComunidadTarget extends JDBCTarget {
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-	Caserio parent = Caserio.closestTo(pointStr, aldea);
+	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	Caserio parent = Caserio.f().closestTo(pointStr, aldea);
 	if (parent != null) {
 	    double d = parent.distanceTo(point);
 	    if (d < 2000) {
 		minDistance = d;
-		code = parent.getPKValue();
+		code = parent.getPK();
 	    }
 	}
 
 	DefaultTableModel results2 = maxCode(Caserio.tablename, "cod_caseri",
-		6, aldea.pk);
+		6, aldea.getPK());
 	DefaultTableModel results3 = maxCode("comunidades", "cod_com", 6,
-		aldea.pk);
+		aldea.getPK());
 
 	String maxCodeInDB = results2.getValueAt(0, 0).toString();
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
@@ -180,8 +182,8 @@ public class ComunidadTarget extends JDBCTarget {
 	    String tablename, String code, int row) {
 	Geometry point = table.getGeom(row).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-	if (!code.startsWith(aldea.pk)) {
+	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	if (!code.startsWith(aldea.getPK())) {
 	    String errorMsg = String
 		    .format("El %s no está en la aldea que indica su código",
 			    tablename);
@@ -192,7 +194,7 @@ public class ComunidadTarget extends JDBCTarget {
 
     private ImportError checkDistanceToCaserio(ImporterTM table, String code,
 	    IGeometry geom, int row) {
-	Caserio caserio = Caserio.fromDB(code);
+	Caserio caserio = Caserio.f().fromDB(code);
 	if (caserio != null) {
 	    double distance = caserio.distanceTo(geom);
 	    if (distance > 5000) {

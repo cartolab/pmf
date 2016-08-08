@@ -11,12 +11,15 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.importer.Entity;
 import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
-import es.icarto.gvsig.importer.RegionI;
 import es.icarto.gvsig.importer.Target;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Aldea;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Comunidad;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Vivienda;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class VerticeTarget extends JDBCTarget implements Target {
@@ -68,8 +71,8 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-	Vivienda parent = Vivienda.closestTo(pointStr, aldea);
+	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	Vivienda parent = Vivienda.f().closestTo(pointStr, aldea);
 	if (parent != null) {
 	    double d = parent.distanceTo(point);
 	    if (d < 1000) {
@@ -83,7 +86,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	    if (tablename.equals(Vivienda.tablename)) {
 		String codViv = table.getCode(row);
 		IGeometry geomViv = table.getGeom(row);
-		Vivienda p = Vivienda.from(codViv, geomViv);
+		Vivienda p = Vivienda.f().from(codViv, geomViv);
 		if (p.distanceTo(point) < minDistance) {
 		    parent = p;
 		    minDistance = parent.distanceTo(point);
@@ -96,7 +99,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	}
 
 	DefaultTableModel results3 = maxCode(tablename, pkname, 13,
-		parent.getPKValue());
+		parent.getPK());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
 	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
 
@@ -105,7 +108,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	return code;
     }
 
-    private String codeIt(RegionI parent, String maxCodeInData,
+    private String codeIt(Entity parent, String maxCodeInData,
 	    String maxCodeInTable) {
 	String maxCode = "00000000vi000p00" + idDiff + "00";
 	if (maxCode.compareTo(maxCodeInTable) < 0) {
@@ -115,8 +118,8 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	if (maxCode.compareTo(maxCodeInData) < 0) {
 	    maxCode = maxCodeInData;
 	}
-	int parseInt = Integer.parseInt(maxCode.substring(10)) + 1;
-	String code = parent.getPKValue() + idDiff
+	int parseInt = Integer.parseInt(maxCode.substring(17)) + 1;
+	String code = parent.getPK() + idDiff
 		+ String.format(digitsDiff, parseInt);
 	return code;
     }
@@ -222,8 +225,8 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	    String tablename, String code, int row) {
 	Geometry point = table.getGeom(row).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-	if (!code.startsWith(aldea.pk)) {
+	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	if (!code.startsWith(aldea.getPK())) {
 	    String errorMsg = String
 		    .format("El %s no está en la aldea que indica su código",
 			    tablename);
@@ -235,8 +238,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
     private ImportError checkDistanceToParent(ImporterTM table, String code,
 	    String parentPKValue, IGeometry geom, int row) {
 	// TODO: Habría que referirlo a la vivienda y sería menos de 5km
-	RegionI comunidad = getComunidad(table, "comunidades", "cod_com",
-		parentPKValue);
+	Entity comunidad = getParent(table, Comunidad.f(), parentPKValue);
 	if (comunidad == null) {
 	    // en ciertos errores tendría más lógica parar en cuando hay un
 	    // error

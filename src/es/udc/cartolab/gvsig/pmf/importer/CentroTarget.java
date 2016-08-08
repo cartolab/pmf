@@ -11,11 +11,13 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
 import es.icarto.gvsig.commons.utils.Field;
+import es.icarto.gvsig.importer.Entity;
 import es.icarto.gvsig.importer.Foo;
 import es.icarto.gvsig.importer.ImportError;
 import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.JDBCTarget;
-import es.icarto.gvsig.importer.RegionI;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Aldea;
+import es.udc.cartolab.gvsig.pmf.importer.entities.Comunidad;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class CentroTarget extends JDBCTarget {
@@ -66,8 +68,8 @@ public class CentroTarget extends JDBCTarget {
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-	Comunidad parent = Comunidad.closestTo(pointStr, aldea);
+	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	Comunidad parent = Comunidad.f().closestTo(pointStr, aldea);
 	if (parent != null) {
 	    double d = parent.distanceTo(point);
 	    if (d < 2000) {
@@ -81,7 +83,7 @@ public class CentroTarget extends JDBCTarget {
 	    if (tablename.equals("comunidades")) {
 		String codCom = table.getCode(row);
 		IGeometry geomCom = table.getGeom(row);
-		Comunidad p = Comunidad.from(codCom, geomCom);
+		Comunidad p = Comunidad.f().from(codCom, geomCom);
 		if (p.distanceTo(point) < minDistance) {
 		    parent = p;
 		    minDistance = parent.distanceTo(point);
@@ -94,7 +96,7 @@ public class CentroTarget extends JDBCTarget {
 	}
 
 	DefaultTableModel results3 = maxCode(tablename, pkname, 8,
-		parent.getPKValue());
+		parent.getPK());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
 	String maxCodeInTable = table.maxCodeValue("tablename", this.field, i);
 
@@ -103,7 +105,7 @@ public class CentroTarget extends JDBCTarget {
 	return code;
     }
 
-    private String codeIt(RegionI parent, String maxCodeInData,
+    private String codeIt(Entity parent, String maxCodeInData,
 	    String maxCodeInTable) {
 	String maxCode = "00000000" + idDiff + "00";
 	if (maxCode.compareTo(maxCodeInTable) < 0) {
@@ -114,7 +116,7 @@ public class CentroTarget extends JDBCTarget {
 	    maxCode = maxCodeInData;
 	}
 	int parseInt = Integer.parseInt(maxCode.substring(10)) + 1;
-	String code = parent.getPKValue() + idDiff
+	String code = parent.getPK() + idDiff
 		+ String.format(digitsDiff, parseInt);
 	return code;
     }
@@ -177,7 +179,7 @@ public class CentroTarget extends JDBCTarget {
     private ImportError checkParentExists(ImporterTM table,
 	    String parentPKValue, int row) {
 	if (!existsInProcessed(table, Comunidad.tablename, parentPKValue, row)
-		&& !existsInDB(Comunidad.tablename, Comunidad.pkName,
+		&& !existsInDB(Comunidad.tablename, Comunidad.pkname,
 			parentPKValue)) {
 	    String errorMsg = String.format("La comunidad %s no existe",
 		    parentPKValue);
@@ -218,8 +220,8 @@ public class CentroTarget extends JDBCTarget {
 	    String tablename, String code, int row) {
 	Geometry point = table.getGeom(row).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
-	Aldea aldea = Aldea.thatIntersectsWith(pointStr);
-	if (!code.startsWith(aldea.pk)) {
+	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	if (!code.startsWith(aldea.getPK())) {
 	    String errorMsg = String
 		    .format("El %s no está en la aldea que indica su código",
 			    tablename);
@@ -231,8 +233,7 @@ public class CentroTarget extends JDBCTarget {
     private ImportError checkDistanceToParent(ImporterTM table, String code,
 	    String parentPKValue, IGeometry geom, int row) {
 
-	RegionI comunidad = getComunidad(table, "comunidades", "cod_com",
-		parentPKValue);
+	Entity comunidad = getParent(table, Comunidad.f(), parentPKValue);
 	double distance = comunidad.distanceTo(geom);
 	if (distance > 5000) {
 	    return new ImportError("Elemento a más de 5km de la comunidad", row);
