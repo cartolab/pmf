@@ -48,12 +48,12 @@ public class PMFRuler implements Ruler {
 		saludPattern, "cs", "%02d");
 	targets.add(saludTarget);
 
-	Pattern verticePattern = Pattern.compile(
-		"^(((\\d{8})vi\\d{3})p\\d{2})v\\d{2}$",
-		Pattern.CASE_INSENSITIVE);
-	Target verticeTarget = new VerticeTarget("limites_parcela",
-		"cod_lim_p", verticePattern);
-	targets.add(verticeTarget);
+	// Pattern verticePattern = Pattern.compile(
+	// "^(((\\d{8})vi\\d{3})p\\d{2})v\\d{2}$",
+	// Pattern.CASE_INSENSITIVE);
+	// Target verticeTarget = new VerticeTarget("limites_parcela",
+	// "cod_lim_p", verticePattern);
+	// targets.add(verticeTarget);
 
 	noTarget = new NoTarget();
     }
