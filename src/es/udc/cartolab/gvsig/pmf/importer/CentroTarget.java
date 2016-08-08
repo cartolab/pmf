@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -21,6 +23,8 @@ import es.udc.cartolab.gvsig.pmf.importer.entities.Comunidad;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class CentroTarget extends JDBCTarget {
+
+    private static final Logger logger = Logger.getLogger(CentroTarget.class);
 
     private final Pattern pattern;
     private final String tablename;
@@ -64,6 +68,16 @@ public class CentroTarget extends JDBCTarget {
 
     @Override
     public String calculateCode(ImporterTM table, int i) {
+	String code = null;
+	try {
+	    code = doCalculateCode(table, i);
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	}
+	return code == null ? "" : code;
+    }
+
+    private String doCalculateCode(ImporterTM table, int i) {
 	double minDistance = Double.MAX_VALUE;
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";

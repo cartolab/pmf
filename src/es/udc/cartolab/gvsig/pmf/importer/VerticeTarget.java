@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -23,6 +25,8 @@ import es.udc.cartolab.gvsig.pmf.importer.entities.Vivienda;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class VerticeTarget extends JDBCTarget implements Target {
+
+    private static final Logger logger = Logger.getLogger(VerticeTarget.class);
 
     private final Pattern pattern;
     private final String tablename;
@@ -66,6 +70,16 @@ public class VerticeTarget extends JDBCTarget implements Target {
 
     @Override
     public String calculateCode(ImporterTM table, int i) {
+	String code = null;
+	try {
+	    code = doCalculateCode(table, i);
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	}
+	return code == null ? "" : code;
+    }
+
+    public String doCalculateCode(ImporterTM table, int i) {
 	// TODO: FIXME
 	double minDistance = Double.MAX_VALUE;
 	Geometry point = table.getGeom(i).toJTSGeometry();

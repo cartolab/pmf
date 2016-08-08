@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -20,6 +22,9 @@ import es.udc.cartolab.gvsig.pmf.importer.entities.Caserio;
 import es.udc.cartolab.gvsig.users.utils.DBSession;
 
 public class ComunidadTarget extends JDBCTarget {
+
+    private static final Logger logger = Logger
+	    .getLogger(ComunidadTarget.class);
 
     private final Pattern pattern;
     private final String tablename;
@@ -61,13 +66,23 @@ public class ComunidadTarget extends JDBCTarget {
     }
 
     @Override
+    public String calculateCode(ImporterTM table, int i) {
+	String code = null;
+	try {
+	    code = doCalculateCode(table, i);
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	}
+	return code == null ? "" : code;
+    }
+
     /**
-     * Si hay un caserio en la aldea donde está el nuevo punto a menos de 1km
-     * se coge ese caserio como el código de la comunidad. En caso contrario se
+     * Si hay un caserio en la aldea donde está el nuevo punto a menos de 1km se
+     * coge ese caserio como el código de la comunidad. En caso contrario se
      * coge el código de máximo valor entre los que ya existan (para esa aldea)
      * en la tabla o en comunidades o en caserios y se le suma 1
      */
-    public String calculateCode(ImporterTM table, int i) {
+    public String doCalculateCode(ImporterTM table, int i) {
 	String code = null;
 	double minDistance = Double.MAX_VALUE;
 	Geometry point = table.getGeom(i).toJTSGeometry();

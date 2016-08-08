@@ -73,7 +73,7 @@ public class GPX implements Reader {
 	values.addColumn("id");
 	values.addColumn("x");
 	values.addColumn("y");
-	values.addColumn("orggeom");
+	// values.addColumn("orggeom");
 
 	try {
 	    for (int i = 0; i < driver.getRowCount(); i++) {
