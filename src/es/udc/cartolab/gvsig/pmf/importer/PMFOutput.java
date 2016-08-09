@@ -13,6 +13,7 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 import es.icarto.gvsig.importer.ImporterTM;
+import es.icarto.gvsig.importer.JDBCTarget;
 import es.icarto.gvsig.importer.Output;
 import es.icarto.gvsig.importer.Ruler;
 import es.icarto.gvsig.importer.TableInfo;
@@ -42,10 +43,7 @@ public class PMFOutput implements Output {
 	    statement = con.createStatement();
 
 	    for (int i = 0; i < table.getRowCount(); i++) {
-		String tablename = table.getTarget(i).toString();
-		if (tablename.isEmpty()) {
-		    continue;
-		}
+		JDBCTarget target = (JDBCTarget) table.getTarget(i).getValue();
 
 		IGeometry geom = table.getGeom(i);
 		String geomAsWKT = geom.toJTSGeometry().toText();
@@ -53,41 +51,7 @@ public class PMFOutput implements Output {
 		String id = table.getCode(i);
 		String codCom = id.substring(0, 8);
 
-		String sql = "";
-		if (tablename.equals("comunidades")) {
-		    sql = String
-			    .format("INSERT INTO comunidades (cod_com, geom) VALUES ('%s', ST_GeomFromText('%s', 32616))",
-				    codCom, geomAsWKT);
-		} else if (tablename.equals("informacion_general")) {
-		    sql = String
-			    .format("INSERT INTO informacion_general (cod_com, cod_viv, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
-				    codCom, id, geomAsWKT);
-		} else if (tablename.equals("centros_educativos")) {
-		    sql = String
-			    .format("INSERT INTO centros_educativos (cod_com, cod_cedu, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
-				    codCom, id, geomAsWKT);
-
-		} else if (tablename.equals("centros_reuniones")) {
-		    sql = String
-			    .format("INSERT INTO centros_reuniones (cod_com, cod_creu, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
-				    codCom, id, geomAsWKT);
-
-		} else if (tablename.equals("centros_salud")) {
-		    sql = String
-			    .format("INSERT INTO centros_salud (cod_com, cod_csalud, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
-				    codCom, id, geomAsWKT);
-
-		} else if (tablename.equals("fuentes_comunitarias")) {
-		    sql = String
-			    .format("INSERT INTO fuentes_comunitarias (cod_com, codigo_fc, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
-				    codCom, id, geomAsWKT);
-		} else if (tablename.equals("limites_parcela")) {
-		    sql = String
-			    .format("INSERT INTO limites_parcela (cod_parcela, cod_lim_p, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
-				    codCom, id, geomAsWKT);
-		} else {
-		    continue;
-		}
+		String sql = target.getInsertSQL(codCom, id, geomAsWKT);
 		statement.addBatch(sql);
 	    }
 

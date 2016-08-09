@@ -50,4 +50,9 @@ public class NoTarget extends JDBCTarget {
 	table.setError(l, row);
 	return l;
     }
+
+    @Override
+    public String getInsertSQL(String parentCode, String code, String geomAsWKT) {
+	return null;
+    }
 }

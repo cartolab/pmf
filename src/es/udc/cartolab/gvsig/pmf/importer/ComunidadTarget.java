@@ -76,6 +76,8 @@ public class ComunidadTarget extends JDBCTarget {
 	return code == null ? "" : code;
     }
 
+    private final static double MIN_DISTANCE_TO_PARENT = 2000;
+
     /**
      * Si hay un caserio en la aldea donde está el nuevo punto a menos de 1km se
      * coge ese caserio como el código de la comunidad. En caso contrario se
@@ -83,23 +85,21 @@ public class ComunidadTarget extends JDBCTarget {
      * en la tabla o en comunidades o en caserios y se le suma 1
      */
     public String doCalculateCode(ImporterTM table, int i) {
-	String code = null;
 	Geometry point = table.getGeom(i).toJTSGeometry();
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
 	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
-	Caserio parent = Caserio.f().closestTo(pointStr, aldea);
-	if (parent != null) {
-	    double d = parent.distanceTo(point);
-	    if (d < 2000) {
-		code = parent.getPK();
-		return code;
+	Caserio caserio = Caserio.f().closestTo(pointStr, aldea);
+	if (caserio != null) {
+	    double d = caserio.distanceTo(point);
+	    if (d < MIN_DISTANCE_TO_PARENT) {
+		return caserio.getPK();
 	    }
 	}
 
-	DefaultTableModel results2 = maxCode(Caserio.tablename, "cod_caseri",
+	DefaultTableModel results2 = maxCode(Caserio.tablename, Caserio.pkname,
 		6, aldea.getPK());
-	DefaultTableModel results3 = maxCode("comunidades", "cod_com", 6,
+	DefaultTableModel results3 = maxCode(tablename, pkname, 6,
 		aldea.getPK());
 
 	String maxCodeInDB = results2.getValueAt(0, 0).toString();
@@ -114,10 +114,9 @@ public class ComunidadTarget extends JDBCTarget {
 	if (maxCode.compareTo(maxCodeInData) < 0) {
 	    maxCode = maxCodeInData;
 	}
-	int parseInt = Integer.parseInt(maxCode) + 1;
-	code = parseInt + "";
+	int code = Integer.parseInt(maxCode) + 1;
 
-	return code;
+	return code + "";
     }
 
     @Override
@@ -213,15 +212,22 @@ public class ComunidadTarget extends JDBCTarget {
 	Caserio caserio = Caserio.f().fromDB(code);
 	if (caserio != null) {
 	    double distance = caserio.distanceTo(geom);
-	    if (distance > 3000) {
+	    if (distance > MIN_DISTANCE_TO_PARENT) {
 		return new ImportError(
-			"Existe un caserío con ese código a más de 3km de esta comunidad",
+			"Existe un caserío con ese código a más de 2km de esta comunidad",
 			row);
 	    }
 
 	}
 
 	return null;
+    }
+
+    @Override
+    public String getInsertSQL(String parentCode, String code, String geomAsWKT) {
+	return String
+		.format("INSERT INTO comunidades (cod_com, geom) VALUES ('%s', ST_GeomFromText('%s', 32616))",
+			code, geomAsWKT);
     }
 
 }

@@ -258,4 +258,12 @@ public class CentroTarget extends JDBCTarget {
 
 	return null;
     }
+
+    @Override
+    public String getInsertSQL(String parentCode, String code, String geomAsWKT) {
+
+	return String
+		.format("INSERT INTO %s (cod_com, %s, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
+			tablename, pkname, parentCode, code, geomAsWKT);
+    }
 }

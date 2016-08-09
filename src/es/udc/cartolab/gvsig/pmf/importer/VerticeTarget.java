@@ -267,4 +267,11 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	return null;
     }
 
+    @Override
+    public String getInsertSQL(String parentCode, String code, String geomAsWKT) {
+	return String
+		.format("INSERT INTO limites_parcela (cod_parcela, cod_lim_p, geom) VALUES ('%s', '%s', ST_GeomFromText('%s', 32616))",
+			parentCode, code, geomAsWKT);
+    }
+
 }

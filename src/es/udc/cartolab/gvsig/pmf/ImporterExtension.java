@@ -57,7 +57,7 @@ public class ImporterExtension extends AbstractExtension {
 
     @Override
     public boolean isEnabled() {
-	return DBSession.isActive();
+	return DBSession.isActive() && (getView() != null);
     }
 
 }
