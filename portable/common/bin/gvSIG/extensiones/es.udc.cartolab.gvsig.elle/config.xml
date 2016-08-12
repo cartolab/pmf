@@ -22,7 +22,7 @@
             class-name="es.udc.cartolab.gvsig.elle.LoadMapExtension"
             active="true" description="Load map">
             <menu action-command="LoadMap" icon="load-map"
-                text="data_base_menu/Load_map" position="20100"/>
+                text="_pmf_menu_name/data_base_menu/Load_map" position="30060"/>
             <tool-bar name="ELLE" position="25">
                 <action-tool name="load-map" action-command="LoadMap"
                     icon="load-map" tooltip="Load_map" position="1"/>
@@ -30,7 +30,7 @@
         </extension>
         <extension
             class-name="es.udc.cartolab.gvsig.elle.SaveMapExtension"
-            active="true" description="save_map">
+            active="false" description="save_map">
             <menu action-command="SaveMap" icon="save-map"
                 text="data_base_menu/save_map" position="20200"/>
             <tool-bar name="ELLE" position="25">
@@ -39,7 +39,7 @@
             </tool-bar>
         </extension>
         <extension class-name="es.udc.cartolab.gvsig.elle.DeleteMapExtension" 
-        	description="delete_map" active="true">
+        	description="delete_map" active="false">
 			<menu text="data_base_menu/delete_map" icon="delete-map"
 				action-command="DeleteMap" position="20300" />
 		</extension>
