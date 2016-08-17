@@ -31,9 +31,10 @@ public class CentroTarget extends JDBCTarget {
     private final String pkname;
     private final String idDiff;
     private final String digitsDiff;
+    private final String name;
 
     public CentroTarget(String tablename, String pkname, Pattern pattern,
-	    String idDiff, String digitsDiff) {
+	    String idDiff, String digitsDiff, String name) {
 	super(DBSession.getCurrentSession().getJavaConnection());
 	this.tablename = tablename;
 	field = new Field(tablename);
@@ -42,6 +43,7 @@ public class CentroTarget extends JDBCTarget {
 	this.pkname = pkname;
 	this.idDiff = idDiff;
 	this.digitsDiff = digitsDiff;
+	this.name = name;
     }
 
     @Override
@@ -85,6 +87,9 @@ public class CentroTarget extends JDBCTarget {
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
 	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	if (aldea == null) {
+	    return null;
+	}
 	Comunidad parent = Comunidad.f().closestTo(pointStr, aldea);
 	if (parent != null) {
 	    double d = parent.distanceTo(point);
@@ -140,6 +145,7 @@ public class CentroTarget extends JDBCTarget {
 
     @Override
     public List<ImportError> checkErrors(ImporterTM table, int row) {
+	ErrorCheck errorCheck = new ErrorCheck(this.name);
 	List<ImportError> l = new ArrayList<ImportError>();
 	ImportError error = null;
 
@@ -170,7 +176,8 @@ public class CentroTarget extends JDBCTarget {
 	    l.add(error);
 	}
 
-	error = checkPointInCorrectAldea(table, tablename, code, row);
+	error = errorCheck
+		.checkPointInCorrectAldea(table, tablename, code, row);
 	if (error != null) {
 	    l.add(error);
 	}
@@ -230,20 +237,6 @@ public class CentroTarget extends JDBCTarget {
 	    return new ImportError(errorMsg, row);
 	}
 
-	return null;
-    }
-
-    private ImportError checkPointInCorrectAldea(ImporterTM table,
-	    String tablename, String code, int row) {
-	Geometry point = table.getGeom(row).toJTSGeometry();
-	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
-	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
-	if (!code.startsWith(aldea.getPK())) {
-	    String errorMsg = String
-		    .format("El elemento de %s '%s' no está en la aldea que indica su código",
-			    tablename, code);
-	    return new ImportError(errorMsg, row);
-	}
 	return null;
     }
 

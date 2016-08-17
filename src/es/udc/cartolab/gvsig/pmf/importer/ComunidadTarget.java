@@ -89,6 +89,9 @@ public class ComunidadTarget extends JDBCTarget {
 	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
 
 	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
+	if (aldea == null) {
+	    return null;
+	}
 	Caserio caserio = Caserio.f().closestTo(pointStr, aldea);
 	if (caserio != null) {
 	    double d = caserio.distanceTo(point);
@@ -121,6 +124,7 @@ public class ComunidadTarget extends JDBCTarget {
 
     @Override
     public List<ImportError> checkErrors(ImporterTM table, int row) {
+	ErrorCheck errorCheck = new ErrorCheck("La comunidad");
 	List<ImportError> l = new ArrayList<ImportError>();
 	ImportError error = null;
 
@@ -142,7 +146,8 @@ public class ComunidadTarget extends JDBCTarget {
 	    l.add(error);
 	}
 
-	error = checkPointInCorrectAldea(table, tablename, code, row);
+	error = errorCheck
+		.checkPointInCorrectAldea(table, tablename, code, row);
 	if (error != null) {
 	    l.add(error);
 	}
@@ -190,20 +195,6 @@ public class ComunidadTarget extends JDBCTarget {
 	    return new ImportError(errorMsg, row);
 	}
 
-	return null;
-    }
-
-    private ImportError checkPointInCorrectAldea(ImporterTM table,
-	    String tablename, String code, int row) {
-	Geometry point = table.getGeom(row).toJTSGeometry();
-	String pointStr = "ST_GeomFromText( '" + point.toText() + "' )";
-	Aldea aldea = Aldea.f().thatIntersectsWith(pointStr);
-	if (!code.startsWith(aldea.getPK())) {
-	    String errorMsg = String
-		    .format("La comunidad '%s' no está en la aldea que indica su código",
-			    code);
-	    return new ImportError(errorMsg, row);
-	}
 	return null;
     }
 

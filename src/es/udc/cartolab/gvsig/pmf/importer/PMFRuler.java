@@ -21,31 +21,31 @@ public class PMFRuler implements Ruler {
 	Pattern vivPattern = Pattern.compile("^(\\d{8})vi\\d{3}$",
 		Pattern.CASE_INSENSITIVE);
 	Target vivTarget = new CentroTarget("informacion_general", "cod_viv",
-		vivPattern, "vi", "%03d");
+		vivPattern, "vi", "%03d", "La vivienda");
 	targets.add(vivTarget);
 
 	Pattern patternFuentes = Pattern.compile("^(\\d{8})fc\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target fuentesTarget = new CentroTarget("fuentes_comunitarias",
-		"codigo_fc", patternFuentes, "fc", "%02d");
+		"codigo_fc", patternFuentes, "fc", "%02d", "La fuente");
 	targets.add(fuentesTarget);
 
 	Pattern eduPattern = Pattern.compile("^(\\d{8})ce\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target eduTarget = new CentroTarget("centros_educativos", "cod_cedu",
-		eduPattern, "ce", "%02d");
+		eduPattern, "ce", "%02d", "El centro educativo");
 	targets.add(eduTarget);
 
 	Pattern reuPattern = Pattern.compile("^(\\d{8})cr\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target reuTarget = new CentroTarget("centros_reuniones", "cod_creu",
-		reuPattern, "cr", "%02d");
+		reuPattern, "cr", "%02d", "El centro");
 	targets.add(reuTarget);
 
 	Pattern saludPattern = Pattern.compile("^(\\d{8})cs\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target saludTarget = new CentroTarget("centros_salud", "cod_csalud",
-		saludPattern, "cs", "%02d");
+		saludPattern, "cs", "%02d", "El centro de salud");
 	targets.add(saludTarget);
 
 	// Pattern verticePattern = Pattern.compile(
