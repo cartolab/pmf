@@ -18,34 +18,34 @@ public class PMFRuler implements Ruler {
 	targets = new ArrayList<Target>();
 	targets.add(new ComunidadTarget());
 
-	Pattern vivPattern = Pattern.compile("^(\\d{8})vi\\d{3}$",
+	Pattern vivPattern = Pattern.compile("^(\\d{8})VI\\d{3}$",
 		Pattern.CASE_INSENSITIVE);
 	Target vivTarget = new CentroTarget("informacion_general", "cod_viv",
-		vivPattern, "vi", "%03d", "La vivienda");
+		vivPattern, "VI", "%03d", "La vivienda");
 	targets.add(vivTarget);
 
-	Pattern patternFuentes = Pattern.compile("^(\\d{8})fc\\d{2}$",
+	Pattern patternFuentes = Pattern.compile("^(\\d{8})FC\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target fuentesTarget = new CentroTarget("fuentes_comunitarias",
-		"codigo_fc", patternFuentes, "fc", "%02d", "La fuente");
+		"codigo_fc", patternFuentes, "FC", "%02d", "La fuente");
 	targets.add(fuentesTarget);
 
-	Pattern eduPattern = Pattern.compile("^(\\d{8})ce\\d{2}$",
+	Pattern eduPattern = Pattern.compile("^(\\d{8})CE\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target eduTarget = new CentroTarget("centros_educativos", "cod_cedu",
-		eduPattern, "ce", "%02d", "El centro educativo");
+		eduPattern, "CE", "%02d", "El centro educativo");
 	targets.add(eduTarget);
 
-	Pattern reuPattern = Pattern.compile("^(\\d{8})cr\\d{2}$",
+	Pattern reuPattern = Pattern.compile("^(\\d{8})CR\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target reuTarget = new CentroTarget("centros_reuniones", "cod_creu",
-		reuPattern, "cr", "%02d", "El centro");
+		reuPattern, "CR", "%02d", "El centro");
 	targets.add(reuTarget);
 
-	Pattern saludPattern = Pattern.compile("^(\\d{8})cs\\d{2}$",
+	Pattern saludPattern = Pattern.compile("^(\\d{8})CS\\d{2}$",
 		Pattern.CASE_INSENSITIVE);
 	Target saludTarget = new CentroTarget("centros_salud", "cod_csalud",
-		saludPattern, "cs", "%02d", "El centro de salud");
+		saludPattern, "CS", "%02d", "El centro de salud");
 	targets.add(saludTarget);
 
 	// Pattern verticePattern = Pattern.compile(
@@ -59,7 +59,7 @@ public class PMFRuler implements Ruler {
     }
 
     public final static Pattern parcelaPattern = Pattern.compile(
-	    "^((\\d{8})vi\\d{3})p\\d{2}$", Pattern.CASE_INSENSITIVE);
+	    "^((\\d{8})VI\\d{3})P\\d{2}$", Pattern.CASE_INSENSITIVE);
 
     @Override
     public void processValue(String value, ImporterTM table, int i) {

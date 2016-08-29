@@ -42,7 +42,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	field.setValue(this);
 	this.pattern = pattern;
 	this.pkname = pkname;
-	this.idDiff = "v";
+	this.idDiff = "V";
 	this.digitsDiff = "%02d";
 	this.name = "El elemento";
     }

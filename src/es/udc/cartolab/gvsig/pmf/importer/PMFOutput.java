@@ -33,6 +33,7 @@ public class PMFOutput implements Output {
 	if (!dialog.isGood()) {
 	    return;
 	}
+	reorder(table);
 
 	Connection con = DBSession.getCurrentSession().getJavaConnection();
 	Statement statement = null;
@@ -71,12 +72,17 @@ public class PMFOutput implements Output {
 	    JOptionPane.showMessageDialog(null, "Añadidos correctamete");
 	} catch (SQLException e) {
 	    logger.error(e.getStackTrace(), e);
+	    logger.error(e.getCause().getMessage());
 	    try {
 		statement.clearBatch();
 		con.rollback();
 	    } catch (SQLException e1) {
 		logger.error(e1.getStackTrace(), e1);
 	    }
+	    JOptionPane.showMessageDialog(null,
+		    "Ha habido un error a<F1>adiendo los datos", "Error",
+		    JOptionPane.ERROR);
+
 	}
     }
 
