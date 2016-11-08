@@ -43,6 +43,12 @@ public class MyMouseListener implements MouseListener {
 	    model.setSelectionInterval(row, row);
 	    JMenuItem createComunidad = createComunidad(table, row);
 	    popup.add(createComunidad);
+	    ImporterTM importer = (ImporterTM) table.getModel();
+	    Field target = importer.getTarget(row);
+	    if (target.getKey().equals("informacion_general")) {
+		JMenuItem createParcela = createParcela(table, row);
+		popup.add(createParcela);
+	    }
 	}
 
 	JMenuItem removeRow = removeRow(table);
@@ -88,7 +94,6 @@ public class MyMouseListener implements MouseListener {
 
     private JMenuItem removeRow(final JTable table) {
 
-
 	int numRows = table.getSelectedRows().length;
 	String msg = numRows > 1 ? "Eliminar filas" : "Eliminar fila";
 	JMenuItem menu = new JMenuItem(msg);
@@ -103,6 +108,40 @@ public class MyMouseListener implements MouseListener {
 		}
 		model.reCheckErrors();
 	    }
+	});
+	return menu;
+    }
+
+    private JMenuItem createParcela(final JTable table, final int row) {
+	JMenuItem menu = new JMenuItem("Crear Parcela");
+	menu.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		ImporterTM model = (ImporterTM) table.getModel();
+
+		Object[] data = new Object[model.getColumnCount()];
+		int tablenameIdx = -1;
+		for (int i = 0; i < model.getColumnCount(); i++) {
+		    final Object o = model.getValueAt(row, i);
+		    if (o instanceof Field) {
+			tablenameIdx = i;
+		    }
+		    data[i] = o;
+		}
+		model.insertRow(row, data);
+
+		Field parcela = null;
+		for (Field f : ruler.getFields()) {
+		    if (f.getKey().equals("parcelas")) {
+			parcela = f;
+		    }
+		}
+
+		model.setValueAt(parcela, row, tablenameIdx);
+		model.reCheckErrors();
+	    }
+
 	});
 	return menu;
     }

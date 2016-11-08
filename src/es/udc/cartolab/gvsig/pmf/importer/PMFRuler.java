@@ -48,6 +48,12 @@ public class PMFRuler implements Ruler {
 		saludPattern, "CS", "%02d", "El centro de salud");
 	targets.add(saludTarget);
 
+	Pattern parcelaPattern = Pattern.compile("^((\\d{8})VI\\d{3})P\\d{2}$",
+		Pattern.CASE_INSENSITIVE);
+	Target parcelaTarget = new ParcelaTarget("parcelas", "cod_parcela",
+		parcelaPattern, "P", "%02d", "Parcela");
+	targets.add(parcelaTarget);
+
 	// Pattern verticePattern = Pattern.compile(
 	// "^(((\\d{8})vi\\d{3})p\\d{2})v\\d{2}$",
 	// Pattern.CASE_INSENSITIVE);
