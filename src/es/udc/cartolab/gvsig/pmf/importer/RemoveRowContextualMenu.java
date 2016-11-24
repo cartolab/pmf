@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import es.icarto.gvsig.importer.ImporterTM;
 
 public class RemoveRowContextualMenu implements ImporterContextualMenu,
-	ActionListener {
+ActionListener {
 
     private final JTable table;
 
@@ -38,6 +38,10 @@ public class RemoveRowContextualMenu implements ImporterContextualMenu,
 
     @Override
     public void actionPerformed(ActionEvent e) {
+	removeRows();
+    }
+
+    public void removeRows() {
 	int numRows = table.getSelectedRows().length;
 	ImporterTM model = (ImporterTM) table.getModel();
 	for (int i = 0; i < numRows; i++) {

@@ -71,7 +71,7 @@ public class ParcelaFromPointsContextualMenu implements ImporterContextualMenu,
 	return true;
     }
 
-    public void removeRows(JTable table) {
+    public void removeRows() {
 	int numRows = table.getSelectedRows().length;
 	ImporterTM model = (ImporterTM) table.getModel();
 	for (int i = 0; i < numRows; i++) {
@@ -84,24 +84,92 @@ public class ParcelaFromPointsContextualMenu implements ImporterContextualMenu,
     public void actionPerformed(ActionEvent e) {
 	final int[] selectedRows = table.getSelectedRows();
 	ImporterTM model = (ImporterTM) table.getModel();
+
+	Object[] data = new Object[model.getColumnCount()];
+
+	setCodesInTheModel(selectedRows, model);
+	IGeometry p = insertPolyGeom(data, selectedRows, model);
+	insertID(data, selectedRows, model);
+
+	ConfirmCroquisDialog confirmCroquisDialog = new ConfirmCroquisDialog(p);
+	confirmCroquisDialog.openDialog();
+	if (confirmCroquisDialog.isGood()) {
+	    postProcess(model, selectedRows, data);
+	}
+    }
+
+    private void setCodesInTheModel(int[] selectedRows, ImporterTM model) {
+	for (int selectedRow : selectedRows) {
+	    String id = model.getID(selectedRow);
+	    model.setCode(id, selectedRow);
+	}
+    }
+
+    private IGeometry insertPolyGeom(Object[] data, int[] selectedRows,
+	    ImporterTM model) {
 	SortedMap<String, Geometry> jtsPointGeoms = new TreeMap<String, Geometry>();
 
 	for (int selectedRow : selectedRows) {
 	    IGeometry g = model.getGeom(selectedRow);
-	    String key = model.getCode(selectedRow);
-	    jtsPointGeoms.put(key, g.toJTSGeometry());
+	    String id = model.getID(selectedRow);
+
+	    model.setCode(id, selectedRow);
+	    jtsPointGeoms.put(id, g.toJTSGeometry());
 	}
 	IGeometry p = points2polygon(jtsPointGeoms);
 
-	Object[] data = new Object[model.getColumnCount()];
-	int NUMERO_ROW_ENGADIR = 0;
-	model.insertRow(NUMERO_ROW_ENGADIR, data);
-	model.setGeom(p, NUMERO_ROW_ENGADIR);
+	int column = -1;
+	for (int i = 0; i < table.getColumnCount(); i++) {
+	    if (table.getColumnName(i).equals("Geometría destino")) {
+		column = i;
+		break;
+	    }
+	}
 
-	model.setTarget(parcelaField, NUMERO_ROW_ENGADIR);
-	removeRows(table);
+	data[column] = p;
+	return p;
+    }
+
+    private void insertID(Object[] data, int[] selectedRows, ImporterTM model) {
+	String aggID = "Creado a partir de los puntos: ";
+	for (int selectedRow : selectedRows) {
+	    String id = model.getID(selectedRow);
+	    aggID = aggID + String.format("'%s, '", id);
+	}
+
+	int column = -1;
+	for (int i = 0; i < table.getColumnCount(); i++) {
+	    if (table.getColumnName(i).equals("id")) {
+		column = i;
+		break;
+	    }
+	}
+
+	data[column] = aggID;
+    }
+
+    private void postProcess(ImporterTM model, int[] selectedRows, Object[] data) {
+	// removeRows();
+	int row = selectedRows[0];
+	// model.insertRow(row, data);
+	model.addRow(data);
+	row = model.getRowCount() - 1;
+	setField(model, row);
 	model.reCheckErrors();
+    }
 
+    private void setField(ImporterTM model, int row) {
+	int tablenameIdx = -1;
+	for (int i = 0; i < model.getColumnCount(); i++) {
+	    final Object o = model.getValueAt(0, i);
+	    if (o instanceof Field) {
+		tablenameIdx = i;
+	    }
+
+	}
+	// To recalculate the code setValueAt instead of setTarget is used
+	// model.setTarget(parcelaField, row);
+	model.setValueAt(parcelaField, row, tablenameIdx);
     }
 
     private IGeometry points2polygon(SortedMap<String, Geometry> jtsPointGeoms) {

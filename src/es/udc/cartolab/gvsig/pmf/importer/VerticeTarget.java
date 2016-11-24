@@ -117,8 +117,7 @@ public class VerticeTarget extends JDBCTarget implements Target {
 	    return null;
 	}
 
-	DefaultTableModel results3 = maxCode(tablename, pkname, 13,
-		parent.getPK());
+	DefaultTableModel results3 = maxCode(tablename, pkname, parent.getPK());
 	String maxCodeInData = results3.getValueAt(0, 0).toString();
 	String maxCodeInTable = table.maxCodeValueForTarget(this.field, i,
 		parent.getPK());
