@@ -1,149 +1,92 @@
 package es.udc.cartolab.gvsig.pmf.importer;
 
+import java.awt.Component;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-import es.icarto.gvsig.commons.utils.Field;
-import es.icarto.gvsig.importer.ImporterTM;
 import es.icarto.gvsig.importer.Ruler;
 
 public class MyMouseListener implements MouseListener {
 
     public static final String CONTEXT_MENU = MyMouseListener.class.getName();
-    private final Ruler ruler;
+    private final JTable table;
+    private final ArrayList<ImporterContextualMenu> items;
 
-    public MyMouseListener(Ruler ruler) {
-	this.ruler = ruler;
+    public MyMouseListener(Ruler ruler, JTable table) {
+	this.table = table;
+
+	items = new ArrayList<ImporterContextualMenu>();
+	items.add(new ComunidadContextualMenu(table, ruler));
+	items.add(new ParcelaContextualMenu(table, ruler));
+	items.add(new ParcelaFromPointsContextualMenu(table, ruler));
+	items.add(new RemoveRowContextualMenu(table));
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-	if (e.getButton() != MouseEvent.BUTTON3) {
+	if (notValidClick(e)) {
 	    return;
 	}
-	final JTable table = (JTable) e.getSource();
-	Point point = e.getPoint();
-	final int row = table.rowAtPoint(point);
-	if (row < 0) {
-	    return;
+	JPopupMenu popup = createPopup(e);
+	if (popup.getComponents().length != 0) {
+	    popup.show(((Component) e.getSource()), e.getX(), e.getY());
+	}
+    }
+
+    private boolean notValidClick(MouseEvent e) {
+	if (e.getButton() != MouseEvent.BUTTON3) {
+	    return true;
 	}
 
+	int row = rowClicked(e);
+	if (row < 0) {
+	    return true;
+	}
+	return false;
+    }
+
+    private int rowClicked(MouseEvent e) {
+	Point point = e.getPoint();
+	return table.rowAtPoint(point);
+    }
+
+    private boolean contains(int[] arr, int v) {
+	for (int i : arr) {
+	    if (i == v) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private JPopupMenu createPopup(MouseEvent e) {
 	JPopupMenu popup = new JPopupMenu();
 
-	if (table.getSelectedRowCount() < 2) {
-	    ListSelectionModel model = table.getSelectionModel();
-	    model.setSelectionInterval(row, row);
-	    JMenuItem createComunidad = createComunidad(table, row);
-	    popup.add(createComunidad);
-	    ImporterTM importer = (ImporterTM) table.getModel();
-	    Field target = importer.getTarget(row);
-	    if (target.getKey().equals("informacion_general")) {
-		JMenuItem createParcela = createParcela(table, row);
-		popup.add(createParcela);
-	    }
+	ListSelectionModel model = table.getSelectionModel();
+	int rowClicked = rowClicked(e);
+	int[] selectedRows = table.getSelectedRows();
+
+	if (selectedRows.length == 0) {
+	    model.setSelectionInterval(rowClicked, rowClicked);
+	} else if ((selectedRows.length == 1)
+		&& (rowClicked != selectedRows[0])) {
+	    model.setSelectionInterval(rowClicked, rowClicked);
+	} else if (!contains(selectedRows, rowClicked)) {
+	    model.setSelectionInterval(rowClicked, rowClicked);
 	}
 
-	JMenuItem removeRow = removeRow(table);
-	popup.add(removeRow);
-	if (popup.getComponents().length != 0) {
-	    popup.show(table, e.getX(), e.getY());
+	for (ImporterContextualMenu item : items) {
+	    if (item.isVisible()) {
+		popup.add(item.getMenuItem());
+	    }
 	}
-
-    }
-
-    private JMenuItem createComunidad(final JTable table, final int row) {
-	JMenuItem menu = new JMenuItem("Crear Comunidad");
-	menu.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		ImporterTM model = (ImporterTM) table.getModel();
-
-		Object[] data = new Object[model.getColumnCount()];
-		int tablenameIdx = -1;
-		for (int i = 0; i < model.getColumnCount(); i++) {
-		    final Object o = model.getValueAt(row, i);
-		    if (o instanceof Field) {
-			tablenameIdx = i;
-		    }
-		    data[i] = o;
-		}
-		model.insertRow(row, data);
-
-		Field comunidad = null;
-		for (Field f : ruler.getFields()) {
-		    if (f.getKey().equals("comunidades")) {
-			comunidad = f;
-		    }
-		}
-
-		model.setValueAt(comunidad, row, tablenameIdx);
-		model.reCheckErrors();
-	    }
-	});
-	return menu;
-    }
-
-    private JMenuItem removeRow(final JTable table) {
-
-	int numRows = table.getSelectedRows().length;
-	String msg = numRows > 1 ? "Eliminar filas" : "Eliminar fila";
-	JMenuItem menu = new JMenuItem(msg);
-	menu.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		int numRows = table.getSelectedRows().length;
-		ImporterTM model = (ImporterTM) table.getModel();
-		for (int i = 0; i < numRows; i++) {
-		    model.removeRow(table.getSelectedRow());
-		}
-		model.reCheckErrors();
-	    }
-	});
-	return menu;
-    }
-
-    private JMenuItem createParcela(final JTable table, final int row) {
-	JMenuItem menu = new JMenuItem("Crear Parcela");
-	menu.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		ImporterTM model = (ImporterTM) table.getModel();
-
-		Object[] data = new Object[model.getColumnCount()];
-		int tablenameIdx = -1;
-		for (int i = 0; i < model.getColumnCount(); i++) {
-		    final Object o = model.getValueAt(row, i);
-		    if (o instanceof Field) {
-			tablenameIdx = i;
-		    }
-		    data[i] = o;
-		}
-		model.insertRow(row, data);
-
-		Field parcela = null;
-		for (Field f : ruler.getFields()) {
-		    if (f.getKey().equals("parcelas")) {
-			parcela = f;
-		    }
-		}
-
-		model.setValueAt(parcela, row, tablenameIdx);
-		model.reCheckErrors();
-	    }
-
-	});
-	return menu;
+	return popup;
     }
 
     @Override

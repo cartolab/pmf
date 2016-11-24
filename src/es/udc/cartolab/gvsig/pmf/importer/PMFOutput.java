@@ -28,7 +28,8 @@ public class PMFOutput implements Output {
 
 	reorder(table);
 	TableInfo dialog = new TableInfo(table, ruler);
-	dialog.setContextMenu(new MyMouseListener(ruler));
+	dialog.setContextMenu(new MyMouseListener(ruler, dialog.getJTable()));
+
 	dialog.openDialog();
 	if (!dialog.isGood()) {
 	    return;
@@ -74,8 +75,8 @@ public class PMFOutput implements Output {
 	    logger.error(e.getStackTrace(), e);
 	    logger.error(e.getCause().getMessage());
 	    try {
-		statement.clearBatch();
 		con.rollback();
+		statement.clearBatch();
 	    } catch (SQLException e1) {
 		logger.error(e1.getStackTrace(), e1);
 	    }

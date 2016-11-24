@@ -258,7 +258,7 @@ public class ParcelaTarget extends JDBCTarget {
     public String getInsertSQL(String parentCode, String code, String geomAsWKT) {
 
 	return String
-		.format("INSERT INTO %s (cod_com, cod_viv, %s, geom) VALUES ('%s', '%s', '%s', ST_Multi(ST_Buffer(ST_GeomFromText('%s', 32616), 50)))",
+		.format("INSERT INTO %s (cod_com, cod_viv, %s, geom) VALUES ('%s', '%s', '%s', ST_Multi(ST_GeomFromText('%s', 32616)))",
 			tablename, pkname, parentCode, code.substring(0, 13),
 			code, geomAsWKT);
     }
