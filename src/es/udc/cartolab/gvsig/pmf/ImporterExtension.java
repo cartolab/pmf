@@ -1,5 +1,6 @@
 package es.udc.cartolab.gvsig.pmf;
 
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,8 +49,9 @@ public class ImporterExtension extends AbstractExtension {
 	Output output = new PMFOutput();
 	Ruler ruler = new PMFRuler();
 
+	Connection con = DBSession.getCurrentSession().getJavaConnection();
 	ImportManager importManager = new ImportManager(reader, header, output,
-		ruler);
+		ruler, con);
 
 	importManager.readHeader();
 	importManager.processFile();
